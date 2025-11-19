@@ -235,6 +235,10 @@
             padding: 10px 15px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            line-height: 1.2;
         }
         
         .forbidden-words {
@@ -257,6 +261,10 @@
             transition: var(--transition);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            line-height: 1.2;
         }
         
         .forbidden-word:hover {
@@ -2633,6 +2641,13 @@ function attachTeamEventListeners() {
     });
 
     document.querySelectorAll('.team-name-input').forEach(input => {
+        input.addEventListener('focus', (e) => {
+            // Takım ismi input'una tıklandığında içeriği temizle
+            if (e.target.value === `Takım ${e.target.getAttribute('data-team-id')}`) {
+                e.target.value = '';
+            }
+        });
+        
         input.addEventListener('input', (e) => {
             const teamId = parseInt(e.target.getAttribute('data-team-id'));
             const team = gameState.teams.find(t => t.id === teamId);
@@ -2641,6 +2656,14 @@ function attachTeamEventListeners() {
     });
 
     document.querySelectorAll('.player-name-input').forEach(input => {
+        input.addEventListener('focus', (e) => {
+            // Oyuncu ismi input'una tıklandığında içeriği temizle
+            const playerIndex = parseInt(e.target.getAttribute('data-player-index'));
+            if (e.target.value === `Oyuncu ${playerIndex + 1}`) {
+                e.target.value = '';
+            }
+        });
+        
         input.addEventListener('input', (e) => {
             const teamId = parseInt(e.target.getAttribute('data-team-id'));
             const playerIndex = parseInt(e.target.getAttribute('data-player-index'));
