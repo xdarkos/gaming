@@ -2,8 +2,18 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TABUNO - Takım Kelime Oyunu</title>
+    
+    <!-- Mobil optimizasyon meta tag'leri -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TABUNO">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6a11cb">
+    <meta name="msapplication-TileColor" content="#6a11cb">
+    <meta name="msapplication-tap-highlight" content="no">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="words.js"></script>
@@ -1229,6 +1239,300 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+		
+		/* MOBİL UYUMLULUK İYİLEŞTİRMELERİ */
+
+/* Küçük ekranlar için genel ayarlar */
+@media (max-width: 767px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 0 10px;
+    }
+    
+    header {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .screen {
+        padding: 20px 15px;
+    }
+    
+    /* Takım kurma ekranı mobil uyumluluğu */
+    .team-setup {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .team {
+        padding: 15px;
+    }
+    
+    .team-input, .player-name-input {
+        padding: 12px 15px;
+        font-size: 16px; /* iOS zoom'u engellemek için */
+    }
+    
+    /* Oyun ekranı mobil uyumluluğu */
+    .game-info {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    
+    .round-info, .team-scores {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .info-item {
+        min-width: auto;
+        padding: 12px;
+    }
+    
+    .timer {
+        font-size: 4rem;
+    }
+    
+    .main-word {
+        font-size: 2rem;
+        padding: 12px 20px;
+    }
+    
+    .forbidden-words {
+        gap: 10px;
+    }
+    
+    .forbidden-word {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .game-controls {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .control-btn {
+        padding: 14px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .pause-btn {
+        grid-column: span 2;
+    }
+    
+    /* Takım sırası ekranı */
+    .turn-team {
+        font-size: 2rem;
+        padding: 15px;
+    }
+    
+    .current-player {
+        font-size: 1.2rem;
+        padding: 12px 20px;
+    }
+    
+    .countdown {
+        font-size: 5rem;
+    }
+    
+    /* Zar ekranı */
+    .dice-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .dice {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+    
+    .dice-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .dice-btn {
+        width: 100%;
+    }
+    
+    /* Kazanan ekranı */
+    .final-scores {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .final-score {
+        padding: 20px 10px;
+    }
+    
+    .score-value {
+        font-size: 2.5rem;
+    }
+    
+    /* Kurallar modal */
+    .rules-modal-content {
+        padding: 25px 20px;
+        width: 95%;
+        max-height: 85vh;
+    }
+    
+    .rules-modal-body {
+        padding: 20px 15px;
+    }
+    
+    /* Duraklatma ekranı */
+    .pause-options {
+        flex-direction: column;
+    }
+    
+    .pause-btn {
+        width: 100%;
+    }
+    
+    /* Devam etme ekranı */
+    .resume-options {
+        flex-direction: column;
+    }
+    
+    /* İstatistik tablosu */
+    .stats-table {
+        font-size: 0.9rem;
+    }
+    
+    .stats-table th, .stats-table td {
+        padding: 12px 8px;
+    }
+}
+
+/* Çok küçük ekranlar için (iPhone SE gibi) */
+@media (max-width: 360px) {
+    .dice-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .control-btn {
+        grid-column: span 1;
+    }
+    
+    .final-scores {
+        grid-template-columns: 1fr;
+    }
+    
+    .team-score {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Tablet boyutları için optimizasyon */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .team-setup {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .game-controls {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pause-btn {
+        grid-column: span 2;
+    }
+}
+
+/* Mobilde yatay mod için optimizasyon */
+@media (max-height: 500px) and (orientation: landscape) {
+    body {
+        padding: 5px;
+    }
+    
+    header {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .screen {
+        padding: 15px 10px;
+    }
+    
+    .timer {
+        font-size: 3rem;
+    }
+    
+    .main-word {
+        font-size: 1.8rem;
+        padding: 10px 15px;
+        margin-bottom: 15px;
+    }
+    
+    .forbidden-word {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .game-info {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .info-item {
+        padding: 8px 10px;
+    }
+}
+
+/* Dokunmatik etkileşimler için iyileştirmeler */
+@media (hover: none) and (pointer: coarse) {
+    .btn:hover, .control-btn:hover, .team:hover {
+        transform: none;
+    }
+    
+    .btn:active, .control-btn:active {
+        transform: scale(0.98);
+    }
+    
+    /* Mobilde daha büyük tıklama alanları */
+    .player-btn, .remove-team {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .control-btn {
+        min-height: 44px;
+    }
+}
+
+/* Yüksek çözünürlüklü ekranlar için */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .btn, .control-btn, .team-input, .player-name-input {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Koyu mod desteği */
+@media (prefers-color-scheme: dark) {
+    /* Koyu modda ekstra kontrast için */
+    .team-input, .player-name-input {
+        background: rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Ekran okuyucu erişilebilirliği */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
         
         /* MODAL STYLES */
         .rules-modal {
@@ -3397,6 +3701,81 @@
                 }, duration * 1000);
             }
         }
+		
+		// Mobil cihaz tespiti
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
+// Dokunmatik olaylar için optimizasyon
+function initializeTouchEvents() {
+    // Pas butonuna uzun basma için
+    let touchTimer;
+    
+    passBtn.addEventListener('touchstart', function(e) {
+        touchTimer = setTimeout(() => {
+            // Uzun basma işlemi
+            handlePass(false);
+        }, 500);
+        e.preventDefault();
+    });
+    
+    passBtn.addEventListener('touchend', function(e) {
+        clearTimeout(touchTimer);
+        e.preventDefault();
+    });
+    
+    // Diğer butonlar için dokunmatik optimizasyon
+    const touchButtons = document.querySelectorAll('.btn, .control-btn, .player-btn');
+    touchButtons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
+}
+
+// Sayfa yüklendiğinde mobil optimizasyonları başlat
+window.addEventListener('DOMContentLoaded', () => {
+    // Mevcut kodunuz...
+    
+    // Mobil optimizasyonları başlat
+    if (isMobileDevice()) {
+        initializeTouchEvents();
+        
+        // Mobilde viewport ayarı
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+        }
+    }
+});
+
+// Ekran dönüşümlerini yönetme
+window.addEventListener('resize', function() {
+    // Ekran boyutu değiştiğinde oyun durumunu koru
+    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+});
+
+// Mobil tarayıcı UI'sını yönetme
+function setupMobileUI() {
+    // Tam ekran modu için
+    if (isMobileDevice()) {
+        document.documentElement.style.height = '100%';
+        document.body.style.height = '100%';
+        
+        // Adres çubuğunu gizlemek için
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 0);
+        });
+    }
+}
     </script>
 </body>
 </html>
+
