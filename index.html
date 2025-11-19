@@ -169,7 +169,7 @@
             border-radius: 2px;
         }
         
-        /* YENİ KART TASARIMI */
+        /* YENİ KART TASARIMI - BÜYÜK BOYUT */
         .card-container {
             perspective: 1200px;
             margin-bottom: 25px;
@@ -178,8 +178,8 @@
         }
         
         .card {
-            width: 280px;
-            height: 400px;
+            width: 320px;
+            height: 480px;
             border-radius: 22px;
             border: 8px solid var(--card-red);
             box-sizing: border-box;
@@ -227,7 +227,7 @@
             color: #ffffff;
             font-weight: 800;
             text-align: center;
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 25px;
             position: relative;
             z-index: 1;
@@ -250,7 +250,7 @@
             background: rgba(255, 255, 255, 0.15);
             padding: 12px 15px;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 18px;
             color: white;
             font-weight: 600;
             backdrop-filter: blur(5px);
@@ -618,6 +618,7 @@
             left: -100%;
         }
         
+        /* Oyun bilgileri - Sadece duraklatma ekranında gösterilecek */
         .game-info {
             display: grid;
             grid-template-columns: 1fr;
@@ -1577,16 +1578,16 @@
             }
             
             .card {
-                width: 260px;
-                height: 370px;
+                width: 280px;
+                height: 420px;
             }
             
             .main-word {
-                font-size: 24px;
+                font-size: 28px;
             }
             
             .forbidden-word {
-                font-size: 14px;
+                font-size: 16px;
                 padding: 10px 12px;
             }
             
@@ -1850,29 +1851,8 @@
             </div>
         </div>
         
-        <!-- Oyun Ekranı -->
+        <!-- Oyun Ekranı - Sadeleştirilmiş -->
         <div class="screen" id="gameScreen">
-            <div class="game-info">
-                <div class="round-info">
-                    <div class="info-item">
-                        <div class="info-label">Tur</div>
-                        <div class="info-value" id="currentRound">1/10</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Sıradaki Takım</div>
-                        <div class="info-value" id="currentTeam">Takım 1</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Anlatıcı</div>
-                        <div class="info-value" id="currentPlayer">Oyuncu 1</div>
-                    </div>
-                </div>
-                
-                <div class="team-scores" id="teamScores">
-                    <!-- Takım skorları buraya dinamik olarak eklenecek -->
-                </div>
-            </div>
-            
             <div class="pass-info">
                 <div class="pass-item">
                     <div class="info-label" id="currentTeamPassLabel">Takım 1 Pas Hakkı</div>
@@ -1889,7 +1869,7 @@
                 <div class="info-label">Kalan Süre</div>
             </div>
             
-            <!-- YENİ KART TASARIMI -->
+            <!-- YENİ KART TASARIMI - BÜYÜK BOYUT -->
             <div class="card-container">
                 <div class="card" id="gameCard">
                     <div class="card-inner">
@@ -1915,7 +1895,7 @@
             </div>
         </div>
         
-        <!-- Duraklatma Ekranı -->
+        <!-- Duraklatma Ekranı - Tüm bilgiler burada gösterilecek -->
         <div class="screen" id="pauseScreen">
             <div class="pause-screen">
                 <h2 class="pause-title">Mola</h2>
@@ -1954,27 +1934,6 @@
             <h2 class="screen-title">Uzatma Turu!</h2>
             <div class="overtime-notice">
                 Skorlar eşit! İlk 3 puanı alan takım kazanır.
-            </div>
-            
-            <div class="game-info">
-                <div class="round-info">
-                    <div class="info-item">
-                        <div class="info-label">Uzatma Skoru</div>
-                        <div class="info-value" id="overtimeScore">0-0</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Sıradaki Takım</div>
-                        <div class="info-value" id="overtimeTeam">Takım 1</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Anlatıcı</div>
-                        <div class="info-value" id="overtimePlayer">Oyuncu 1</div>
-                    </div>
-                </div>
-                
-                <div class="team-scores" id="overtimeTeamScores">
-                    <!-- Takım skorları buraya dinamik olarak eklenecek -->
-                </div>
             </div>
             
             <div class="pass-info">
@@ -2154,10 +2113,6 @@
         const readyBtn = document.getElementById('readyBtn');
 
         // Oyun elementleri
-        const currentRoundDisplay = document.getElementById('currentRound');
-        const currentTeamDisplay = document.getElementById('currentTeam');
-        const currentPlayerDisplay = document.getElementById('currentPlayer');
-        const teamScoresContainer = document.getElementById('teamScores');
         const mainWordDisplay = document.getElementById('mainWord');
         const forbiddenWord1 = document.getElementById('forbiddenWord1');
         const forbiddenWord2 = document.getElementById('forbiddenWord2');
@@ -2182,10 +2137,6 @@
         const quitBtn = document.getElementById('quitBtn');
 
         // Uzatma elementleri
-        const overtimeScoreDisplay = document.getElementById('overtimeScore');
-        const overtimeTeamDisplay = document.getElementById('overtimeTeam');
-        const overtimePlayerDisplay = document.getElementById('overtimePlayer');
-        const overtimeTeamScoresContainer = document.getElementById('overtimeTeamScores');
         const overtimeMainWordDisplay = document.getElementById('overtimeMainWord');
         const overtimeWord1 = document.getElementById('overtimeWord1');
         const overtimeWord2 = document.getElementById('overtimeWord2');
@@ -3061,23 +3012,9 @@
             const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
             const currentPlayer = currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
 
-            currentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
-            currentTeamDisplay.textContent = currentTeam.name;
-            currentPlayerDisplay.textContent = currentPlayer;
-
-            teamScoresContainer.innerHTML = '';
-            gameState.teamOrder.forEach(team => {
-                const teamScoreElement = document.createElement('div');
-                teamScoreElement.className = 'team-score';
-
-                const scoreClass = team.score < 0 ? 'negative-score' : '';
-
-                teamScoreElement.innerHTML = `
-                    <div class="score-badge ${team.color}-badge">${team.id}</div>
-                    <div class="info-value ${scoreClass}">${team.score}</div>
-                `;
-                teamScoresContainer.appendChild(teamScoreElement);
-            });
+            // Bu bilgiler artık sadece duraklatma ekranında gösterilecek
+            // Oyun ekranında sadece pas hakkı, süre ve kelime kartı gösterilecek
+            updatePassDisplay(false);
         }
 
         // Pas ekranını güncelle
@@ -3417,23 +3354,8 @@
             const currentTeam = gameState.teamOrder[gameState.overtime.currentTeamIndex];
             const currentPlayer = currentTeam.players[gameState.overtime.currentPlayerIndex];
 
-            overtimeScoreDisplay.textContent = gameState.overtime.teamScores.join('-');
-            overtimeTeamDisplay.textContent = currentTeam.name;
-            overtimePlayerDisplay.textContent = currentPlayer;
-
-            overtimeTeamScoresContainer.innerHTML = '';
-            gameState.teamOrder.forEach((team, index) => {
-                const teamScoreElement = document.createElement('div');
-                teamScoreElement.className = 'team-score';
-
-                const scoreClass = gameState.overtime.teamScores[index] < 0 ? 'negative-score' : '';
-
-                teamScoreElement.innerHTML = `
-                    <div class="score-badge ${team.color}-badge">${team.id}</div>
-                    <div class="info-value ${scoreClass}">${gameState.overtime.teamScores[index]}</div>
-                `;
-                overtimeTeamScoresContainer.appendChild(teamScoreElement);
-            });
+            // Uzatma ekranında sadece pas hakkı, süre ve kelime kartı gösterilecek
+            updatePassDisplay(true);
         }
 
         // Uzatma için kart
