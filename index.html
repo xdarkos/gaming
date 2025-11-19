@@ -34,6 +34,8 @@
             --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.2);
             --radius: 16px;
             --radius-lg: 24px;
+            --card-red: #d30000;
+            --card-light-red: #ff4d4d;
         }
         
         * {
@@ -167,6 +169,212 @@
             border-radius: 2px;
         }
         
+        /* YENİ KART TASARIMI */
+        .card-container {
+            perspective: 1200px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .card {
+            width: 280px;
+            height: 400px;
+            border-radius: 22px;
+            border: 8px solid var(--card-red);
+            box-sizing: border-box;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 14px 12px 10px;
+            box-shadow: var(--shadow-lg);
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-inner {
+            background: var(--card-red);
+            border-radius: 14px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-inner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        .main-word {
+            color: #ffffff;
+            font-weight: 800;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .forbidden-words {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .forbidden-word {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        .forbidden-word:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bottom-text-wrapper {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bottom-text {
+            color: var(--card-red);
+            font-weight: 800;
+            font-size: 24px;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Kart geçiş animasyonları */
+        .card-enter {
+            animation: cardEnter 0.5s ease forwards;
+        }
+        
+        .card-exit {
+            animation: cardExit 0.5s ease forwards;
+        }
+        
+        @keyframes cardEnter {
+            0% { opacity: 0; transform: scale(0.8) rotateY(-90deg); }
+            100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+        }
+        
+        @keyframes cardExit {
+            0% { opacity: 1; transform: scale(1) rotateY(0deg); }
+            100% { opacity: 0; transform: scale(1.1) rotateY(90deg); }
+        }
+        
+        /* Pas ve Yasak butonları için yeni tasarım */
+        .game-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .control-btn {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .control-btn:hover::before {
+            left: 100%;
+        }
+        
+        .correct-btn {
+            background: var(--success);
+            color: white;
+        }
+        
+        .pass-btn {
+            background: linear-gradient(135deg, #ff9a3c, #ff6b6b);
+            color: white;
+        }
+        
+        .forbidden-btn {
+            background: linear-gradient(135deg, #d30000, #ff4d4d);
+            color: white;
+        }
+        
+        .pause-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            grid-column: span 2;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .control-btn:disabled:hover::before {
+            left: -100%;
+        }
+        
+        /* Diğer stiller aynı kalacak */
         .team-setup {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -571,162 +779,9 @@
             100% { transform: scale(1); }
         }
         
-        .card-container {
-            perspective: 1200px;
-            margin-bottom: 25px;
-        }
-        
-        .card {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            border-radius: var(--radius);
-            padding: 40px 20px;
-            color: white;
-            box-shadow: var(--shadow-lg);
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transform-style: preserve-3d;
-            transition: transform 0.8s;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-        
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .main-word {
-            font-size: clamp(2.5rem, 7vw, 4rem);
-            font-weight: 800;
-            margin-bottom: 30px;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 30px;
-            border-radius: var(--radius);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .forbidden-words {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .forbidden-word {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-size: 1rem;
-            backdrop-filter: blur(5px);
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 500;
-        }
-        
-        .forbidden-word:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .game-controls {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        
-        .control-btn {
-            padding: 16px 20px;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .control-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: 0.5s;
-        }
-        
-        .control-btn:hover::before {
-            left: 100%;
-        }
-        
-        .correct-btn {
-            background: var(--success);
-            color: white;
-        }
-        
-        .pass-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        
-        .forbidden-btn {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .pause-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            grid-column: span 2;
-        }
-        
-        .control-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .control-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .control-btn:disabled:hover::before {
-            left: -100%;
         }
         
         .team-turn-screen {
@@ -1239,300 +1294,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-		
-		/* MOBİL UYUMLULUK İYİLEŞTİRMELERİ */
-
-/* Küçük ekranlar için genel ayarlar */
-@media (max-width: 767px) {
-    body {
-        padding: 10px;
-    }
-    
-    .container {
-        padding: 0 10px;
-    }
-    
-    header {
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .screen {
-        padding: 20px 15px;
-    }
-    
-    /* Takım kurma ekranı mobil uyumluluğu */
-    .team-setup {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .team {
-        padding: 15px;
-    }
-    
-    .team-input, .player-name-input {
-        padding: 12px 15px;
-        font-size: 16px; /* iOS zoom'u engellemek için */
-    }
-    
-    /* Oyun ekranı mobil uyumluluğu */
-    .game-info {
-        grid-template-columns: 1fr;
-        padding: 15px;
-    }
-    
-    .round-info, .team-scores {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .info-item {
-        min-width: auto;
-        padding: 12px;
-    }
-    
-    .timer {
-        font-size: 4rem;
-    }
-    
-    .main-word {
-        font-size: 2rem;
-        padding: 12px 20px;
-    }
-    
-    .forbidden-words {
-        gap: 10px;
-    }
-    
-    .forbidden-word {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    
-    .game-controls {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-    
-    .control-btn {
-        padding: 14px 10px;
-        font-size: 0.9rem;
-    }
-    
-    .pause-btn {
-        grid-column: span 2;
-    }
-    
-    /* Takım sırası ekranı */
-    .turn-team {
-        font-size: 2rem;
-        padding: 15px;
-    }
-    
-    .current-player {
-        font-size: 1.2rem;
-        padding: 12px 20px;
-    }
-    
-    .countdown {
-        font-size: 5rem;
-    }
-    
-    /* Zar ekranı */
-    .dice-container {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-    
-    .dice {
-        width: 70px;
-        height: 70px;
-        font-size: 1.8rem;
-    }
-    
-    .dice-controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .dice-btn {
-        width: 100%;
-    }
-    
-    /* Kazanan ekranı */
-    .final-scores {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-    
-    .final-score {
-        padding: 20px 10px;
-    }
-    
-    .score-value {
-        font-size: 2.5rem;
-    }
-    
-    /* Kurallar modal */
-    .rules-modal-content {
-        padding: 25px 20px;
-        width: 95%;
-        max-height: 85vh;
-    }
-    
-    .rules-modal-body {
-        padding: 20px 15px;
-    }
-    
-    /* Duraklatma ekranı */
-    .pause-options {
-        flex-direction: column;
-    }
-    
-    .pause-btn {
-        width: 100%;
-    }
-    
-    /* Devam etme ekranı */
-    .resume-options {
-        flex-direction: column;
-    }
-    
-    /* İstatistik tablosu */
-    .stats-table {
-        font-size: 0.9rem;
-    }
-    
-    .stats-table th, .stats-table td {
-        padding: 12px 8px;
-    }
-}
-
-/* Çok küçük ekranlar için (iPhone SE gibi) */
-@media (max-width: 360px) {
-    .dice-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .game-controls {
-        grid-template-columns: 1fr;
-    }
-    
-    .control-btn {
-        grid-column: span 1;
-    }
-    
-    .final-scores {
-        grid-template-columns: 1fr;
-    }
-    
-    .team-score {
-        flex-direction: column;
-        gap: 8px;
-    }
-}
-
-/* Tablet boyutları için optimizasyon */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .team-setup {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .game-controls {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .pause-btn {
-        grid-column: span 2;
-    }
-}
-
-/* Mobilde yatay mod için optimizasyon */
-@media (max-height: 500px) and (orientation: landscape) {
-    body {
-        padding: 5px;
-    }
-    
-    header {
-        padding: 10px;
-        margin-bottom: 15px;
-    }
-    
-    .screen {
-        padding: 15px 10px;
-    }
-    
-    .timer {
-        font-size: 3rem;
-    }
-    
-    .main-word {
-        font-size: 1.8rem;
-        padding: 10px 15px;
-        margin-bottom: 15px;
-    }
-    
-    .forbidden-word {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-    }
-    
-    .game-info {
-        padding: 10px;
-        margin-bottom: 15px;
-    }
-    
-    .info-item {
-        padding: 8px 10px;
-    }
-}
-
-/* Dokunmatik etkileşimler için iyileştirmeler */
-@media (hover: none) and (pointer: coarse) {
-    .btn:hover, .control-btn:hover, .team:hover {
-        transform: none;
-    }
-    
-    .btn:active, .control-btn:active {
-        transform: scale(0.98);
-    }
-    
-    /* Mobilde daha büyük tıklama alanları */
-    .player-btn, .remove-team {
-        min-width: 44px;
-        min-height: 44px;
-    }
-    
-    .control-btn {
-        min-height: 44px;
-    }
-}
-
-/* Yüksek çözünürlüklü ekranlar için */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .btn, .control-btn, .team-input, .player-name-input {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-}
-
-/* Koyu mod desteği */
-@media (prefers-color-scheme: dark) {
-    /* Koyu modda ekstra kontrast için */
-    .team-input, .player-name-input {
-        background: rgba(255, 255, 255, 0.15);
-    }
-}
-
-/* Ekran okuyucu erişilebilirliği */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
         
         /* MODAL STYLES */
         .rules-modal {
@@ -1796,6 +1557,168 @@
             }
         }
         
+        /* MOBİL UYUMLULUK İYİLEŞTİRMELERİ */
+        @media (max-width: 767px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 0 10px;
+            }
+            
+            header {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .screen {
+                padding: 20px 15px;
+            }
+            
+            .card {
+                width: 260px;
+                height: 370px;
+            }
+            
+            .main-word {
+                font-size: 24px;
+            }
+            
+            .forbidden-word {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            
+            .bottom-text {
+                font-size: 20px;
+            }
+            
+            .team-setup {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .team {
+                padding: 15px;
+            }
+            
+            .team-input, .player-name-input {
+                padding: 12px 15px;
+                font-size: 16px;
+            }
+            
+            .game-info {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .round-info, .team-scores {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .info-item {
+                min-width: auto;
+                padding: 12px;
+            }
+            
+            .timer {
+                font-size: 4rem;
+            }
+            
+            .game-controls {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 14px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .pause-btn {
+                grid-column: span 2;
+            }
+            
+            .turn-team {
+                font-size: 2rem;
+                padding: 15px;
+            }
+            
+            .current-player {
+                font-size: 1.2rem;
+                padding: 12px 20px;
+            }
+            
+            .countdown {
+                font-size: 5rem;
+            }
+            
+            .dice-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .dice {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+            
+            .dice-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .dice-btn {
+                width: 100%;
+            }
+            
+            .final-scores {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .final-score {
+                padding: 20px 10px;
+            }
+            
+            .score-value {
+                font-size: 2.5rem;
+            }
+            
+            .rules-modal-content {
+                padding: 25px 20px;
+                width: 95%;
+                max-height: 85vh;
+            }
+            
+            .rules-modal-body {
+                padding: 20px 15px;
+            }
+            
+            .pause-options {
+                flex-direction: column;
+            }
+            
+            .pause-btn {
+                width: 100%;
+            }
+            
+            .resume-options {
+                flex-direction: column;
+            }
+            
+            .stats-table {
+                font-size: 0.9rem;
+            }
+            
+            .stats-table th, .stats-table td {
+                padding: 12px 8px;
+            }
+        }
+        
         @media (min-width: 768px) {
             .screen {
                 padding: 40px;
@@ -1966,14 +1889,20 @@
                 <div class="info-label">Kalan Süre</div>
             </div>
             
+            <!-- YENİ KART TASARIMI -->
             <div class="card-container">
                 <div class="card" id="gameCard">
-                    <div class="main-word" id="mainWord">YÜKSEK</div>
-                    <div class="forbidden-words">
-                        <div class="forbidden-word" id="forbiddenWord1">DAĞ</div>
-                        <div class="forbidden-word" id="forbiddenWord2">UZUN</div>
-                        <div class="forbidden-word" id="forbiddenWord3">BİNA</div>
-                        <div class="forbidden-word" id="forbiddenWord4">TEPE</div>
+                    <div class="card-inner">
+                        <div class="main-word" id="mainWord">YÜKSEK</div>
+                        <div class="forbidden-words">
+                            <div class="forbidden-word" id="forbiddenWord1">DAĞ</div>
+                            <div class="forbidden-word" id="forbiddenWord2">UZUN</div>
+                            <div class="forbidden-word" id="forbiddenWord3">BİNA</div>
+                            <div class="forbidden-word" id="forbiddenWord4">TEPE</div>
+                        </div>
+                    </div>
+                    <div class="bottom-text-wrapper">
+                        <div class="bottom-text">TABUNO</div>
                     </div>
                 </div>
             </div>
@@ -2064,14 +1993,20 @@
                 <div class="info-label">Kalan Süre</div>
             </div>
             
+            <!-- YENİ KART TASARIMI (Uzatma) -->
             <div class="card-container">
                 <div class="card" id="overtimeCard">
-                    <div class="main-word" id="overtimeMainWord">YÜKSEK</div>
-                    <div class="forbidden-words">
-                        <div class="forbidden-word" id="overtimeWord1">DAĞ</div>
-                        <div class="forbidden-word" id="overtimeWord2">UZUN</div>
-                        <div class="forbidden-word" id="overtimeWord3">BİNA</div>
-                        <div class="forbidden-word" id="overtimeWord4">TEPE</div>
+                    <div class="card-inner">
+                        <div class="main-word" id="overtimeMainWord">YÜKSEK</div>
+                        <div class="forbidden-words">
+                            <div class="forbidden-word" id="overtimeWord1">DAĞ</div>
+                            <div class="forbidden-word" id="overtimeWord2">UZUN</div>
+                            <div class="forbidden-word" id="overtimeWord3">BİNA</div>
+                            <div class="forbidden-word" id="overtimeWord4">TEPE</div>
+                        </div>
+                    </div>
+                    <div class="bottom-text-wrapper">
+                        <div class="bottom-text">TABUNO</div>
                     </div>
                 </div>
             </div>
@@ -2236,6 +2171,7 @@
         const passCountDisplay = document.getElementById('passCount');
         const currentTeamPassLabel = document.getElementById('currentTeamPassLabel');
         const currentTeamPassCount = document.getElementById('currentTeamPassCount');
+        const gameCard = document.getElementById('gameCard');
 
         // Duraklatma ekranı
         const pauseCurrentRoundDisplay = document.getElementById('pauseCurrentRound');
@@ -2263,6 +2199,7 @@
         const overtimePassCountDisplay = document.getElementById('overtimePassCount');
         const overtimeTeamPassLabel = document.getElementById('overtimeTeamPassLabel');
         const overtimeTeamPassCount = document.getElementById('overtimeTeamPassCount');
+        const overtimeCard = document.getElementById('overtimeCard');
 
         // Kazanan ekranı elementleri
         const winnerTeamNameDisplay = document.getElementById('winnerTeamName');
@@ -2284,11 +2221,11 @@
         function createEmptyGameState() {
             return {
                 teams: [],
-                currentRound: 1,          // EKRANDA GÖRÜLEN TUR (1 / toplamTur)
-                totalRounds: 10,          // Kaç KEZ tüm oyuncular tamamlanacak (tam döngü sayısı)
-                currentTeamIndex: 0,      // Şu an oynayan takım index'i (teamOrder üzerinden)
-                currentPlayerIndex: 0,    // Şu anki anlatıcı (takım içindeki index)
-                turnNumber: 0,            // GLOBAL TUR: her takımın anlatımı sonrası +1 (oyuncu sırası buradan çıkıyor)
+                currentRound: 1,
+                totalRounds: 10,
+                currentTeamIndex: 0,
+                currentPlayerIndex: 0,
+                turnNumber: 0,
                 usedWords: [],
                 teamOrder: [],
                 diceRolled: false,
@@ -2507,34 +2444,20 @@
         });
 
         // === OYUNCU SIRASI / DENGE ===
-        // turnNumber, takım ve oyuncu seçimini yönetir.
-        // Sıra:
-        //  - turnNumber artarken önce tüm takımların 1. oyuncusu
-        //  - sonra tüm takımların 2. oyuncusu
-        //  - sonra 3. oyuncusu ...
-        // TUR (currentRound) ise: bütün oyuncuların oynadığı TAM bir döngü bittiğinde +1.
-
-        // Dengesiz takımlarda oyuncu seçim helper'ı
         function getBalancedPlayerIndex(team, waveIndex, maxPlayers, minPlayers) {
-            // waveIndex: 0 => 1. oyuncular, 1 => 2. oyuncular, 2 => 3. oyuncular...
-
-            // Takımda bu indexte oyuncu varsa direkt onu kullan
             if (waveIndex < team.players.length) {
                 return { index: waveIndex, isRandomSelected: false, baseIndex: waveIndex };
             }
 
-            // Özel durum: 2-3 oyunculu dengesiz eşleşme
             if (minPlayers === 2 && maxPlayers === 3 && team.players.length === minPlayers) {
                 const randomIndex = Math.floor(Math.random() * team.players.length);
                 return { index: randomIndex, isRandomSelected: true, baseIndex: waveIndex };
             }
 
-            // Diğer tüm durumlar için güvenli fallback
             const safeIndex = waveIndex % team.players.length;
             return { index: safeIndex, isRandomSelected: false, baseIndex: waveIndex };
         }
 
-        // turnNumber'a göre şu anki takım ve oyuncuyu hesapla
         function computeCurrentTeamAndPlayer() {
             if (!gameState.teamOrder || gameState.teamOrder.length === 0) return null;
 
@@ -2564,7 +2487,6 @@
             };
         }
 
-        // Dengesiz durumda oyuncu seçildiyse ekrana mesaj bas
         function showImbalanceMessage(team, playerIndex, baseIndex) {
             const container = document.querySelector('#teamTurnScreen .team-turn-screen');
             if (!container) return;
@@ -2578,7 +2500,7 @@
                 container.appendChild(msg);
             }
 
-            const humanIndex = baseIndex + 1; // 1., 2., 3. oyuncu...
+            const humanIndex = baseIndex + 1;
             msg.textContent = `${team.name} takımının ${humanIndex}. oyuncu sırası için eşleşecek oyuncu olmadığı için rastgele oyuncu seçildi: ${team.players[playerIndex]}`;
         }
 
@@ -3087,12 +3009,7 @@
             timerDisplay.textContent = gameState.timeLeft;
         }
 
-        // TUR SİSTEMİ – Burayı özellikle değiştirdik:
-        // Her 60 saniyelik anlatım bittiğinde:
-        //   - turnNumber++ (bir sonraki "oyuncu"ya geç)
-        //   - Eğer turnNumber, takımSayısı * maxOyuncuSayısı döngüsünü tamamladıysa
-        //       => currentRound++ (oyun turu bir artar)
-        //   - Bu anda, tekrar zarla belirlenmiş 1. takıma ve 1. oyuncuya dönülmüş olur.
+        // TUR SİSTEMİ
         function timeUp() {
             gameState.timerRunning = false;
 
@@ -3105,16 +3022,13 @@
             const counts = gameState.teamOrder.map(t => t.players.length);
             const maxPlayers = Math.max(...counts);
 
-            const cycleSize = teamCount * maxPlayers; // BİR TAM OYUNCU DÖNGÜSÜNDEKİ TUR SAYISI
+            const cycleSize = teamCount * maxPlayers;
 
-            // Bir takımın 60 saniyelik turu bitti, global sırayı bir arttır
             gameState.turnNumber++;
 
-            // Tam döngü bitti mi? (Bütün oyuncular oynadı, sıra tekrar ilk takımın 1. oyuncusuna geldi)
             if (gameState.turnNumber % cycleSize === 0) {
                 gameState.currentRound++;
 
-                // Oyun bitti mi?
                 if (gameState.currentRound > gameState.totalRounds) {
                     const maxScore = Math.max(...gameState.teamOrder.map(team => team.score));
                     const winners = gameState.teamOrder.filter(team => team.score === maxScore);
@@ -3128,7 +3042,6 @@
                 }
             }
 
-            // Yeni turnNumber'a göre sıradaki takım ve oyuncuyu hesapla
             computeCurrentTeamAndPlayer();
 
             localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
@@ -3202,7 +3115,7 @@
             }
         }
 
-        // Sonraki kart
+        // YENİ KART GEÇİŞ ANİMASYONU
         function nextCard() {
             if (!Array.isArray(wordPool) || wordPool.length === 0) {
                 mainWordDisplay.textContent = 'Kelime yok';
@@ -3232,11 +3145,25 @@
             gameState.sessionUsedWords.push(randomWord.main);
             gameState.usedWords.push(randomWord.main);
 
-            mainWordDisplay.textContent = randomWord.main;
-            forbiddenWord1.textContent = randomWord.forbidden[0];
-            forbiddenWord2.textContent = randomWord.forbidden[1];
-            forbiddenWord3.textContent = randomWord.forbidden[2];
-            forbiddenWord4.textContent = randomWord.forbidden[3];
+            // Kart çıkış animasyonu
+            gameCard.classList.add('card-exit');
+            
+            setTimeout(() => {
+                // Yeni kelimeleri yükle
+                mainWordDisplay.textContent = randomWord.main;
+                forbiddenWord1.textContent = randomWord.forbidden[0];
+                forbiddenWord2.textContent = randomWord.forbidden[1];
+                forbiddenWord3.textContent = randomWord.forbidden[2];
+                forbiddenWord4.textContent = randomWord.forbidden[3];
+                
+                // Kart giriş animasyonu
+                gameCard.classList.remove('card-exit');
+                gameCard.classList.add('card-enter');
+                
+                setTimeout(() => {
+                    gameCard.classList.remove('card-enter');
+                }, 500);
+            }, 250);
         }
 
         // Doğru cevap
@@ -3539,11 +3466,25 @@
             gameState.sessionUsedWords.push(randomWord.main);
             gameState.usedWords.push(randomWord.main);
 
-            overtimeMainWordDisplay.textContent = randomWord.main;
-            overtimeWord1.textContent = randomWord.forbidden[0];
-            overtimeWord2.textContent = randomWord.forbidden[1];
-            overtimeWord3.textContent = randomWord.forbidden[2];
-            overtimeWord4.textContent = randomWord.forbidden[3];
+            // Kart çıkış animasyonu
+            overtimeCard.classList.add('card-exit');
+            
+            setTimeout(() => {
+                // Yeni kelimeleri yükle
+                overtimeMainWordDisplay.textContent = randomWord.main;
+                overtimeWord1.textContent = randomWord.forbidden[0];
+                overtimeWord2.textContent = randomWord.forbidden[1];
+                overtimeWord3.textContent = randomWord.forbidden[2];
+                overtimeWord4.textContent = randomWord.forbidden[3];
+                
+                // Kart giriş animasyonu
+                overtimeCard.classList.remove('card-exit');
+                overtimeCard.classList.add('card-enter');
+                
+                setTimeout(() => {
+                    overtimeCard.classList.remove('card-enter');
+                }, 500);
+            }, 250);
         }
 
         // Oyunu bitir
@@ -3639,15 +3580,12 @@
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 
-                // Rastgele boyut
                 const size = Math.random() * 6 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
-                // Rastgele pozisyon
                 particle.style.left = `${Math.random() * 100}%`;
                 
-                // Rastgele renk
                 const colors = [
                     'rgba(255, 154, 60, 0.7)',
                     'rgba(0, 180, 219, 0.7)',
@@ -3657,11 +3595,9 @@
                 ];
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
                 
-                // Rastgele animasyon süresi
                 const duration = Math.random() * 20 + 10;
                 particle.style.animationDuration = `${duration}s`;
                 
-                // Rastgele gecikme
                 const delay = Math.random() * 5;
                 particle.style.animationDelay = `${delay}s`;
                 
@@ -3678,104 +3614,24 @@
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 
-                // Rastgele renk
                 confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
                 
-                // Rastgele pozisyon
                 confetti.style.left = `${Math.random() * 100}%`;
                 
-                // Rastgele boyut
                 const size = Math.random() * 10 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
                 
-                // Rastgele animasyon süresi
                 const duration = Math.random() * 3 + 2;
                 confetti.style.animation = `confetti-fall ${duration}s linear forwards`;
                 
                 document.body.appendChild(confetti);
                 
-                // Animasyon bitince elementi kaldır
                 setTimeout(() => {
                     confetti.remove();
                 }, duration * 1000);
             }
         }
-		
-		// Mobil cihaz tespiti
-function isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-}
-
-// Dokunmatik olaylar için optimizasyon
-function initializeTouchEvents() {
-    // Pas butonuna uzun basma için
-    let touchTimer;
-    
-    passBtn.addEventListener('touchstart', function(e) {
-        touchTimer = setTimeout(() => {
-            // Uzun basma işlemi
-            handlePass(false);
-        }, 500);
-        e.preventDefault();
-    });
-    
-    passBtn.addEventListener('touchend', function(e) {
-        clearTimeout(touchTimer);
-        e.preventDefault();
-    });
-    
-    // Diğer butonlar için dokunmatik optimizasyon
-    const touchButtons = document.querySelectorAll('.btn, .control-btn, .player-btn');
-    touchButtons.forEach(button => {
-        button.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-        
-        button.addEventListener('touchend', function() {
-            this.style.transform = '';
-        });
-    });
-}
-
-// Sayfa yüklendiğinde mobil optimizasyonları başlat
-window.addEventListener('DOMContentLoaded', () => {
-    // Mevcut kodunuz...
-    
-    // Mobil optimizasyonları başlat
-    if (isMobileDevice()) {
-        initializeTouchEvents();
-        
-        // Mobilde viewport ayarı
-        const viewport = document.querySelector('meta[name="viewport"]');
-        if (viewport) {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-        }
-    }
-});
-
-// Ekran dönüşümlerini yönetme
-window.addEventListener('resize', function() {
-    // Ekran boyutu değiştiğinde oyun durumunu koru
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
-});
-
-// Mobil tarayıcı UI'sını yönetme
-function setupMobileUI() {
-    // Tam ekran modu için
-    if (isMobileDevice()) {
-        document.documentElement.style.height = '100%';
-        document.body.style.height = '100%';
-        
-        // Adres çubuğunu gizlemek için
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                window.scrollTo(0, 1);
-            }, 0);
-        });
-    }
-}
     </script>
 </body>
 </html>
-
