@@ -1766,19 +1766,81 @@
                 padding: 0 20px;
             }
         }
+
+/* Ekranda görünmeyen, sadece ekran okuyucu için H1 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Logo tamamen header'ın üstüne bindirilecek */
+.header-logo-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Buton vs tıklamayı engellemesin */
+}
+
+/* Sadece bunu değiştirerek logo boyutunu oynat */
+.header-logo {
+    width: 350px;  /* İstediğin gibi 180, 250, 300 yap */
+    height: auto;
+    display: block;
+}
+/* Logo tamamen header'ın üst kısmına sabitlenecek */
+.header-logo-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -58%); /* -60'tı, -70 yaptık → logo yukarı */
+    pointer-events: none;
+    z-index: 5;
+}
+
+
+/* Logo boyutu */
+.header-logo {
+    width: 280px;   /* istersen buradan büyüt/küçült */
+    height: auto;
+    display: block;
+}
+
+/* Alt yazı, logonun altında dursun diye */
+header .subtitle {
+    position: relative;
+    margin-top: 140px;  /* logonun yüksekliğine göre ayarla */
+    z-index: 1;
+}
+
+
+
     </style>
 </head>
 <body>
     <div class="floating-particles" id="particles"></div>
     
     <div class="container">
-        <header>
-            <div class="logo-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <h1>TabulaGo</h1>
-            <p class="subtitle">Takımını Kur, Kelimeleri Anlat, Kazan!</p>
-        </header>
+<header>
+
+
+    <!-- Ekranda görünmeyen ama SEO/a11y için duran başlık -->
+    <h1 class="visually-hidden">TabulaGo</h1>
+
+    <!-- Gerçek görünen logo -->
+    <div class="header-logo-wrapper">
+        <img src="logo.png" alt="TabulaGo" class="header-logo">
+    </div>
+
+    <p class="subtitle">Takımını Kur, Kelimeleri Anlat, Kazan!</p>
+</header>
+
         
         <!-- Devam Etme Ekranı -->
         <div class="screen" id="resumeScreen">
