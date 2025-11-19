@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TABUNO - Takım Kelime Oyunu</title>
+    <title>TabulaGo - Takım Kelime Oyunu</title>
     
     <!-- Mobil optimizasyon meta tag'leri -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TABUNO">
+    <meta name="apple-mobile-web-app-title" content="TabulaGo">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#6a11cb">
     <meta name="msapplication-TileColor" content="#6a11cb">
@@ -1776,7 +1776,7 @@
             <div class="logo-icon">
                 <i class="fas fa-users"></i>
             </div>
-            <h1>TABUNO</h1>
+            <h1>TabulaGo</h1>
             <p class="subtitle">Takımını Kur, Kelimeleri Anlat, Kazan!</p>
         </header>
         
@@ -1890,7 +1890,7 @@
                         </div>
                     </div>
                     <div class="bottom-text-wrapper">
-                        <div class="bottom-text">TABUNO</div>
+                        <div class="bottom-text">TabulaGo</div>
                     </div>
                 </div>
             </div>
@@ -1973,7 +1973,7 @@
                         </div>
                     </div>
                     <div class="bottom-text-wrapper">
-                        <div class="bottom-text">TABUNO</div>
+                        <div class="bottom-text">TabulaGo</div>
                     </div>
                 </div>
             </div>
@@ -2011,14 +2011,14 @@
         <div class="rules-modal-backdrop" id="rulesModalBackdrop"></div>
         <div class="rules-modal-content">
             <div class="rules-modal-header">
-                <h2 class="rules-modal-title">TABUNO Oyun Kuralları</h2>
-                <button class="rules-modal-close" id="rulesModalClose">×</button>
+                <h2 class="rules-modal-title">TabulaGo Oyun Kuralları</h2>
+                <button class="rules-modal-close" id="rulesModalClose"></button>
             </div>
             <div class="rules-modal-body">
                 <div class="rules-modal-section">
                     <h3 class="rules-modal-section-title">Genel Kurallar</h3>
                     <ul class="rules-modal-list">
-                        <li>TABUNO, takımlar halinde oynanan bir kelime anlatma oyunudur.</li>
+                        <li>TabulaGo, takımlar halinde oynanan bir kelime anlatma oyunudur.</li>
                         <li>Oyunun amacı, takımınıza kelimeleri anlatarak en yüksek puanı toplamaktır.</li>
                         <li>Her takımın kelime anlatmak için 60 saniye süresi vardır.</li>
                     </ul>
@@ -2372,7 +2372,7 @@ window.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
     createParticles();
 
-    const savedGameState = localStorage.getItem('tabunoGameState');
+    const savedGameState = localStorage.getItem('tabulagoGameState');
     if (savedGameState) {
         try {
             const parsedState = JSON.parse(savedGameState);
@@ -2419,7 +2419,7 @@ function initializeNewGame() {
 // Sayfa kapatılırken oyun durumunu kaydet - GÜNCELLENDİ
 window.addEventListener('beforeunload', () => {
     if (gameState.gameStarted) {
-        localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+        localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
     }
 });
 
@@ -2542,7 +2542,7 @@ function resumeFromSave() {
 
 // Yeni oyun başlat (resume ekranından gelen)
 function startNewGame() {
-    localStorage.removeItem('tabunoGameState');
+    localStorage.removeItem('tabulagoGameState');
     initializeNewGame();
 }
 
@@ -2749,7 +2749,7 @@ function startGame() {
         teamPasses: []
     };
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
     showDiceScreen();
 }
 
@@ -2914,7 +2914,7 @@ function startAfterDice() {
     gameState.turnNumber = 0;
     gameState.currentRound = 1;
     computeCurrentTeamAndPlayer();
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
     showTeamTurnScreen();
 }
 
@@ -2976,7 +2976,7 @@ function startRound() {
     nextCard();
     startTimer();
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Zamanlayıcıyı başlat - GÜNCELLENDİ
@@ -3058,7 +3058,7 @@ function timeUp() {
 
     computeCurrentTeamAndPlayer();
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
     showTeamTurnScreen();
 }
 
@@ -3206,7 +3206,7 @@ function handleCorrectAnswer(isOvertime) {
         nextCard();
     }
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Yasak kelime - GÜNCELLENDİ
@@ -3230,7 +3230,7 @@ function handleForbiddenWord(isOvertime) {
         nextCard();
     }
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Pas - GÜNCELLENDİ
@@ -3257,7 +3257,7 @@ function handlePass(isOvertime) {
         }
     }
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Duraklat - GÜNCELLENDİ
@@ -3361,7 +3361,7 @@ function startOvertime() {
     startOvertimeTimer();
     showScreen('overtime');
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Uzatma zamanlayıcısı - GÜNCELLENDİ
@@ -3422,7 +3422,7 @@ function overtimeTimeUp() {
     nextOvertimeCard();
     startOvertimeTimer();
 
-    localStorage.setItem('tabunoGameState', JSON.stringify(gameState));
+    localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
 // Uzatma ekranını güncelle
@@ -3495,7 +3495,7 @@ function endGame(winningTeamId) {
     gameState.sessionUsedWords = [];
     gameState.pausedTimeLeft = 60;
     
-    localStorage.removeItem('tabunoGameState');
+    localStorage.removeItem('tabulagoGameState');
 
     const winnerTeam = gameState.teams.find(team => team.id === winningTeamId);
 
@@ -3559,7 +3559,7 @@ function resetGame() {
         clearInterval(countdownInterval);
     }
 
-    localStorage.removeItem('tabunoGameState');
+    localStorage.removeItem('tabulagoGameState');
     initializeNewGame();
 }
 
