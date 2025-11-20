@@ -915,27 +915,41 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* YENİ TAKIM SIRASI EKRANI TASARIMI */
         .team-turn-screen {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 20px;
         }
         
         .turn-title {
             font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 25px;
+            background: linear-gradient(to right, var(--team1), var(--team2), var(--team3), var(--team4));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .turn-team-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
         }
         
         .turn-team {
             font-size: clamp(2.2rem, 6vw, 3.5rem);
             font-weight: bold;
-            margin-bottom: 25px;
-            padding: 20px;
+            margin-bottom: 15px;
+            padding: 20px 40px;
             border-radius: var(--radius);
             background: rgba(255, 255, 255, 0.1);
             display: inline-block;
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
         
         .team1-turn {
@@ -958,6 +972,31 @@
             box-shadow: 0 0 30px rgba(46, 204, 113, 0.5);
         }
         
+        .turn-team::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+        
+        .team1-turn::before {
+            background: var(--team1);
+        }
+        
+        .team2-turn::before {
+            background: var(--team2);
+        }
+        
+        .team3-turn::before {
+            background: var(--team3);
+        }
+        
+        .team4-turn::before {
+            background: var(--team4);
+        }
+        
         .current-player {
             font-size: 1.5rem;
             margin-bottom: 25px;
@@ -966,6 +1005,83 @@
             padding: 15px 25px;
             border-radius: var(--radius);
             display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .team-stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .team-stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .team-stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .team-stat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .team-stat-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .team-stat-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .team-stat-scores {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        .stat-positive {
+            color: var(--success);
+        }
+        
+        .stat-negative {
+            color: var(--accent);
         }
         
         .countdown {
@@ -1782,6 +1898,14 @@
                 padding: 12px 20px;
             }
             
+            .team-stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .team-stat-scores {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
             .countdown {
                 font-size: 5rem;
             }
@@ -2093,12 +2217,20 @@ header .subtitle {
             </div>
         </div>
         
-        <!-- Takım Sırası Ekranı -->
+        <!-- YENİ TAKIM SIRASI EKRANI TASARIMI -->
         <div class="screen" id="teamTurnScreen">
             <div class="team-turn-screen">
-                <h2 class="turn-title">Sıradaki Takım</h2>
-                <div class="turn-team" id="turnTeamName">Takım 1</div>
-                <div class="current-player" id="currentPlayerName">Anlatıcı: Oyuncu 1</div>
+                <h2 class="turn-title">Anlatmaya Hazır Takım</h2>
+                
+                <div class="turn-team-container">
+                    <div class="turn-team" id="turnTeamName">Takım 1</div>
+                    <div class="current-player" id="currentPlayerName">Anlatacak Oyuncu: Oyuncu 1</div>
+                </div>
+                
+                <div class="team-stats-container" id="teamStatsContainer">
+                    <!-- Takım istatistikleri buraya eklenecek -->
+                </div>
+                
                 <div class="info-label">Hazır olunca "Hazırım" butonuna basın!</div>
                 <button class="btn ready-btn" id="readyBtn"><i class="fas fa-check-circle"></i> Hazırım</button>
                 <div class="countdown" id="turnCountdown" style="display: none;">3</div>
@@ -2382,11 +2514,12 @@ const rollDiceBtn = document.getElementById('rollDiceBtn');
 const orderList = document.getElementById('orderList');
 const startAfterDiceBtn = document.getElementById('startAfterDiceBtn');
 
-// Takım sırası ekranı
+// YENİ TAKIM SIRASI EKRANI ELEMENTLERİ
 const turnTeamNameDisplay = document.getElementById('turnTeamName');
 const currentPlayerNameDisplay = document.getElementById('currentPlayerName');
 const turnCountdownDisplay = document.getElementById('turnCountdown');
 const readyBtn = document.getElementById('readyBtn');
+const teamStatsContainer = document.getElementById('teamStatsContainer');
 
 // YENİ OYUN EKRANI ELEMENTLERİ
 const currentRoundDisplay = document.getElementById('currentRoundDisplay');
@@ -3189,7 +3322,7 @@ function startAfterDice() {
     showTeamTurnScreen();
 }
 
-// Takım sırası ekranını göster
+// YENİ TAKIM SIRASI EKRANINI GÖSTER - GÜNCELLENDİ
 function showTeamTurnScreen() {
     const info = computeCurrentTeamAndPlayer();
     if (!info) return;
@@ -3197,21 +3330,64 @@ function showTeamTurnScreen() {
     const currentTeam = info.team;
     const currentPlayer = currentTeam.players[info.playerIndex];
 
+    // Takım adını ve anlatacak oyuncuyu güncelle
     turnTeamNameDisplay.textContent = currentTeam.name;
-    currentPlayerNameDisplay.textContent = `Anlatıcı: ${currentPlayer}`;
+    currentPlayerNameDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
     turnTeamNameDisplay.className = `turn-team ${currentTeam.color}-turn`;
 
+    // Eski mesajları temizle
     const oldMsg = document.getElementById('playerBalanceMessage');
     if (oldMsg) oldMsg.remove();
 
+    // Eşitsizlik mesajını göster
     if (info.isRandomSelected) {
         showImbalanceMessage(currentTeam, info.playerIndex, info.baseIndex);
     }
+
+    // Takım istatistiklerini göster
+    updateTeamStats();
 
     turnCountdownDisplay.style.display = 'none';
     readyBtn.style.display = 'block';
 
     showScreen('teamTurn');
+}
+
+// YENİ TAKIM İSTATİSTİKLERİNİ GÜNCELLE - YENİ EKLENDİ
+function updateTeamStats() {
+    teamStatsContainer.innerHTML = '';
+    
+    gameState.teamOrder.forEach((team, index) => {
+        const teamStatCard = document.createElement('div');
+        teamStatCard.className = 'team-stat-card';
+        
+        const correctAnswers = safeArrayAccess(gameState.stats.correctAnswers, index, 0);
+        const forbiddenWords = safeArrayAccess(gameState.stats.forbiddenWords, index, 0);
+        const passes = safeArrayAccess(gameState.stats.passes, index, 0);
+        
+        teamStatCard.innerHTML = `
+            <div class="team-stat-header">
+                <div class="team-stat-badge ${team.color}-badge">${team.id}</div>
+                <div class="team-stat-name">${team.name}</div>
+            </div>
+            <div class="team-stat-scores">
+                <div class="stat-item">
+                    <div class="stat-label">Doğru</div>
+                    <div class="stat-value stat-positive">${correctAnswers}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Yasak</div>
+                    <div class="stat-value stat-negative">${forbiddenWords}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Pas</div>
+                    <div class="stat-value">${passes}</div>
+                </div>
+            </div>
+        `;
+        
+        teamStatsContainer.appendChild(teamStatCard);
+    });
 }
 
 // 3-2-1 geri sayım
