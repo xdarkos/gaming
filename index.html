@@ -112,20 +112,24 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .screen {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(15px);
-            margin-bottom: 30px;
-            display: none;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: var(--transition);
-        }
+.screen {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(15px);
+    margin-bottom: 30px;
+    display: none;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: var(--transition);
+}
+
+.screen.active-screen {
+    display: block;
+}
         
         .screen::before {
             content: '';
@@ -169,10 +173,131 @@
             border-radius: 2px;
         }
         
+        /* YENİ OYUN EKRANI TASARIMI - TÜM BİLEŞENLER GÖRÜNEBİLİR */
+#gameScreen {
+    padding: 20px;
+    min-height: 80vh;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* OYUN EKRANI SADECE AKTİFKEN FLEX OLSUN */
+#gameScreen.active-screen {
+    display: flex;
+}
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .game-info-compact {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .game-info-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+            transition: var(--transition);
+        }
+        
+        .game-info-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .game-info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .game-info-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        .game-main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 25px;
+            margin: 20px 0;
+        }
+        
+        .timer-container-compact {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 150px;
+        }
+        
+        .timer-compact {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', monospace;
+            background: linear-gradient(to right, var(--team1), var(--team2), var(--team3), var(--team4));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .timer-warning {
+            animation: pulse 1s infinite;
+        }
+        
+        .pass-info-compact {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 150px;
+        }
+        
+        .pass-count-compact {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .pass-dot-compact {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+        }
+        
+        .pass-dot-compact.used {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+        
         /* YENİ KART TASARIMI - BÜYÜK BOYUT */
         .card-container {
             perspective: 1200px;
-            margin-bottom: 25px;
+            margin: 20px 0;
             display: flex;
             justify-content: center;
         }
@@ -312,6 +437,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            margin-top: 20px;
         }
         
         .control-btn {
@@ -776,10 +902,6 @@
             background: linear-gradient(to right, var(--team1), var(--team2), var(--team3), var(--team4));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-        
-        .timer-warning {
-            animation: pulse 1s infinite;
         }
         
         @keyframes pulse {
@@ -1726,6 +1848,70 @@
             .stats-table th, .stats-table td {
                 padding: 12px 8px;
             }
+            
+            /* MOBİL OYUN EKRANI */
+            #gameScreen {
+                padding: 15px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .game-info-compact {
+                gap: 10px;
+            }
+            
+            .game-info-item {
+                min-width: 100px;
+                padding: 10px 15px;
+            }
+            
+            .game-info-label {
+                font-size: 0.8rem;
+            }
+            
+            .game-info-value {
+                font-size: 1.2rem;
+            }
+            
+            .timer-compact {
+                font-size: 2.5rem;
+            }
+            
+            .pass-info-compact {
+                padding: 10px 15px;
+                min-width: 120px;
+            }
+            
+            .card {
+                width: 260px;
+                height: 380px;
+            }
+            
+            .main-word {
+                font-size: 24px;
+            }
+            
+            .forbidden-word {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+            
+            .game-controls {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 12px 8px;
+                font-size: 0.85rem;
+            }
+            
+            .pause-btn {
+                grid-column: span 2;
+            }
         }
         
         @media (min-width: 768px) {
@@ -1818,8 +2004,6 @@ header .subtitle {
     margin-top: 140px;  /* logonun yüksekliğine göre ayarla */
     z-index: 1;
 }
-
-
 
     </style>
 </head>
@@ -1921,42 +2105,64 @@ header .subtitle {
             </div>
         </div>
         
-        <!-- Oyun Ekranı - Sadeleştirilmiş -->
+        <!-- YENİ OYUN EKRANI - TASARIMI GELİŞTİRİLMİŞ -->
         <div class="screen" id="gameScreen">
-            <div class="pass-info">
-                <div class="pass-item">
-                    <div class="info-label" id="currentTeamPassLabel">Takım 1 Pas Hakkı</div>
-                    <div class="pass-count" id="currentTeamPassCount">
-                        <div class="pass-dot"></div>
-                        <div class="pass-dot"></div>
-                        <div class="pass-dot"></div>
+            <!-- Üst Bilgi Alanı -->
+            <div class="game-header">
+                <div class="game-info-compact">
+                    <div class="game-info-item">
+                        <div class="game-info-label">Tur</div>
+                        <div class="game-info-value" id="currentRoundDisplay">1/10</div>
+                    </div>
+                    <div class="game-info-item">
+                        <div class="game-info-label">Takım</div>
+                        <div class="game-info-value" id="currentTeamDisplay">Takım 1</div>
+                    </div>
+                    <div class="game-info-item">
+                        <div class="game-info-label">Anlatıcı</div>
+                        <div class="game-info-value" id="currentPlayerDisplay">Oyuncu 1</div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="timer-container">
-                <div class="timer" id="timer">60</div>
-                <div class="info-label">Kalan Süre</div>
-            </div>
-            
-            <!-- YENİ KART TASARIMI - BÜYÜK BOYUT -->
-            <div class="card-container">
-                <div class="card" id="gameCard">
-                    <div class="card-inner">
-                        <div class="main-word" id="mainWord">YÜKSEK</div>
-                        <div class="forbidden-words">
-                            <div class="forbidden-word" id="forbiddenWord1">DAĞ</div>
-                            <div class="forbidden-word" id="forbiddenWord2">UZUN</div>
-                            <div class="forbidden-word" id="forbiddenWord3">BİNA</div>
-                            <div class="forbidden-word" id="forbiddenWord4">TEPE</div>
+                
+                <div class="game-info-compact">
+                    <div class="timer-container-compact">
+                        <div class="timer-compact" id="timer">60</div>
+                        <div class="info-label">Kalan Süre</div>
+                    </div>
+                    
+                    <div class="pass-info-compact">
+                        <div class="info-label" id="currentTeamPassLabel">Pas Hakkı</div>
+                        <div class="pass-count-compact" id="currentTeamPassCount">
+                            <div class="pass-dot-compact"></div>
+                            <div class="pass-dot-compact"></div>
+                            <div class="pass-dot-compact"></div>
                         </div>
                     </div>
-                    <div class="bottom-text-wrapper">
-                        <div class="bottom-text">TabulaGo</div>
+                </div>
+            </div>
+            
+            <!-- Ana İçerik Alanı -->
+            <div class="game-main-content">
+                <!-- YENİ KART TASARIMI - BÜYÜK BOYUT -->
+                <div class="card-container">
+                    <div class="card" id="gameCard">
+                        <div class="card-inner">
+                            <div class="main-word" id="mainWord">YÜKSEK</div>
+                            <div class="forbidden-words">
+                                <div class="forbidden-word" id="forbiddenWord1">DAĞ</div>
+                                <div class="forbidden-word" id="forbiddenWord2">UZUN</div>
+                                <div class="forbidden-word" id="forbiddenWord3">BİNA</div>
+                                <div class="forbidden-word" id="forbiddenWord4">TEPE</div>
+                            </div>
+                        </div>
+                        <div class="bottom-text-wrapper">
+                            <div class="bottom-text">TabulaGo</div>
+                        </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Kontrol Butonları -->
             <div class="game-controls">
                 <button class="control-btn correct-btn" id="correctBtn"><i class="fas fa-check"></i> Doğru (+1)</button>
                 <button class="control-btn pass-btn" id="passBtn"><i class="fas fa-forward"></i> Pas (Kalan: <span id="passCount">3</span>)</button>
@@ -2182,7 +2388,10 @@ const currentPlayerNameDisplay = document.getElementById('currentPlayerName');
 const turnCountdownDisplay = document.getElementById('turnCountdown');
 const readyBtn = document.getElementById('readyBtn');
 
-// Oyun elementleri
+// YENİ OYUN EKRANI ELEMENTLERİ
+const currentRoundDisplay = document.getElementById('currentRoundDisplay');
+const currentTeamDisplay = document.getElementById('currentTeamDisplay');
+const currentPlayerDisplay = document.getElementById('currentPlayerDisplay');
 const mainWordDisplay = document.getElementById('mainWord');
 const forbiddenWord1 = document.getElementById('forbiddenWord1');
 const forbiddenWord2 = document.getElementById('forbiddenWord2');
@@ -3041,6 +3250,19 @@ function startRound() {
     localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
+// YENİ OYUN EKRANI GÜNCELLEME - GÜNCELLENDİ
+function updateGameDisplay() {
+    const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
+    const currentPlayer = currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
+
+    // Yeni oyun ekranı için bilgileri güncelle
+    currentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+    currentTeamDisplay.textContent = currentTeam.name;
+    currentPlayerDisplay.textContent = currentPlayer;
+    
+    updatePassDisplay(false);
+}
+
 // Zamanlayıcıyı başlat - GÜNCELLENDİ
 function startTimer() {
     if (gameState.timerRunning) return;
@@ -3135,16 +3357,6 @@ function showScreen(screenName) {
     }
 }
 
-// Oyun ekranını güncelle
-function updateGameDisplay() {
-    const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
-    const currentPlayer = currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
-
-    // Bu bilgiler artık sadece duraklatma ekranında gösterilecek
-    // Oyun ekranında sadece pas hakkı, süre ve kelime kartı gösterilecek
-    updatePassDisplay(false);
-}
-
 // Pas ekranını güncelle
 function updatePassDisplay(isOvertime) {
     if (isOvertime) {
@@ -3169,7 +3381,7 @@ function updatePassDisplay(isOvertime) {
         passCountDisplay.textContent = currentPasses;
         currentTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
 
-        const passDots = currentTeamPassCount.querySelectorAll('.pass-dot');
+        const passDots = currentTeamPassCount.querySelectorAll('.pass-dot-compact');
         passDots.forEach((dot, index) => {
             if (index < currentPasses) {
                 dot.classList.remove('used');
