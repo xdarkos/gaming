@@ -14,6 +14,13 @@
     <meta name="msapplication-TileColor" content="#6a11cb">
     <meta name="msapplication-tap-highlight" content="no">
     
+    <!-- Preload avatarlar için -->
+    <link rel="preload" as="image" href="avatar1.png">
+    <link rel="preload" as="image" href="avatar2.png">
+    <link rel="preload" as="image" href="avatar3.png">
+    <link rel="preload" as="image" href="avatar4.png">
+    <link rel="preload" as="image" href="avatar5.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="words.js"></script>
@@ -292,6 +299,9 @@ header .subtitle {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* YENİ: Görsel optimizasyonu */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .avatar-placeholder {
@@ -446,9 +456,9 @@ header .subtitle {
     text-align: left;
 }
 
-/* OYUN EKRANI TASARIMI - AVATARLAR EKLENDİ */
+/* YENİ: MOBİL OPTİMİZE OYUN EKRANI */
 #gameScreen {
-    padding: 20px;
+    padding: 15px;
     min-height: 80vh;
     flex-direction: column;
     justify-content: space-between;
@@ -458,91 +468,87 @@ header .subtitle {
     display: flex;
 }
 
-.game-header {
+.game-header-mobile {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 10px;
 }
 
-.game-info-compact {
+.game-info-mobile {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
+    flex: 1;
 }
 
-.game-info-item {
+.game-info-item-mobile {
     background: rgba(255, 255, 255, 0.15);
-    padding: 12px 20px;
+    padding: 10px 15px;
     border-radius: var(--radius);
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 120px;
+    min-width: 80px;
     transition: var(--transition);
 }
 
-.game-info-item:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-3px);
-}
-
-.game-info-label {
-    font-size: 0.9rem;
+.game-info-label-mobile {
+    font-size: 0.8rem;
     opacity: 0.8;
     margin-bottom: 5px;
 }
 
-.game-info-value {
-    font-size: 1.4rem;
+.game-info-value-mobile {
+    font-size: 1.1rem;
     font-weight: bold;
 }
 
-/* YENİ: AVATAR GÖRÜNTÜLEME ALANI */
-.game-player-avatar {
-    width: 50px;
-    height: 50px;
+/* YENİ: AVATAR GÖRÜNTÜLEME ALANI - MOBİL */
+.game-player-avatar-mobile {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 10px;
+    margin: 0 auto 5px;
 }
 
-.game-player-avatar img {
+.game-player-avatar-mobile img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.game-main-content {
+.game-main-content-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    gap: 25px;
-    margin: 20px 0;
+    gap: 15px;
+    margin: 15px 0;
 }
 
-.timer-container-compact {
+.timer-container-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px 25px;
+    padding: 10px 15px;
     border-radius: var(--radius);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 150px;
+    min-width: 120px;
 }
 
-.timer-compact {
-    font-size: clamp(2.5rem, 6vw, 3.5rem);
+.timer-mobile {
+    font-size: clamp(2rem, 6vw, 2.8rem);
     font-weight: bold;
     margin-bottom: 5px;
     text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -556,55 +562,55 @@ header .subtitle {
     animation: pulse 1s infinite;
 }
 
-.pass-info-compact {
+.pass-info-mobile {
     display: flex;
     flex-direction: column;
     align-items: center;
     background: rgba(255, 255, 255, 0.1);
-    padding: 15px 25px;
+    padding: 10px 15px;
     border-radius: var(--radius);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 150px;
+    min-width: 120px;
 }
 
-.pass-count-compact {
+.pass-count-mobile {
     display: flex;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 6px;
+    margin-top: 6px;
 }
 
-.pass-dot-compact {
-    width: 14px;
-    height: 14px;
+.pass-dot-mobile {
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.3);
     transition: var(--transition);
 }
 
-.pass-dot-compact.used {
+.pass-dot-mobile.used {
     background: var(--accent);
     transform: scale(1.1);
 }
 
-/* KART TASARIMI - AVATAR EKLENDİ VE MOBİL İYİLEŞTİRMELERİ */
-.card-container {
+/* KART TASARIMI - MOBİL OPTİMİZE */
+.card-container-mobile {
     perspective: 1200px;
-    margin: 20px 0;
+    margin: 15px 0;
     display: flex;
     justify-content: center;
 }
 
-.card {
-    width: 320px;
-    height: 480px;
-    border-radius: 22px;
-    border: 8px solid var(--card-red);
+.card-mobile {
+    width: 280px;
+    height: 380px;
+    border-radius: 18px;
+    border: 6px solid var(--card-red);
     box-sizing: border-box;
     background: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 14px 12px 10px;
+    padding: 12px 10px 8px;
     box-shadow: var(--shadow-lg);
     transform-style: preserve-3d;
     transition: transform 0.6s ease;
@@ -612,24 +618,24 @@ header .subtitle {
     overflow: hidden;
 }
 
-.card.flipped {
+.card-mobile.flipped {
     transform: rotateY(180deg);
 }
 
-.card-inner {
+.card-inner-mobile {
     background: var(--card-red);
-    border-radius: 14px;
+    border-radius: 12px;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 15px;
     position: relative;
     overflow: hidden;
 }
 
-.card-inner::before {
+.card-inner-mobile::before {
     content: '';
     position: absolute;
     top: -50%;
@@ -640,48 +646,18 @@ header .subtitle {
     animation: rotate 20s linear infinite;
 }
 
-.main-word {
+.main-word-mobile {
     color: #ffffff;
     font-weight: 800;
     text-align: center;
-    font-size: clamp(24px, 5vw, 32px);
-    margin-bottom: 25px;
+    font-size: clamp(20px, 5vw, 26px);
+    margin-bottom: 20px;
     position: relative;
     z-index: 1;
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    padding: 10px 15px;
+    padding: 8px 12px;
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    max-width: 100%;
-    line-height: 1.2;
-    min-height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.forbidden-words {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-}
-
-.forbidden-word {
-    background: rgba(255, 255, 255, 0.15);
-    padding: 12px 15px;
-    border-radius: 10px;
-    font-size: clamp(14px, 3vw, 18px);
-    color: white;
-    font-weight: 600;
-    backdrop-filter: blur(5px);
-    transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    text-align: center;
+    border-radius: 8px;
     word-break: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
@@ -692,23 +668,53 @@ header .subtitle {
     justify-content: center;
 }
 
-.forbidden-word:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+.forbidden-words-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
-.bottom-text-wrapper {
-    height: 70px;
+.forbidden-word-mobile {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: clamp(12px, 3vw, 14px);
+    color: white;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.2;
+    min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.bottom-text {
+.forbidden-word-mobile:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.bottom-text-wrapper-mobile {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom-text-mobile {
     color: var(--card-red);
     font-weight: 800;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -732,32 +738,32 @@ header .subtitle {
     100% { opacity: 0; transform: scale(1.1) rotateY(90deg); }
 }
 
-/* Pas ve Yasak butonları için yeni tasarım */
-.game-controls {
+/* Pas ve Yasak butonları için yeni tasarım - MOBİL */
+.game-controls-mobile {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
-.control-btn {
-    padding: 16px 20px;
+.control-btn-mobile {
+    padding: 14px 12px;
     border: none;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 1rem;
+    font-size: 0.9rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 }
 
-.control-btn::before {
+.control-btn-mobile::before {
     content: '';
     position: absolute;
     top: 0;
@@ -768,44 +774,94 @@ header .subtitle {
     transition: 0.5s;
 }
 
-.control-btn:hover::before {
+.control-btn-mobile:hover::before {
     left: 100%;
 }
 
-.correct-btn {
+.correct-btn-mobile {
     background: var(--success);
     color: white;
 }
 
-.pass-btn {
+.pass-btn-mobile {
     background: linear-gradient(135deg, #ff9a3c, #ff6b6b);
     color: white;
 }
 
-.forbidden-btn {
+.forbidden-btn-mobile {
     background: linear-gradient(135deg, #d30000, #ff4d4d);
     color: white;
 }
 
-.pause-btn {
+.pause-btn-mobile {
     background: rgba(255, 255, 255, 0.2);
     color: white;
     grid-column: span 2;
 }
 
-.control-btn:hover {
+.control-btn-mobile:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-.control-btn:disabled {
+.control-btn-mobile:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
 }
 
-.control-btn:disabled:hover::before {
+.control-btn-mobile:disabled:hover::before {
     left: -100%;
+}
+
+/* YENİ: TAKIM SIRASI EKRANINDA AVATAR GÖSTERİMİ */
+.turn-team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.turn-team-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.turn-team-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.turn-team {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 15px 30px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.1);
+    display: inline-block;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.current-player {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Diğer stiller aynı kalacak */
@@ -1230,28 +1286,6 @@ header .subtitle {
     font-weight: 800;
 }
 
-.turn-team-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.turn-team {
-    font-size: clamp(2.2rem, 6vw, 3.5rem);
-    font-weight: bold;
-    margin-bottom: 15px;
-    padding: 20px 40px;
-    border-radius: var(--radius);
-    background: rgba(255, 255, 255, 0.1);
-    display: inline-block;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
 .team1-turn {
     color: var(--team1);
     box-shadow: 0 0 30px rgba(255, 154, 60, 0.5);
@@ -1295,17 +1329,6 @@ header .subtitle {
 
 .team4-turn::before {
     background: var(--team4);
-}
-
-.current-player {
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px 25px;
-    border-radius: var(--radius);
-    display: inline-block;
-    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .team-stats-container {
@@ -2123,24 +2146,24 @@ header .subtitle {
         padding: 20px 15px;
     }
     
-    .card {
-        width: 280px;
-        height: 420px;
+    .card-mobile {
+        width: 260px;
+        height: 360px;
     }
     
-    .main-word {
-        font-size: 24px;
-        min-height: 50px;
-    }
-    
-    .forbidden-word {
-        font-size: 14px;
-        padding: 10px 12px;
+    .main-word-mobile {
+        font-size: 20px;
         min-height: 45px;
     }
     
-    .bottom-text {
-        font-size: 20px;
+    .forbidden-word-mobile {
+        font-size: 12px;
+        padding: 8px 10px;
+        min-height: 38px;
+    }
+    
+    .bottom-text-mobile {
+        font-size: 18px;
     }
     
     .team-setup {
@@ -2176,28 +2199,33 @@ header .subtitle {
         font-size: 4rem;
     }
     
-    .game-controls {
+    .game-controls-mobile {
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 8px;
     }
     
-    .control-btn {
-        padding: 14px 10px;
-        font-size: 0.9rem;
+    .control-btn-mobile {
+        padding: 12px 8px;
+        font-size: 0.85rem;
     }
     
-    .pause-btn {
+    .pause-btn-mobile {
         grid-column: span 2;
     }
     
     .turn-team {
-        font-size: 2rem;
-        padding: 15px;
+        font-size: 1.8rem;
+        padding: 12px 20px;
+    }
+    
+    .turn-team-avatar {
+        width: 100px;
+        height: 100px;
     }
     
     .current-player {
-        font-size: 1.2rem;
-        padding: 12px 20px;
+        font-size: 1.1rem;
+        padding: 10px 15px;
     }
     
     .team-stats-container {
@@ -2277,67 +2305,67 @@ header .subtitle {
     
     /* MOBİL OYUN EKRANI */
     #gameScreen {
-        padding: 15px;
+        padding: 10px;
     }
     
-    .game-header {
+    .game-header-mobile {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
     
-    .game-info-compact {
-        gap: 10px;
+    .game-info-mobile {
+        gap: 8px;
     }
     
-    .game-info-item {
+    .game-info-item-mobile {
+        min-width: 70px;
+        padding: 8px 12px;
+    }
+    
+    .game-info-label-mobile {
+        font-size: 0.7rem;
+    }
+    
+    .game-info-value-mobile {
+        font-size: 1rem;
+    }
+    
+    .timer-mobile {
+        font-size: 2rem;
+    }
+    
+    .pass-info-mobile {
+        padding: 8px 12px;
         min-width: 100px;
-        padding: 10px 15px;
     }
     
-    .game-info-label {
-        font-size: 0.8rem;
+    .card-mobile {
+        width: 240px;
+        height: 340px;
     }
     
-    .game-info-value {
-        font-size: 1.2rem;
-    }
-    
-    .timer-compact {
-        font-size: 2.5rem;
-    }
-    
-    .pass-info-compact {
-        padding: 10px 15px;
-        min-width: 120px;
-    }
-    
-    .card {
-        width: 260px;
-        height: 380px;
-    }
-    
-    .main-word {
-        font-size: 20px;
-        min-height: 45px;
-    }
-    
-    .forbidden-word {
-        font-size: 12px;
-        padding: 8px 10px;
+    .main-word-mobile {
+        font-size: 18px;
         min-height: 40px;
     }
     
-    .game-controls {
+    .forbidden-word-mobile {
+        font-size: 11px;
+        padding: 6px 8px;
+        min-height: 35px;
+    }
+    
+    .game-controls-mobile {
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 8px;
     }
     
-    .control-btn {
-        padding: 12px 8px;
-        font-size: 0.85rem;
+    .control-btn-mobile {
+        padding: 10px 6px;
+        font-size: 0.8rem;
     }
     
-    .pause-btn {
+    .pause-btn-mobile {
         grid-column: span 2;
     }
     
@@ -2362,9 +2390,9 @@ header .subtitle {
     }
     
     /* YENİ: Oyun ekranı avatar boyutu */
-    .game-player-avatar {
-        width: 40px;
-        height: 40px;
+    .game-player-avatar-mobile {
+        width: 35px;
+        height: 35px;
     }
 }
 
@@ -2373,12 +2401,12 @@ header .subtitle {
         padding: 40px;
     }
     
-    .game-controls {
+    .game-controls-mobile {
         grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
+        gap: 15px;
     }
     
-    .pause-btn {
+    .pause-btn-mobile {
         grid-column: span 1;
     }
     
@@ -2554,6 +2582,10 @@ header .subtitle {
                 <h2 class="turn-title">Anlatmaya Hazır Takım</h2>
                 
                 <div class="turn-team-container">
+                    <!-- YENİ: AVATAR GÖSTERİMİ -->
+                    <div class="turn-team-avatar" id="turnTeamAvatar">
+                        <div class="avatar-placeholder">?</div>
+                    </div>
                     <div class="turn-team" id="turnTeamName">Takım 1</div>
                     <div class="current-player" id="currentPlayerName">Anlatacak Oyuncu: Oyuncu 1</div>
                 </div>
@@ -2568,77 +2600,77 @@ header .subtitle {
             </div>
         </div>
         
-        <!-- YENİ OYUN EKRANI - TASARIMI GELİŞTİRİLMİŞ -->
+        <!-- YENİ OYUN EKRANI - MOBİL OPTİMİZE -->
         <div class="screen" id="gameScreen">
-            <!-- Üst Bilgi Alanı -->
-            <div class="game-header">
-                <div class="game-info-compact">
-                    <div class="game-info-item">
-                        <div class="game-info-label">Tur</div>
-                        <div class="game-info-value" id="currentRoundDisplay">1/10</div>
+            <!-- Üst Bilgi Alanı - MOBİL -->
+            <div class="game-header-mobile">
+                <div class="game-info-mobile">
+                    <div class="game-info-item-mobile">
+                        <div class="game-info-label-mobile">Tur</div>
+                        <div class="game-info-value-mobile" id="currentRoundDisplay">1/10</div>
                     </div>
-                    <div class="game-info-item">
-                        <div class="game-info-label">Takım</div>
-                        <div class="game-info-value" id="currentTeamDisplay">Takım 1</div>
-                        <!-- YENİ: AVATAR GÖRÜNTÜLEME -->
-                        <div class="game-player-avatar" id="currentTeamAvatar">
+                    <div class="game-info-item-mobile">
+                        <div class="game-info-label-mobile">Takım</div>
+                        <div class="game-info-value-mobile" id="currentTeamDisplay">Takım 1</div>
+                        <!-- YENİ: AVATAR GÖRÜNTÜLEME - MOBİL -->
+                        <div class="game-player-avatar-mobile" id="currentTeamAvatar">
                             <div class="avatar-placeholder">?</div>
                         </div>
                     </div>
-                    <div class="game-info-item">
-                        <div class="game-info-label">Anlatıcı</div>
-                        <div class="game-info-value" id="currentPlayerDisplay">Oyuncu 1</div>
-                        <!-- YENİ: AVATAR GÖRÜNTÜLEME -->
-                        <div class="game-player-avatar" id="currentPlayerAvatar">
+                    <div class="game-info-item-mobile">
+                        <div class="game-info-label-mobile">Anlatıcı</div>
+                        <div class="game-info-value-mobile" id="currentPlayerDisplay">Oyuncu 1</div>
+                        <!-- YENİ: AVATAR GÖRÜNTÜLEME - MOBİL -->
+                        <div class="game-player-avatar-mobile" id="currentPlayerAvatar">
                             <div class="avatar-placeholder">?</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="game-info-compact">
-                    <div class="timer-container-compact">
-                        <div class="timer-compact" id="timer">60</div>
+                <div class="game-info-mobile">
+                    <div class="timer-container-mobile">
+                        <div class="timer-mobile" id="timer">60</div>
                         <div class="info-label">Kalan Süre</div>
                     </div>
                     
-                    <div class="pass-info-compact">
+                    <div class="pass-info-mobile">
                         <div class="info-label" id="currentTeamPassLabel">Pas Hakkı</div>
-                        <div class="pass-count-compact" id="currentTeamPassCount">
-                            <div class="pass-dot-compact"></div>
-                            <div class="pass-dot-compact"></div>
-                            <div class="pass-dot-compact"></div>
+                        <div class="pass-count-mobile" id="currentTeamPassCount">
+                            <div class="pass-dot-mobile"></div>
+                            <div class="pass-dot-mobile"></div>
+                            <div class="pass-dot-mobile"></div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Ana İçerik Alanı -->
-            <div class="game-main-content">
-                <!-- YENİ KART TASARIMI - BÜYÜK BOYUT -->
-                <div class="card-container">
-                    <div class="card" id="gameCard">
-                        <div class="card-inner">
-                            <div class="main-word" id="mainWord">YÜKSEK</div>
-                            <div class="forbidden-words">
-                                <div class="forbidden-word" id="forbiddenWord1">DAĞ</div>
-                                <div class="forbidden-word" id="forbiddenWord2">UZUN</div>
-                                <div class="forbidden-word" id="forbiddenWord3">BİNA</div>
-                                <div class="forbidden-word" id="forbiddenWord4">TEPE</div>
+            <!-- Ana İçerik Alanı - MOBİL -->
+            <div class="game-main-content-mobile">
+                <!-- YENİ KART TASARIMI - MOBİL BOYUT -->
+                <div class="card-container-mobile">
+                    <div class="card-mobile" id="gameCard">
+                        <div class="card-inner-mobile">
+                            <div class="main-word-mobile" id="mainWord">YÜKSEK</div>
+                            <div class="forbidden-words-mobile">
+                                <div class="forbidden-word-mobile" id="forbiddenWord1">DAĞ</div>
+                                <div class="forbidden-word-mobile" id="forbiddenWord2">UZUN</div>
+                                <div class="forbidden-word-mobile" id="forbiddenWord3">BİNA</div>
+                                <div class="forbidden-word-mobile" id="forbiddenWord4">TEPE</div>
                             </div>
                         </div>
-                        <div class="bottom-text-wrapper">
-                            <div class="bottom-text">TabulaGo</div>
+                        <div class="bottom-text-wrapper-mobile">
+                            <div class="bottom-text-mobile">TabulaGo</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Kontrol Butonları -->
-            <div class="game-controls">
-                <button class="control-btn correct-btn" id="correctBtn"><i class="fas fa-check"></i> Doğru (+1)</button>
-                <button class="control-btn pass-btn" id="passBtn"><i class="fas fa-forward"></i> Pas (Kalan: <span id="passCount">3</span>)</button>
-                <button class="control-btn forbidden-btn" id="forbiddenBtn"><i class="fas fa-times"></i> Yasak (-1)</button>
-                <button class="control-btn pause-btn" id="pauseBtn"><i class="fas fa-pause"></i> Duraklat</button>
+            <!-- Kontrol Butonları - MOBİL -->
+            <div class="game-controls-mobile">
+                <button class="control-btn-mobile correct-btn-mobile" id="correctBtn"><i class="fas fa-check"></i> Doğru (+1)</button>
+                <button class="control-btn-mobile pass-btn-mobile" id="passBtn"><i class="fas fa-forward"></i> Pas (Kalan: <span id="passCount">3</span>)</button>
+                <button class="control-btn-mobile forbidden-btn-mobile" id="forbiddenBtn"><i class="fas fa-times"></i> Yasak (-1)</button>
+                <button class="control-btn-mobile pause-btn-mobile" id="pauseBtn"><i class="fas fa-pause"></i> Duraklat</button>
             </div>
         </div>
         
@@ -2869,11 +2901,12 @@ const startAfterDiceBtn = document.getElementById('startAfterDiceBtn');
 
 // YENİ TAKIM SIRASI EKRANI ELEMENTLERİ
 const turnTeamNameDisplay = document.getElementById('turnTeamName');
+const turnTeamAvatarDisplay = document.getElementById('turnTeamAvatar');
 const turnCountdownDisplay = document.getElementById('turnCountdown');
 const readyBtn = document.getElementById('readyBtn');
 const teamStatsContainer = document.getElementById('teamStatsContainer');
 
-// YENİ OYUN EKRANI ELEMENTLERİ
+// YENİ OYUN EKRANI ELEMENTLERİ - MOBİL
 const currentRoundDisplay = document.getElementById('currentRoundDisplay');
 const currentTeamDisplay = document.getElementById('currentTeamDisplay');
 const currentPlayerDisplay = document.getElementById('currentPlayerDisplay');
@@ -3746,8 +3779,8 @@ function finishTeamAvatarSelection() {
     } else {
         // Aynı takımın sonraki oyuncusuna geç
         updateAvatarSelectionDisplay();
-        renderAvatarGrid();
-        checkTeamReadyStatus();
+            renderAvatarGrid();
+            checkTeamReadyStatus();
     }
 }
 
@@ -3981,6 +4014,9 @@ function showTeamTurnScreen() {
     currentPlayerNameDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
     turnTeamNameDisplay.className = `turn-team ${currentTeam.color}-turn`;
 
+    // YENİ: AVATAR GÖSTERİMİ
+    updateTurnTeamAvatar(currentTeam, currentPlayer);
+
     // Eski mesajları temizle
     const oldMsg = document.getElementById('playerBalanceMessage');
     if (oldMsg) oldMsg.remove();
@@ -3997,6 +4033,21 @@ function showTeamTurnScreen() {
     readyBtn.style.display = 'block';
 
     showScreen('teamTurn');
+}
+
+// YENİ: TAKIM SIRASI EKRANINDA AVATAR GÖSTER - YENİ EKLENDİ
+function updateTurnTeamAvatar(team, player) {
+    // Oyuncu avatarını bul
+    const playerAvatar = gameState.playerAvatars.find(pa => 
+        pa.teamId === team.id && 
+        pa.playerName === player
+    );
+    
+    if (playerAvatar) {
+        turnTeamAvatarDisplay.innerHTML = `<img src="${avatarList[playerAvatar.avatarIndex]}" alt="${player}" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${player}</div>'">`;
+    } else {
+        turnTeamAvatarDisplay.innerHTML = '<div class="avatar-placeholder">?</div>';
+    }
 }
 
 // YENİ TAKIM İSTATİSTİKLERİNİ GÜNCELLE - YENİ EKLENDİ
@@ -4232,7 +4283,7 @@ function updatePassDisplay(isOvertime) {
         passCountDisplay.textContent = currentPasses;
         currentTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
 
-        const passDots = currentTeamPassCount.querySelectorAll('.pass-dot-compact');
+        const passDots = currentTeamPassCount.querySelectorAll('.pass-dot-mobile');
         passDots.forEach((dot, index) => {
             if (index < currentPasses) {
                 dot.classList.remove('used');
