@@ -4754,6 +4754,29 @@ function createConfetti() {
         }, duration * 1000);
     }
 }
+
+// --- MOBİLDE ZOOM'U TAMAMEN KAPAT ---
+// Çift dokunma zoom'unu engelle
+(function () {
+    let lastTouchEnd = 0;
+
+    document.addEventListener('touchend', function (event) {
+        const now = Date.now();
+
+        // İki dokunuş arası süre çok kısa ise (double tap)
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault(); // zoom'u engelle
+        }
+
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    // iOS Safari pinch zoom (iki parmak büyütme) engelleme
+    document.addEventListener('gesturestart', function (event) {
+        event.preventDefault();
+    }, { passive: false });
+})();
+
     </script>
 </body>
 </html>
