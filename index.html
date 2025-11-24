@@ -2592,6 +2592,73 @@ header .subtitle {
     border: 0;
 }
 
+/* YENİ: Sıralama listesi flama stilleri */
+.order-team-flag {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.order-flag-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 5px;
+}
+
+.order-flag-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Sıralama listesi item düzenlemesi */
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Boşlukları biraz artırdık */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.05);
+    transition: var(--transition);
+}
+
+@media (max-width: 767px) {
+    .order-item {
+        gap: 12px;
+        padding: 12px;
+    }
+    
+    .order-team-flag {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .order-flag-placeholder {
+        font-size: 0.7rem;
+    }
+    
+    .order-team {
+        font-size: 1rem;
+    }
+    
+    .order-dice {
+        font-size: 1rem;
+        padding: 6px 12px;
+    }
+}
 
     </style>
 </head>
@@ -4369,15 +4436,24 @@ function determineOrder() {
     startAfterDiceBtn.style.display = 'block';
 }
 
-// Sıralama listesini göster
+// Sıralama listesini göster - FLAMALAR EKLENDİ
 function showOrderList() {
     orderList.innerHTML = '<h3 class="order-title">Oyun Sırası</h3>';
 
     gameState.teamOrder.forEach((team, index) => {
+        // Takımın seçtiği flamayı bul
+        const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
+        
         const orderItem = document.createElement('div');
         orderItem.className = 'order-item';
         orderItem.innerHTML = `
             <div class="order-number">${index + 1}</div>
+            ${teamFlag ? 
+                `<div class="order-team-flag">
+                    <img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="order-flag-image" onerror="this.style.display='none'">
+                </div>` : 
+                '<div class="order-team-flag"><div class="order-flag-placeholder">?</div></div>'
+            }
             <div class="order-team">${team.name}</div>
             <div class="order-dice">Zar: ${team.diceValue}</div>
         `;
