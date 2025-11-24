@@ -2917,29 +2917,33 @@ header .subtitle {
             </div>
         </div>
         
-        <!-- YENİ TAKIM SIRASI EKRANI TASARIMI -->
-        <div class="screen" id="teamTurnScreen">
-            <div class="team-turn-screen">
-                <h2 class="turn-title">Anlatmaya Hazır Takım</h2>
-                
-                <div class="turn-team-container">
-                    <!-- YENİ: AVATAR GÖSTERİMİ -->
-                    <div class="turn-team-avatar" id="turnTeamAvatar">
-                        <div class="avatar-placeholder">?</div>
-                    </div>
-                    <div class="turn-team" id="turnTeamName">Takım 1</div>
-                    <div class="current-player" id="currentPlayerName">Anlatacak Oyuncu: Oyuncu 1</div>
-                </div>
-                
-                <div class="team-stats-container" id="teamStatsContainer">
-                    <!-- Takım istatistikleri buraya eklenecek -->
-                </div>
-                
-                <div class="info-label">Hazır olunca "Hazırım" butonuna basın!</div>
-                <button class="btn ready-btn" id="readyBtn"><i class="fas fa-check-circle"></i> Hazırım</button>
-                <div class="countdown" id="turnCountdown" style="display: none;">3</div>
+<!-- YENİ TAKIM SIRASI EKRANI TASARIMI -->
+<div class="screen" id="teamTurnScreen">
+    <div class="team-turn-screen">
+        <h2 class="turn-title">Anlatmaya Hazır Takım</h2>
+        
+        <div class="turn-team-container">
+            <!-- YENİ: AVATAR GÖSTERİMİ -->
+            <div class="turn-team-avatar" id="turnTeamAvatar">
+                <div class="avatar-placeholder">?</div>
             </div>
+            <div class="turn-team" id="turnTeamName">Takım 1</div>
+            <!-- ÖNEMLİ: id burada değişti -->
+            <div class="current-player" id="turnCurrentPlayer">Anlatacak Oyuncu: Oyuncu 1</div>
         </div>
+        
+        <div class="team-stats-container" id="teamStatsContainer">
+            <!-- Takım istatistikleri buraya eklenecek -->
+        </div>
+        
+        <div class="turn-countdown" id="turnCountdown">3</div>
+        <button class="btn btn-primary" id="readyBtn">
+            <i class="fas fa-play"></i> Hazırım!
+        </button>
+    </div>
+</div>
+
+
         
         <!-- YENİ OYUN EKRANI - MOBİL OPTİMİZE -->
         <div class="screen" id="gameScreen">
@@ -3231,8 +3235,9 @@ const addTeamBtn = document.getElementById('addTeamBtn');
 const totalRoundsInput = document.getElementById('totalRounds');
 
 // Avatar seçim ekranı elementleri
-const currentTeamNameDisplay = document.getElementById('currentTeamName');
-const currentPlayerNameDisplay = document.getElementById('currentPlayerName');
+const currentTeamNameDisplay = document.getElementById('currentTeamName');      // Avatar ekranı
+const currentPlayerNameDisplay = document.getElementById('currentPlayerName');  // Avatar ekranı
+
 const avatarGrid = document.getElementById('avatarGrid');
 const teamProgressDots = document.getElementById('teamProgressDots');
 const progressText = document.getElementById('progressText');
@@ -3262,6 +3267,9 @@ const turnTeamAvatarDisplay = document.getElementById('turnTeamAvatar');
 const turnCountdownDisplay = document.getElementById('turnCountdown');
 const readyBtn = document.getElementById('readyBtn');
 const teamStatsContainer = document.getElementById('teamStatsContainer');
+
+// YENİ: Anlatmaya Hazır ekrandaki oyuncu ismi
+const turnCurrentPlayerDisplay = document.getElementById('turnCurrentPlayer');
 
 // YENİ OYUN EKRANI ELEMENTLERİ - MOBİL
 const currentRoundDisplay = document.getElementById('currentRoundDisplay');
@@ -4596,7 +4604,8 @@ function showTeamTurnScreen() {
 
     // Takım adını ve anlatacak oyuncuyu güncelle
     turnTeamNameDisplay.textContent = currentTeam.name;
-    currentPlayerNameDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
+    // ÖNEMLİ: Artık Anlatmaya Hazır ekranındaki elemana yazıyoruz
+    turnCurrentPlayerDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
     
     // TAKIM ADININ RENGİNİ FLAMANIN RENGİNE GÖRE AYARLA
     const teamFlag = gameState.teamFlags.find(tf => tf.teamId === currentTeam.id);
@@ -4627,6 +4636,7 @@ function showTeamTurnScreen() {
 
     showScreen('teamTurn');
 }
+
 
 // YENİ: TAKIM SIRASI EKRANINDA AVATAR GÖSTER - YENİ EKLENDİ
 function updateTurnTeamAvatar(team, player) {
