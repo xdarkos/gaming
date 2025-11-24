@@ -678,12 +678,12 @@ header .subtitle {
     margin-bottom: 5px;
     text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     font-family: 'Poppins', monospace;
-    background: linear-gradient(to right, var(--team1), var(--team2), var(--team3), var(--team4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white; /* Beyaz renk */
+    transition: var(--transition);
 }
 
 .timer-warning {
+    color: #ff6b6b !important; /* Kırmızı renk */
     animation: pulse 1s infinite;
 }
 
@@ -976,6 +976,7 @@ header .subtitle {
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    color: white; /* Beyaz renk */
 }
 
 .current-player {
@@ -1380,9 +1381,13 @@ header .subtitle {
     margin-bottom: 15px;
     text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     font-family: 'Poppins', monospace;
-    background: linear-gradient(to right, var(--team1), var(--team2), var(--team3), var(--team4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: white; /* Beyaz renk */
+    transition: var(--transition);
+}
+
+.timer-warning {
+    color: #ff6b6b !important; /* Kırmızı renk */
+    animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
@@ -2660,6 +2665,104 @@ header .subtitle {
     }
 }
 
+/* YENİ: Takım istatistiklerinde flama görünümü */
+.team-stat-flag {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-stat-flag-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 5px;
+}
+
+.team-stat-flag-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* YENİ: Oyun ekranında takım flaması için stil */
+.team-flag-display {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin: 0 auto 5px;
+}
+
+.team-flag-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 3px;
+}
+
+.team-flag-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+
+/* YENİ: Mola ekranında avatar ve flama için stiller */
+.pause-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.pause-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pause-flag {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.pause-flag img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 3px;
+}
+
     </style>
 </head>
 <body>
@@ -2850,9 +2953,9 @@ header .subtitle {
                     <div class="game-info-item-mobile">
                         <div class="game-info-label-mobile">Takım</div>
                         <div class="game-info-value-mobile" id="currentTeamDisplay">Takım 1</div>
-                        <!-- YENİ: AVATAR GÖRÜNTÜLEME - MOBİL -->
-                        <div class="game-player-avatar-mobile" id="currentTeamAvatar">
-                            <div class="avatar-placeholder">?</div>
+                        <!-- YENİ: FLAMA GÖRÜNTÜLEME - MOBİL -->
+                        <div class="team-flag-display" id="currentTeamFlag">
+                            <div class="team-flag-placeholder">?</div>
                         </div>
                     </div>
                     <div class="game-info-item-mobile">
@@ -2925,12 +3028,20 @@ header .subtitle {
                             <div class="info-value" id="pauseCurrentRound">1/10</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Sıradaki Takım</div>
+                            <div class="info-label">Anlatan Takım</div>
                             <div class="info-value" id="pauseCurrentTeam">Takım 1</div>
+                            <!-- YENİ: TAKIM FLAMASI GÖSTERİMİ -->
+                            <div class="pause-flag" id="pauseTeamFlag">
+                                <div class="team-flag-placeholder">?</div>
+                            </div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">Anlatıcı</div>
                             <div class="info-value" id="pauseCurrentPlayer">Oyuncu 1</div>
+                            <!-- YENİ: OYUNCU AVATARI GÖSTERİMİ -->
+                            <div class="pause-avatar" id="pausePlayerAvatar">
+                                <div class="avatar-placeholder">?</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -3156,7 +3267,7 @@ const teamStatsContainer = document.getElementById('teamStatsContainer');
 const currentRoundDisplay = document.getElementById('currentRoundDisplay');
 const currentTeamDisplay = document.getElementById('currentTeamDisplay');
 const currentPlayerDisplay = document.getElementById('currentPlayerDisplay');
-const currentTeamAvatar = document.getElementById('currentTeamAvatar');
+const currentTeamFlag = document.getElementById('currentTeamFlag');
 const currentPlayerAvatar = document.getElementById('currentPlayerAvatar');
 const mainWordDisplay = document.getElementById('mainWord');
 const forbiddenWord1 = document.getElementById('forbiddenWord1');
@@ -3177,6 +3288,8 @@ const gameCard = document.getElementById('gameCard');
 const pauseCurrentRoundDisplay = document.getElementById('pauseCurrentRound');
 const pauseCurrentTeamDisplay = document.getElementById('pauseCurrentTeam');
 const pauseCurrentPlayerDisplay = document.getElementById('pauseCurrentPlayer');
+const pauseTeamFlag = document.getElementById('pauseTeamFlag');
+const pausePlayerAvatar = document.getElementById('pausePlayerAvatar');
 const pauseTeamScoresContainer = document.getElementById('pauseTeamScores');
 const resumeBtn = document.getElementById('resumeBtn');
 const quitBtn = document.getElementById('quitBtn');
@@ -3223,10 +3336,10 @@ const avatarList = [
 
 // Flama listesi - 4 flama
 const flagList = [
-    { name: 'Kırmızı Flama', image: 'flamakirmizi.png' },
-    { name: 'Mavi Flama', image: 'flamamavi.png' },
-    { name: 'Sarı Flama', image: 'flamasari.png' },
-    { name: 'Yeşil Flama', image: 'flamayesil.png' }
+    { name: 'Kırmızı Flama', image: 'flamakirmizi.png', color: '#ff6b6b' },
+    { name: 'Mavi Flama', image: 'flamamavi.png', color: '#00b4db' },
+    { name: 'Sarı Flama', image: 'flamasari.png', color: '#ffd93d' },
+    { name: 'Yeşil Flama', image: 'flamayesil.png', color: '#6bcf7f' }
 ];
 
 // Modal durumu
@@ -4151,7 +4264,8 @@ function selectFlag(flagIndex) {
         teamId: currentTeam.id,
         flagIndex: flagIndex,
         flagName: flagList[flagIndex].name,
-        flagPath: flagList[flagIndex].image
+        flagPath: flagList[flagIndex].image,
+        flagColor: flagList[flagIndex].color
     });
     
     // Flama grid'ini güncelle
@@ -4483,7 +4597,15 @@ function showTeamTurnScreen() {
     // Takım adını ve anlatacak oyuncuyu güncelle
     turnTeamNameDisplay.textContent = currentTeam.name;
     currentPlayerNameDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
-    turnTeamNameDisplay.className = `turn-team ${currentTeam.color}-turn`;
+    
+    // TAKIM ADININ RENGİNİ FLAMANIN RENGİNE GÖRE AYARLA
+    const teamFlag = gameState.teamFlags.find(tf => tf.teamId === currentTeam.id);
+    if (teamFlag) {
+        turnTeamNameDisplay.style.color = teamFlag.flagColor;
+        turnTeamNameDisplay.style.boxShadow = `0 0 30px ${teamFlag.flagColor}80`;
+    } else {
+        turnTeamNameDisplay.className = `turn-team ${currentTeam.color}-turn`;
+    }
 
     // YENİ: AVATAR GÖSTERİMİ
     updateTurnTeamAvatar(currentTeam, currentPlayer);
@@ -4533,9 +4655,17 @@ function updateTeamStats() {
         const forbiddenWords = safeArrayAccess(gameState.stats.forbiddenWords, index, 0);
         const passes = safeArrayAccess(gameState.stats.passes, index, 0);
         
+        // Takımın flamasını bul
+        const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
+        
         teamStatCard.innerHTML = `
             <div class="team-stat-header">
-                <div class="team-stat-badge ${team.color}-badge">${team.id}</div>
+                ${teamFlag ? 
+                    `<div class="team-stat-flag">
+                        <img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-stat-flag-image" onerror="this.style.display='none'">
+                    </div>` : 
+                    '<div class="team-stat-flag"><div class="team-stat-flag-placeholder">?</div></div>'
+                }
                 <div class="team-stat-name">${team.name}</div>
             </div>
             <div class="team-stat-scores">
@@ -4604,35 +4734,41 @@ function updateGameDisplay() {
     currentTeamDisplay.textContent = currentTeam.name;
     currentPlayerDisplay.textContent = currentPlayer;
     
-    // YENİ: AVATARLARI GÖSTER
+    // YENİ: AVATARLARI VE FLAMALARI GÖSTER
     updatePlayerAvatars(currentTeam, currentPlayer);
+    updateTeamFlag(currentTeam);
     
     updatePassDisplay(false);
 }
 
 // YENİ: OYUNCU AVATARLARINI GÜNCELLE - YENİ EKLENDİ
 function updatePlayerAvatars(team, player) {
-    // Takım avatarını güncelle
-    const teamAvatar = gameState.playerAvatars.find(pa => 
-        pa.teamId === team.id
-    );
-    
-    if (teamAvatar) {
-        currentTeamAvatar.innerHTML = `<img src="${avatarList[teamAvatar.avatarIndex]}" alt="${team.name}" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${team.name}</div>'">`;
-    } else {
-        currentTeamAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
-    }
-    
-    // Oyuncu avatarını güncelle
+    // Sadece oyuncu avatarını güncelle
+
     const playerAvatar = gameState.playerAvatars.find(pa => 
         pa.teamId === team.id && 
         pa.playerName === player
     );
     
     if (playerAvatar) {
-        currentPlayerAvatar.innerHTML = `<img src="${avatarList[playerAvatar.avatarIndex]}" alt="${player}" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${player}</div>'">`;
+        currentPlayerAvatar.innerHTML = `
+            <img src="${avatarList[playerAvatar.avatarIndex]}" alt="${player}"
+                 onerror="this.parentElement.innerHTML='<div class=\'avatar-placeholder\'>${player}</div>'">
+        `;
     } else {
         currentPlayerAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
+    }
+}
+
+
+// YENİ: TAKIM FLAMASINI GÜNCELLE - YENİ EKLENDİ
+function updateTeamFlag(team) {
+    const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
+    
+    if (teamFlag) {
+        currentTeamFlag.innerHTML = `<img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">`;
+    } else {
+        currentTeamFlag.innerHTML = '<div class="team-flag-placeholder">?</div>';
     }
 }
 
@@ -4925,6 +5061,25 @@ function updatePauseDisplay() {
     pauseCurrentTeamDisplay.textContent = currentTeam.name;
     pauseCurrentPlayerDisplay.textContent = currentPlayer;
 
+    // YENİ: TAKIM FLAMASINI GÜNCELLE
+    const teamFlag = gameState.teamFlags.find(tf => tf.teamId === currentTeam.id);
+    if (teamFlag) {
+        pauseTeamFlag.innerHTML = `<img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">`;
+    } else {
+        pauseTeamFlag.innerHTML = '<div class="team-flag-placeholder">?</div>';
+    }
+
+    // YENİ: OYUNCU AVATARINI GÜNCELLE
+    const playerAvatar = gameState.playerAvatars.find(pa => 
+        pa.teamId === currentTeam.id && 
+        pa.playerName === currentPlayer
+    );
+    if (playerAvatar) {
+        pausePlayerAvatar.innerHTML = `<img src="${avatarList[playerAvatar.avatarIndex]}" alt="${currentPlayer}" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${currentPlayer}</div>'">`;
+    } else {
+        pausePlayerAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
+    }
+
     pauseTeamScoresContainer.innerHTML = '';
     gameState.teamOrder.forEach(team => {
         const teamScoreElement = document.createElement('div');
@@ -4932,8 +5087,16 @@ function updatePauseDisplay() {
 
         const scoreClass = team.score < 0 ? 'negative-score' : '';
 
+        // YENİ: TAKIM FLAMASINI GÖSTER
+        const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
+        
         teamScoreElement.innerHTML = `
-            <div class="score-badge ${team.color}-badge">${team.id}</div>
+            ${teamFlag ? 
+                `<div class="pause-flag">
+                    <img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">
+                </div>` : 
+                '<div class="pause-flag"><div class="team-flag-placeholder">?</div></div>'
+            }
             <div class="info-value ${scoreClass}">${team.score}</div>
         `;
         pauseTeamScoresContainer.appendChild(teamScoreElement);
