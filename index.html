@@ -2937,7 +2937,7 @@ header .subtitle {
             </div>
             <div class="turn-team" id="turnTeamName">Takım 1</div>
             <!-- ÖNEMLİ: id burada değişti -->
-            <div class="current-player" id="turnCurrentPlayer">Anlatacak Oyuncu: Oyuncu 1</div>
+            <div class="current-player" id="turnCurrentPlayer">Anlatan Oyuncu: Oyuncu 1</div>
         </div>
         
         <div class="team-stats-container" id="teamStatsContainer">
@@ -3857,17 +3857,20 @@ function attachTeamEventListeners() {
 
     document.querySelectorAll('.team-name-input').forEach(input => {
         input.addEventListener('focus', (e) => {
+		e.target.value = e.target.value.toUpperCase();
             // Takım ismi input'una tıklandığında içeriği temizle
             if (e.target.value === `Takım ${e.target.getAttribute('data-team-id')}`) {
                 e.target.value = '';
             }
         });
         
-        input.addEventListener('input', (e) => {
-            const teamId = parseInt(e.target.getAttribute('data-team-id'));
-            const team = gameState.teams.find(t => t.id === teamId);
-            if (team) team.name = e.target.value;
-        });
+input.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();   // ← OTOMATİK BÜYÜK HARF
+    const teamId = parseInt(e.target.getAttribute('data-team-id'));
+    const team = gameState.teams.find(t => t.id === teamId);
+    if (team) team.name = e.target.value;
+});
+
     });
 
     document.querySelectorAll('.player-name-input').forEach(input => {
@@ -3879,14 +3882,16 @@ function attachTeamEventListeners() {
             }
         });
         
-        input.addEventListener('input', (e) => {
-            const teamId = parseInt(e.target.getAttribute('data-team-id'));
-            const playerIndex = parseInt(e.target.getAttribute('data-player-index'));
-            const team = gameState.teams.find(t => t.id === teamId);
-            if (team && team.players[playerIndex] !== undefined) {
-                team.players[playerIndex] = e.target.value;
-            }
-        });
+input.addEventListener('input', (e) => {
+    e.target.value = e.target.value.toUpperCase();    // ← OTOMATİK BÜYÜK HARF
+    const teamId = parseInt(e.target.getAttribute('data-team-id'));
+    const playerIndex = parseInt(e.target.getAttribute('data-player-index'));
+    const team = gameState.teams.find(t => t.id === teamId);
+    if (team && team.players[playerIndex] !== undefined) {
+        team.players[playerIndex] = e.target.value;
+    }
+});
+
     });
 }
 
