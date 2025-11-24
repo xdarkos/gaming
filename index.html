@@ -65,6 +65,10 @@
             color: white;
             overflow-x: hidden;
             max-width: 100vw;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .container,
@@ -898,6 +902,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            touch-action: manipulation;
         }
 
         .control-btn-mobile::before {
@@ -1211,6 +1216,7 @@
             overflow: hidden;
             min-width: 180px;
             letter-spacing: 0.5px;
+            touch-action: manipulation;
         }
 
         .btn::before {
@@ -3369,8 +3375,8 @@
         let rulesUnderstood = false;
 
         // Zamanlayıcı değişkenleri
-        let timerInterval;
-        let countdownInterval;
+        let timerInterval = null;
+        let countdownInterval = null;
 
         // Avatar seçim durumu
         let avatarSelectionState = {
@@ -3436,62 +3442,70 @@
             return array[index] !== undefined ? array[index] : defaultValue;
         }
 
+        // Element null kontrolü
+        function safeElementAccess(element) {
+            return element && element instanceof HTMLElement ? element : null;
+        }
+
         // ===== OLAYLARI BAŞLATMA =====
 
         // Olay dinleyicileri
         function initializeEventListeners() {
-            startGameBtn.addEventListener('click', startGame);
-            playAgainBtn.addEventListener('click', resetGame);
-            mainMenuBtn.addEventListener('click', goToMainMenu);
-            addTeamBtn.addEventListener('click', addTeam);
+            // Buton event listener'ları
+            if (startGameBtn) startGameBtn.addEventListener('click', startGame);
+            if (playAgainBtn) playAgainBtn.addEventListener('click', resetGame);
+            if (mainMenuBtn) mainMenuBtn.addEventListener('click', goToMainMenu);
+            if (addTeamBtn) addTeamBtn.addEventListener('click', addTeam);
 
             // Modal olayları
-            rulesBtn.addEventListener('click', openRulesModal);
-            rulesModalBackdrop.addEventListener('click', attemptCloseRulesModal);
-            rulesModalClose.addEventListener('click', attemptCloseRulesModal);
-            rulesUnderstoodBtn.addEventListener('click', confirmRules);
+            if (rulesBtn) rulesBtn.addEventListener('click', openRulesModal);
+            if (rulesModalBackdrop) rulesModalBackdrop.addEventListener('click', attemptCloseRulesModal);
+            if (rulesModalClose) rulesModalClose.addEventListener('click', attemptCloseRulesModal);
+            if (rulesUnderstoodBtn) rulesUnderstoodBtn.addEventListener('click', confirmRules);
 
-            resumeGameBtn.addEventListener('click', resumeFromSave);
-            newGameBtn.addEventListener('click', startNewGame);
+            if (resumeGameBtn) resumeGameBtn.addEventListener('click', resumeFromSave);
+            if (newGameBtn) newGameBtn.addEventListener('click', startNewGame);
 
             // Avatar seçim olayları
-            teamReadyBtn.addEventListener('click', finishTeamAvatarSelection);
+            if (teamReadyBtn) teamReadyBtn.addEventListener('click', finishTeamAvatarSelection);
 
             // Flama seçim olayları
-            flagReadyBtn.addEventListener('click', finishTeamFlagSelection);
+            if (flagReadyBtn) flagReadyBtn.addEventListener('click', finishTeamFlagSelection);
 
             // Hazır ekranı olayları
-            goToDiceBtn.addEventListener('click', goToDiceScreen);
+            if (goToDiceBtn) goToDiceBtn.addEventListener('click', goToDiceScreen);
 
-            rollDiceBtn.addEventListener('click', rollDice);
-            startAfterDiceBtn.addEventListener('click', startAfterDice);
+            if (rollDiceBtn) rollDiceBtn.addEventListener('click', rollDice);
+            if (startAfterDiceBtn) startAfterDiceBtn.addEventListener('click', startAfterDice);
 
-            readyBtn.addEventListener('click', startTurnCountdown);
+            if (readyBtn) readyBtn.addEventListener('click', startTurnCountdown);
 
-            correctBtn.addEventListener('click', () => handleCorrectAnswer(false));
-            passBtn.addEventListener('click', () => handlePass(false));
-            forbiddenBtn.addEventListener('click', () => handleForbiddenWord(false));
-            pauseBtn.addEventListener('click', pauseGame);
+            if (correctBtn) correctBtn.addEventListener('click', () => handleCorrectAnswer(false));
+            if (passBtn) passBtn.addEventListener('click', () => handlePass(false));
+            if (forbiddenBtn) forbiddenBtn.addEventListener('click', () => handleForbiddenWord(false));
+            if (pauseBtn) pauseBtn.addEventListener('click', pauseGame);
 
-            resumeBtn.addEventListener('click', resumeGame);
-            quitBtn.addEventListener('click', quitGame);
+            if (resumeBtn) resumeBtn.addEventListener('click', resumeGame);
+            if (quitBtn) quitBtn.addEventListener('click', quitGame);
 
-            overtimeCorrectBtn.addEventListener('click', () => handleCorrectAnswer(true));
-            overtimePassBtn.addEventListener('click', () => handlePass(true));
-            overtimeForbiddenBtn.addEventListener('click', () => handleForbiddenWord(true));
-            overtimePauseBtn.addEventListener('click', pauseGame);
+            if (overtimeCorrectBtn) overtimeCorrectBtn.addEventListener('click', () => handleCorrectAnswer(true));
+            if (overtimePassBtn) overtimePassBtn.addEventListener('click', () => handlePass(true));
+            if (overtimeForbiddenBtn) overtimeForbiddenBtn.addEventListener('click', () => handleForbiddenWord(true));
+            if (overtimePauseBtn) overtimePauseBtn.addEventListener('click', pauseGame);
 
             // Tur sayısı input kontrolü
-            totalRoundsInput.addEventListener('input', function () {
-                let value = parseInt(this.value);
-                if (isNaN(value) || value < 1) {
-                    this.value = 1;
-                } else if (value > 20) {
-                    this.value = 20;
-                }
-                // Değeri gameState'e kaydet
-                gameState.totalRounds = parseInt(this.value);
-            });
+            if (totalRoundsInput) {
+                totalRoundsInput.addEventListener('input', function () {
+                    let value = parseInt(this.value);
+                    if (isNaN(value) || value < 1) {
+                        this.value = 1;
+                    } else if (value > 20) {
+                        this.value = 20;
+                    }
+                    // Değeri gameState'e kaydet
+                    gameState.totalRounds = parseInt(this.value);
+                });
+            }
 
             // Klavye kısayolları
             document.addEventListener('keydown', handleKeyboardShortcuts);
@@ -3500,20 +3514,22 @@
         // ===== MODAL İŞLEVLERİ =====
 
         function openRulesModal() {
-            rulesModal.classList.add('active');
-            rulesUnderstood = false;
-            rulesUnderstoodBtn.classList.remove('warning');
+            if (rulesModal) {
+                rulesModal.classList.add('active');
+                rulesUnderstood = false;
+                if (rulesUnderstoodBtn) rulesUnderstoodBtn.classList.remove('warning');
+            }
         }
 
         function attemptCloseRulesModal() {
             if (rulesUnderstood) {
                 closeRulesModal();
             } else {
-                rulesUnderstoodBtn.classList.add('warning');
+                if (rulesUnderstoodBtn) rulesUnderstoodBtn.classList.add('warning');
                 
                 // 2 saniye sonra uyarıyı kaldır
                 setTimeout(() => {
-                    rulesUnderstoodBtn.classList.remove('warning');
+                    if (rulesUnderstoodBtn) rulesUnderstoodBtn.classList.remove('warning');
                 }, 2000);
             }
         }
@@ -3524,7 +3540,9 @@
         }
 
         function closeRulesModal() {
-            rulesModal.classList.remove('active');
+            if (rulesModal) {
+                rulesModal.classList.remove('active');
+            }
         }
 
         // ===== KLAVYE KISAYOLLARI =====
@@ -3551,19 +3569,19 @@
             switch (e.key) {
                 case '1':
                 case 'a':
-                    correctBtn.click();
+                    if (correctBtn) correctBtn.click();
                     break;
                 case '2':
                 case 's':
-                    passBtn.click();
+                    if (passBtn) passBtn.click();
                     break;
                 case '3':
                 case 'd':
-                    forbiddenBtn.click();
+                    if (forbiddenBtn) forbiddenBtn.click();
                     break;
                 case ' ':
                 case 'p':
-                    pauseBtn.click();
+                    if (pauseBtn) pauseBtn.click();
                     break;
             }
         }
@@ -3572,19 +3590,19 @@
             switch (e.key) {
                 case '1':
                 case 'a':
-                    overtimeCorrectBtn.click();
+                    if (overtimeCorrectBtn) overtimeCorrectBtn.click();
                     break;
                 case '2':
                 case 's':
-                    overtimePassBtn.click();
+                    if (overtimePassBtn) overtimePassBtn.click();
                     break;
                 case '3':
                 case 'd':
-                    overtimeForbiddenBtn.click();
+                    if (overtimeForbiddenBtn) overtimeForbiddenBtn.click();
                     break;
                 case ' ':
                 case 'p':
-                    overtimePauseBtn.click();
+                    if (overtimePauseBtn) overtimePauseBtn.click();
                     break;
             }
         }
@@ -3733,24 +3751,26 @@
             const currentTeam = info.team;
             const currentPlayer = currentTeam.players[info.playerIndex];
 
-            resumeInfo.innerHTML = `
-                <div class="resume-item">
-                    <span class="resume-label">Tur:</span>
-                    <span class="resume-value">${gameState.currentRound}/${gameState.totalRounds}</span>
-                </div>
-                <div class="resume-item">
-                    <span class="resume-label">Sıradaki Takım:</span>
-                    <span class="resume-value">${currentTeam.name}</span>
-                </div>
-                <div class="resume-item">
-                    <span class="resume-label">Anlatıcı:</span>
-                    <span class="resume-value">${currentPlayer}</span>
-                </div>
-                <div class="resume-item">
-                    <span class="resume-label">Takım Skorları:</span>
-                    <span class="resume-value">${gameState.teamOrder.map(team => `${team.name}: ${team.score}`).join(', ')}</span>
-                </div>
-            `;
+            if (resumeInfo) {
+                resumeInfo.innerHTML = `
+                    <div class="resume-item">
+                        <span class="resume-label">Tur:</span>
+                        <span class="resume-value">${gameState.currentRound}/${gameState.totalRounds}</span>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-label">Sıradaki Takım:</span>
+                        <span class="resume-value">${currentTeam.name}</span>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-label">Anlatıcı:</span>
+                        <span class="resume-value">${currentPlayer}</span>
+                    </div>
+                    <div class="resume-item">
+                        <span class="resume-label">Takım Skorları:</span>
+                        <span class="resume-value">${gameState.teamOrder.map(team => `${team.name}: ${team.score}`).join(', ')}</span>
+                    </div>
+                `;
+            }
 
             showScreen('resume');
         }
@@ -3820,6 +3840,8 @@
 
         // Takımları render et
         function renderTeams() {
+            if (!teamsContainer) return;
+            
             teamsContainer.innerHTML = '';
 
             gameState.teams.forEach(team => {
@@ -3943,7 +3965,7 @@
             let rounds = parseInt(totalRoundsInput.value) || 10;
             if (rounds < 1) rounds = 1;
             if (rounds > 20) rounds = 20;
-            totalRoundsInput.value = rounds;
+            if (totalRoundsInput) totalRoundsInput.value = rounds;
             gameState.totalRounds = rounds;
 
             // Tüm takımları sıfırla
@@ -4030,6 +4052,8 @@
 
         // Avatar grid'ini oluştur
         function renderAvatarGrid() {
+            if (!avatarGrid) return;
+            
             avatarGrid.innerHTML = '';
             
             avatarList.forEach((avatar, index) => {
@@ -4131,8 +4155,8 @@
             const currentTeam = gameState.teams[avatarSelectionState.currentTeamIndex];
             const currentPlayer = currentTeam.players[avatarSelectionState.currentPlayerIndex];
             
-            currentTeamNameDisplay.textContent = currentTeam.name;
-            currentPlayerNameDisplay.textContent = currentPlayer;
+            if (currentTeamNameDisplay) currentTeamNameDisplay.textContent = currentTeam.name;
+            if (currentPlayerNameDisplay) currentPlayerNameDisplay.textContent = currentPlayer;
             
             // İlerleme durumunu güncelle
             updateProgressDisplay();
@@ -4151,23 +4175,25 @@
             const totalPlayers = currentTeam.players.length;
             
             // İlerleme noktalarını güncelle
-            teamProgressDots.innerHTML = '';
-            
-            for (let i = 0; i < totalPlayers; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'progress-dot';
+            if (teamProgressDots) {
+                teamProgressDots.innerHTML = '';
                 
-                if (i < completedPlayers) {
-                    dot.classList.add('completed');
-                } else if (i === avatarSelectionState.currentPlayerIndex) {
-                    dot.classList.add('current');
+                for (let i = 0; i < totalPlayers; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'progress-dot';
+                    
+                    if (i < completedPlayers) {
+                        dot.classList.add('completed');
+                    } else if (i === avatarSelectionState.currentPlayerIndex) {
+                        dot.classList.add('current');
+                    }
+                    
+                    teamProgressDots.appendChild(dot);
                 }
-                
-                teamProgressDots.appendChild(dot);
             }
             
             // İlerleme metnini güncelle
-            progressText.textContent = `${completedPlayers}/${totalPlayers} oyuncu tamamlandı`;
+            if (progressText) progressText.textContent = `${completedPlayers}/${totalPlayers} oyuncu tamamlandı`;
         }
 
         // Takım hazır durumunu kontrol et
@@ -4183,7 +4209,9 @@
             const totalPlayers = currentTeam.players.length;
             
             // Mevcut oyuncu avatar seçtiyse butonu etkinleştir
-            teamReadyBtn.disabled = completedPlayers <= avatarSelectionState.currentPlayerIndex;
+            if (teamReadyBtn) {
+                teamReadyBtn.disabled = completedPlayers <= avatarSelectionState.currentPlayerIndex;
+            }
         }
 
         // Takım avatar seçimini tamamla
@@ -4233,6 +4261,8 @@
 
         // Flama grid'ini oluştur
         function renderFlagGrid() {
+            if (!flagGrid) return;
+            
             flagGrid.innerHTML = '';
             
             flagList.forEach((flag, index) => {
@@ -4329,7 +4359,7 @@
         function updateFlagSelectionDisplay() {
             const currentTeam = gameState.teams[flagSelectionState.currentTeamIndex];
             
-            currentFlagTeamNameDisplay.textContent = currentTeam.name;
+            if (currentFlagTeamNameDisplay) currentFlagTeamNameDisplay.textContent = currentTeam.name;
             
             // İlerleme durumunu güncelle
             updateFlagProgressDisplay();
@@ -4346,23 +4376,25 @@
             const totalTeams = gameState.teams.length;
             
             // İlerleme noktalarını güncelle
-            flagProgressDots.innerHTML = '';
-            
-            for (let i = 0; i < totalTeams; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'flag-progress-dot';
+            if (flagProgressDots) {
+                flagProgressDots.innerHTML = '';
                 
-                if (i < completedTeams) {
-                    dot.classList.add('completed');
-                } else if (i === flagSelectionState.currentTeamIndex) {
-                    dot.classList.add('current');
+                for (let i = 0; i < totalTeams; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'flag-progress-dot';
+                    
+                    if (i < completedTeams) {
+                        dot.classList.add('completed');
+                    } else if (i === flagSelectionState.currentTeamIndex) {
+                        dot.classList.add('current');
+                    }
+                    
+                    flagProgressDots.appendChild(dot);
                 }
-                
-                flagProgressDots.appendChild(dot);
             }
             
             // İlerleme metnini güncelle
-            flagProgressText.textContent = `${completedTeams}/${totalTeams} takım tamamlandı`;
+            if (flagProgressText) flagProgressText.textContent = `${completedTeams}/${totalTeams} takım tamamlandı`;
         }
 
         // Takım flama hazır durumunu kontrol et
@@ -4373,7 +4405,9 @@
             );
             
             // Mevcut takım flama seçtiyse butonu etkinleştir
-            flagReadyBtn.disabled = !hasSelectedFlag;
+            if (flagReadyBtn) {
+                flagReadyBtn.disabled = !hasSelectedFlag;
+            }
         }
 
         // Takım flama seçimini tamamla
@@ -4403,6 +4437,8 @@
 
         // Hazır takımları göster
         function renderReadyTeams() {
+            if (!readyTeamsContainer) return;
+            
             readyTeamsContainer.innerHTML = '';
             
             gameState.teams.forEach(team => {
@@ -4462,6 +4498,8 @@
 
         // Zar ekranını göster
         function showDiceScreen() {
+            if (!diceContainer) return;
+            
             diceContainer.innerHTML = '';
             gameState.teams.forEach(team => {
                 const diceItem = document.createElement('div');
@@ -4478,21 +4516,23 @@
             gameState.diceRounds = 0;
             gameState.diceRolled = false;
 
-            tieInfoContainer.innerHTML = '';
+            if (tieInfoContainer) tieInfoContainer.innerHTML = '';
 
-            orderList.style.display = 'none';
-            startAfterDiceBtn.style.display = 'none';
+            if (orderList) orderList.style.display = 'none';
+            if (startAfterDiceBtn) startAfterDiceBtn.style.display = 'none';
 
-            rollDiceBtn.style.display = 'block';
-            rollDiceBtn.disabled = false;
-            rollDiceBtn.innerHTML = '<i class="fas fa-dice"></i> Zarları At';
+            if (rollDiceBtn) {
+                rollDiceBtn.style.display = 'block';
+                rollDiceBtn.disabled = false;
+                rollDiceBtn.innerHTML = '<i class="fas fa-dice"></i> Zarları At';
+            }
 
             showScreen('dice');
         }
 
         // Tek tur zar at
         function rollDice() {
-            if (rollDiceBtn.disabled) return;
+            if (rollDiceBtn && rollDiceBtn.disabled) return;
 
             let participants;
             if (gameState.diceParticipants && gameState.diceParticipants.length > 0) {
@@ -4508,7 +4548,7 @@
 
             gameState.diceRounds++;
             gameState.diceRolled = true;
-            rollDiceBtn.disabled = true;
+            if (rollDiceBtn) rollDiceBtn.disabled = true;
 
             let diceRolledCount = 0;
 
@@ -4571,23 +4611,27 @@
                     message += `<div class="tie-info">${names} takımları ${value} attı, tekrar zar atacak.</div>`;
                 });
 
-                tieInfoContainer.innerHTML = message;
+                if (tieInfoContainer) tieInfoContainer.innerHTML = message;
 
                 gameState.diceParticipants = tieTeams.map(t => t.id);
 
-                rollDiceBtn.disabled = false;
-                rollDiceBtn.innerHTML = '<i class="fas fa-dice"></i> Eşit Takımlar Tekrar Zar Atsın';
+                if (rollDiceBtn) {
+                    rollDiceBtn.disabled = false;
+                    rollDiceBtn.innerHTML = '<i class="fas fa-dice"></i> Eşit Takımlar Tekrar Zar Atsın';
+                }
             } else {
                 gameState.diceParticipants = [];
 
-                if (gameState.diceRounds > 1) {
-                    tieInfoContainer.innerHTML = `<div class="tie-info">${gameState.diceRounds} tur zar atıldıktan sonra sıralama belirlendi!</div>`;
-                } else {
-                    tieInfoContainer.innerHTML = '';
+                if (tieInfoContainer) {
+                    if (gameState.diceRounds > 1) {
+                        tieInfoContainer.innerHTML = `<div class="tie-info">${gameState.diceRounds} tur zar atıldıktan sonra sıralama belirlendi!</div>`;
+                    } else {
+                        tieInfoContainer.innerHTML = '';
+                    }
                 }
 
                 determineOrder();
-                rollDiceBtn.style.display = 'none';
+                if (rollDiceBtn) rollDiceBtn.style.display = 'none';
             }
         }
 
@@ -4595,11 +4639,13 @@
         function determineOrder() {
             gameState.teamOrder = [...gameState.teams].sort((a, b) => b.diceValue - a.diceValue);
             showOrderList();
-            startAfterDiceBtn.style.display = 'block';
+            if (startAfterDiceBtn) startAfterDiceBtn.style.display = 'block';
         }
 
         // Sıralama listesini göster - FLAMALAR EKLENDİ
         function showOrderList() {
+            if (!orderList) return;
+            
             orderList.innerHTML = '<h3 class="order-title">Oyun Sırası</h3>';
 
             gameState.teamOrder.forEach((team, index) => {
@@ -4645,15 +4691,15 @@
             const currentPlayer = currentTeam.players[info.playerIndex];
 
             // Takım adını ve anlatacak oyuncuyu güncelle
-            turnTeamNameDisplay.textContent = currentTeam.name;
-            turnCurrentPlayerDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
+            if (turnTeamNameDisplay) turnTeamNameDisplay.textContent = currentTeam.name;
+            if (turnCurrentPlayerDisplay) turnCurrentPlayerDisplay.textContent = `Anlatacak Oyuncu: ${currentPlayer}`;
             
             // TAKIM ADININ RENGİNİ FLAMANIN RENGİNE GÖRE AYARLA
             const teamFlag = gameState.teamFlags.find(tf => tf.teamId === currentTeam.id);
-            if (teamFlag) {
+            if (teamFlag && turnTeamNameDisplay) {
                 turnTeamNameDisplay.style.color = teamFlag.flagColor;
                 turnTeamNameDisplay.style.boxShadow = `0 0 30px ${teamFlag.flagColor}80`;
-            } else {
+            } else if (turnTeamNameDisplay) {
                 turnTeamNameDisplay.className = `turn-team ${currentTeam.color}-turn`;
             }
 
@@ -4672,14 +4718,16 @@
             // Takım istatistiklerini göster
             updateTeamStats();
 
-            turnCountdownDisplay.style.display = 'none';
-            readyBtn.style.display = 'block';
+            if (turnCountdownDisplay) turnCountdownDisplay.style.display = 'none';
+            if (readyBtn) readyBtn.style.display = 'block';
 
             showScreen('teamTurn');
         }
 
         // Takım sırası ekranında avatar göster
         function updateTurnTeamAvatar(team, player) {
+            if (!turnTeamAvatarDisplay) return;
+            
             // Oyuncu avatarını bul
             const playerAvatar = gameState.playerAvatars.find(pa => 
                 pa.teamId === team.id && 
@@ -4695,6 +4743,8 @@
 
         // Takım istatistiklerini güncelle
         function updateTeamStats() {
+            if (!teamStatsContainer) return;
+            
             teamStatsContainer.innerHTML = '';
             
             gameState.teamOrder.forEach((team, index) => {
@@ -4740,11 +4790,18 @@
 
         // 3-2-1 geri sayım
         function startTurnCountdown() {
+            if (!readyBtn || !turnCountdownDisplay) return;
+            
             readyBtn.style.display = 'none';
             turnCountdownDisplay.style.display = 'block';
 
             let countdown = 3;
             turnCountdownDisplay.textContent = countdown;
+
+            // Önceki interval'i temizle
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
 
             countdownInterval = setInterval(() => {
                 countdown--;
@@ -4782,9 +4839,9 @@
             const currentPlayer = currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
 
             // Yeni oyun ekranı için bilgileri güncelle
-            currentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
-            currentTeamDisplay.textContent = currentTeam.name;
-            currentPlayerDisplay.textContent = currentPlayer;
+            if (currentRoundDisplay) currentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+            if (currentTeamDisplay) currentTeamDisplay.textContent = currentTeam.name;
+            if (currentPlayerDisplay) currentPlayerDisplay.textContent = currentPlayer;
             
             // AVATARLARI VE FLAMALARI GÖSTER
             updatePlayerAvatars(currentTeam, currentPlayer);
@@ -4796,6 +4853,7 @@
         // Oyuncu avatarlarını güncelle
         function updatePlayerAvatars(team, player) {
             // Sadece oyuncu avatarını güncelle
+            if (!currentPlayerAvatar) return;
 
             const playerAvatar = gameState.playerAvatars.find(pa => 
                 pa.teamId === team.id && 
@@ -4814,6 +4872,8 @@
 
         // Takım flamasını güncelle
         function updateTeamFlag(team) {
+            if (!currentTeamFlag) return;
+            
             const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
             
             if (teamFlag) {
@@ -4835,6 +4895,7 @@
 
             updateTimerDisplay();
 
+            // Önceki interval'i temizle
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
@@ -4847,12 +4908,13 @@
 
                     updateTimerDisplay();
 
-                    if (gameState.timeLeft <= 10) {
+                    if (gameState.timeLeft <= 10 && timerDisplay) {
                         timerDisplay.classList.add('timer-warning');
                     }
 
                     if (gameState.timeLeft <= 0) {
                         clearInterval(timerInterval);
+                        timerInterval = null;
                         gameState.timerRunning = false;
                         gameState.pausedTimeLeft = 60; // Sonraki tur için sıfırla
                         timeUp();
@@ -4864,7 +4926,7 @@
         }
 
         function updateTimerDisplay() {
-            timerDisplay.textContent = gameState.timeLeft;
+            if (timerDisplay) timerDisplay.textContent = gameState.timeLeft;
         }
 
         // Tur sistemi
@@ -4909,7 +4971,7 @@
         // Ekranı değiştir
         function showScreen(screenName) {
             Object.values(screens).forEach(screen => {
-                screen.classList.remove('active-screen');
+                if (screen) screen.classList.remove('active-screen');
             });
             
             if (screens[screenName]) {
@@ -4923,43 +4985,47 @@
                 const currentTeam = gameState.teamOrder[gameState.overtime.currentTeamIndex];
                 const currentPasses = safeArrayAccess(gameState.overtime.teamPasses, gameState.overtime.currentTeamIndex, 3);
 
-                overtimePassCountDisplay.textContent = currentPasses;
-                overtimeTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
+                if (overtimePassCountDisplay) overtimePassCountDisplay.textContent = currentPasses;
+                if (overtimeTeamPassLabel) overtimeTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
 
-                const passDots = overtimeTeamPassCount.querySelectorAll('.pass-dot');
-                passDots.forEach((dot, index) => {
-                    if (index < currentPasses) {
-                        dot.classList.remove('used');
-                    } else {
-                        dot.classList.add('used');
-                    }
-                });
+                if (overtimeTeamPassCount) {
+                    const passDots = overtimeTeamPassCount.querySelectorAll('.pass-dot');
+                    passDots.forEach((dot, index) => {
+                        if (index < currentPasses) {
+                            dot.classList.remove('used');
+                        } else {
+                            dot.classList.add('used');
+                        }
+                    });
+                }
             } else {
                 const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
                 const currentPasses = currentTeam ? currentTeam.passes : 3;
 
-                passCountDisplay.textContent = currentPasses;
-                currentTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
+                if (passCountDisplay) passCountDisplay.textContent = currentPasses;
+                if (currentTeamPassLabel) currentTeamPassLabel.textContent = `${currentTeam.name} Pas Hakkı`;
 
-                const passDots = currentTeamPassCount.querySelectorAll('.pass-dot-mobile');
-                passDots.forEach((dot, index) => {
-                    if (index < currentPasses) {
-                        dot.classList.remove('used');
-                    } else {
-                        dot.classList.add('used');
-                    }
-                });
+                if (currentTeamPassCount) {
+                    const passDots = currentTeamPassCount.querySelectorAll('.pass-dot-mobile');
+                    passDots.forEach((dot, index) => {
+                        if (index < currentPasses) {
+                            dot.classList.remove('used');
+                        } else {
+                            dot.classList.add('used');
+                        }
+                    });
+                }
             }
         }
 
         // Kart geçiş animasyonu
         function nextCard() {
             if (!Array.isArray(wordPool) || wordPool.length === 0) {
-                mainWordDisplay.textContent = 'Kelime yok';
-                forbiddenWord1.textContent = '-';
-                forbiddenWord2.textContent = '-';
-                forbiddenWord3.textContent = '-';
-                forbiddenWord4.textContent = '-';
+                if (mainWordDisplay) mainWordDisplay.textContent = 'Kelime yok';
+                if (forbiddenWord1) forbiddenWord1.textContent = '-';
+                if (forbiddenWord2) forbiddenWord2.textContent = '-';
+                if (forbiddenWord3) forbiddenWord3.textContent = '-';
+                if (forbiddenWord4) forbiddenWord4.textContent = '-';
                 return;
             }
 
@@ -4983,23 +5049,25 @@
             gameState.usedWords.push(randomWord.main);
 
             // Kart çıkış animasyonu
-            gameCard.classList.add('card-exit');
+            if (gameCard) gameCard.classList.add('card-exit');
             
             setTimeout(() => {
                 // Yeni kelimeleri yükle
-                mainWordDisplay.textContent = randomWord.main;
-                forbiddenWord1.textContent = randomWord.forbidden[0];
-                forbiddenWord2.textContent = randomWord.forbidden[1];
-                forbiddenWord3.textContent = randomWord.forbidden[2];
-                forbiddenWord4.textContent = randomWord.forbidden[3];
+                if (mainWordDisplay) mainWordDisplay.textContent = randomWord.main;
+                if (forbiddenWord1) forbiddenWord1.textContent = randomWord.forbidden[0];
+                if (forbiddenWord2) forbiddenWord2.textContent = randomWord.forbidden[1];
+                if (forbiddenWord3) forbiddenWord3.textContent = randomWord.forbidden[2];
+                if (forbiddenWord4) forbiddenWord4.textContent = randomWord.forbidden[3];
                 
                 // Kart giriş animasyonu
-                gameCard.classList.remove('card-exit');
-                gameCard.classList.add('card-enter');
-                
-                setTimeout(() => {
-                    gameCard.classList.remove('card-enter');
-                }, 500);
+                if (gameCard) {
+                    gameCard.classList.remove('card-exit');
+                    gameCard.classList.add('card-enter');
+                    
+                    setTimeout(() => {
+                        gameCard.classList.remove('card-enter');
+                    }, 500);
+                }
             }, 250);
         }
 
@@ -5112,15 +5180,15 @@
             const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
             const currentPlayer = currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
 
-            pauseCurrentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
-            pauseCurrentTeamDisplay.textContent = currentTeam.name;
-            pauseCurrentPlayerDisplay.textContent = currentPlayer;
+            if (pauseCurrentRoundDisplay) pauseCurrentRoundDisplay.textContent = `${gameState.currentRound}/${gameState.totalRounds}`;
+            if (pauseCurrentTeamDisplay) pauseCurrentTeamDisplay.textContent = currentTeam.name;
+            if (pauseCurrentPlayerDisplay) pauseCurrentPlayerDisplay.textContent = currentPlayer;
 
             // TAKIM FLAMASINI GÜNCELLE
             const teamFlag = gameState.teamFlags.find(tf => tf.teamId === currentTeam.id);
-            if (teamFlag) {
+            if (teamFlag && pauseTeamFlag) {
                 pauseTeamFlag.innerHTML = `<img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">`;
-            } else {
+            } else if (pauseTeamFlag) {
                 pauseTeamFlag.innerHTML = '<div class="team-flag-placeholder">?</div>';
             }
 
@@ -5129,33 +5197,35 @@
                 pa.teamId === currentTeam.id && 
                 pa.playerName === currentPlayer
             );
-            if (playerAvatar) {
+            if (playerAvatar && pausePlayerAvatar) {
                 pausePlayerAvatar.innerHTML = `<img src="${avatarList[playerAvatar.avatarIndex]}" alt="${currentPlayer}" onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${currentPlayer}</div>'">`;
-            } else {
+            } else if (pausePlayerAvatar) {
                 pausePlayerAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
             }
 
-            pauseTeamScoresContainer.innerHTML = '';
-            gameState.teamOrder.forEach(team => {
-                const teamScoreElement = document.createElement('div');
-                teamScoreElement.className = 'team-score';
+            if (pauseTeamScoresContainer) {
+                pauseTeamScoresContainer.innerHTML = '';
+                gameState.teamOrder.forEach(team => {
+                    const teamScoreElement = document.createElement('div');
+                    teamScoreElement.className = 'team-score';
 
-                const scoreClass = team.score < 0 ? 'negative-score' : '';
+                    const scoreClass = team.score < 0 ? 'negative-score' : '';
 
-                // TAKIM FLAMASINI GÖSTER
-                const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
-                
-                teamScoreElement.innerHTML = `
-                    ${teamFlag ? 
-                        `<div class="pause-flag">
-                            <img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">
-                        </div>` : 
-                        '<div class="pause-flag"><div class="team-flag-placeholder">?</div></div>'
-                    }
-                    <div class="info-value ${scoreClass}">${team.score}</div>
-                `;
-                pauseTeamScoresContainer.appendChild(teamScoreElement);
-            });
+                    // TAKIM FLAMASINI GÖSTER
+                    const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
+                    
+                    teamScoreElement.innerHTML = `
+                        ${teamFlag ? 
+                            `<div class="pause-flag">
+                                <img src="${flagList[teamFlag.flagIndex].image}" alt="${teamFlag.flagName}" class="team-flag-image" onerror="this.parentElement.innerHTML='<div class=\\'team-flag-placeholder\\'>?</div>'">
+                            </div>` : 
+                            '<div class="pause-flag"><div class="team-flag-placeholder">?</div></div>'
+                        }
+                        <div class="info-value ${scoreClass}">${team.score}</div>
+                    `;
+                    pauseTeamScoresContainer.appendChild(teamScoreElement);
+                });
+            }
         }
 
         // Devam et
@@ -5167,6 +5237,8 @@
         // Devam geri sayımı
         function startResumeCountdown() {
             const pauseScreenEl = document.getElementById('pauseScreen');
+            if (!pauseScreenEl) return;
+            
             let countdownElement = document.getElementById('resumeCountdown');
 
             if (!countdownElement) {
@@ -5180,8 +5252,8 @@
             countdownElement.textContent = countdown;
             countdownElement.style.display = 'block';
 
-            resumeBtn.disabled = true;
-            quitBtn.disabled = true;
+            if (resumeBtn) resumeBtn.disabled = true;
+            if (quitBtn) quitBtn.disabled = true;
 
             const resumeInterval = setInterval(() => {
                 countdown--;
@@ -5191,8 +5263,8 @@
                     clearInterval(resumeInterval);
                     countdownElement.style.display = 'none';
 
-                    resumeBtn.disabled = false;
-                    quitBtn.disabled = false;
+                    if (resumeBtn) resumeBtn.disabled = false;
+                    if (quitBtn) quitBtn.disabled = false;
 
                     if (gameState.overtime && gameState.overtime.teamScores && gameState.overtime.teamScores.length > 0) {
                         showScreen('overtime');
@@ -5241,6 +5313,7 @@
 
             updateOvertimeTimerDisplay();
 
+            // Önceki interval'i temizle
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
@@ -5254,12 +5327,13 @@
 
                     updateOvertimeTimerDisplay();
 
-                    if (gameState.overtimeTimeLeft <= 10) {
+                    if (gameState.overtimeTimeLeft <= 10 && overtimeTimerDisplay) {
                         overtimeTimerDisplay.classList.add('timer-warning');
                     }
 
                     if (gameState.overtimeTimeLeft <= 0) {
                         clearInterval(timerInterval);
+                        timerInterval = null;
                         gameState.timerRunning = false;
                         overtimeTimeUp();
                     }
@@ -5270,7 +5344,7 @@
         }
 
         function updateOvertimeTimerDisplay() {
-            overtimeTimerDisplay.textContent = gameState.overtimeTimeLeft;
+            if (overtimeTimerDisplay) overtimeTimerDisplay.textContent = gameState.overtimeTimeLeft;
         }
 
         // Uzatma süresi doldu
@@ -5304,11 +5378,11 @@
         // Uzatma için kart
         function nextOvertimeCard() {
             if (!Array.isArray(wordPool) || wordPool.length === 0) {
-                overtimeMainWordDisplay.textContent = 'Kelime yok';
-                overtimeWord1.textContent = '-';
-                overtimeWord2.textContent = '-';
-                overtimeWord3.textContent = '-';
-                overtimeWord4.textContent = '-';
+                if (overtimeMainWordDisplay) overtimeMainWordDisplay.textContent = 'Kelime yok';
+                if (overtimeWord1) overtimeWord1.textContent = '-';
+                if (overtimeWord2) overtimeWord2.textContent = '-';
+                if (overtimeWord3) overtimeWord3.textContent = '-';
+                if (overtimeWord4) overtimeWord4.textContent = '-';
                 return;
             }
 
@@ -5332,23 +5406,25 @@
             gameState.usedWords.push(randomWord.main);
 
             // Kart çıkış animasyonu
-            overtimeCard.classList.add('card-exit');
+            if (overtimeCard) overtimeCard.classList.add('card-exit');
             
             setTimeout(() => {
                 // Yeni kelimeleri yükle
-                overtimeMainWordDisplay.textContent = randomWord.main;
-                overtimeWord1.textContent = randomWord.forbidden[0];
-                overtimeWord2.textContent = randomWord.forbidden[1];
-                overtimeWord3.textContent = randomWord.forbidden[2];
-                overtimeWord4.textContent = randomWord.forbidden[3];
+                if (overtimeMainWordDisplay) overtimeMainWordDisplay.textContent = randomWord.main;
+                if (overtimeWord1) overtimeWord1.textContent = randomWord.forbidden[0];
+                if (overtimeWord2) overtimeWord2.textContent = randomWord.forbidden[1];
+                if (overtimeWord3) overtimeWord3.textContent = randomWord.forbidden[2];
+                if (overtimeWord4) overtimeWord4.textContent = randomWord.forbidden[3];
                 
                 // Kart giriş animasyonu
-                overtimeCard.classList.remove('card-exit');
-                overtimeCard.classList.add('card-enter');
-                
-                setTimeout(() => {
-                    overtimeCard.classList.remove('card-enter');
-                }, 500);
+                if (overtimeCard) {
+                    overtimeCard.classList.remove('card-exit');
+                    overtimeCard.classList.add('card-enter');
+                    
+                    setTimeout(() => {
+                        overtimeCard.classList.remove('card-enter');
+                    }, 500);
+                }
             }, 250);
         }
 
@@ -5356,8 +5432,15 @@
 
         // Oyunu bitir
         function endGame(winningTeamId) {
+            // Zamanlayıcıları temizle
             if (timerInterval) {
                 clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
             }
 
             // Tüm session verilerini temizle
@@ -5368,21 +5451,23 @@
 
             const winnerTeam = gameState.teams.find(team => team.id === winningTeamId);
 
-            winnerTeamNameDisplay.textContent = `${winnerTeam.name} Kazandı!`;
+            if (winnerTeamNameDisplay) winnerTeamNameDisplay.textContent = `${winnerTeam.name} Kazandı!`;
 
-            finalScoresContainer.innerHTML = '';
-            gameState.teams.forEach(team => {
-                const finalScoreElement = document.createElement('div');
-                finalScoreElement.className = 'final-score';
+            if (finalScoresContainer) {
+                finalScoresContainer.innerHTML = '';
+                gameState.teams.forEach(team => {
+                    const finalScoreElement = document.createElement('div');
+                    finalScoreElement.className = 'final-score';
 
-                const scoreClass = team.score < 0 ? 'negative-score' : '';
+                    const scoreClass = team.score < 0 ? 'negative-score' : '';
 
-                finalScoreElement.innerHTML = `
-                    <div class="score-value ${team.color}-score ${scoreClass}">${team.score}</div>
-                    <div class="score-label">${team.name}</div>
-                `;
-                finalScoresContainer.appendChild(finalScoreElement);
-            });
+                    finalScoreElement.innerHTML = `
+                        <div class="score-value ${team.color}-score ${scoreClass}">${team.score}</div>
+                        <div class="score-label">${team.name}</div>
+                    `;
+                    finalScoresContainer.appendChild(finalScoreElement);
+                });
+            }
 
             createStatsTable();
             showScreen('winner');
@@ -5391,6 +5476,8 @@
 
         // İstatistik tablosu
         function createStatsTable() {
+            if (!statsTableContainer) return;
+            
             statsTableContainer.innerHTML = `
                 <h3 style="margin-bottom: 20px;">Oyun İstatistikleri</h3>
                 <table class="stats-table">
@@ -5420,12 +5507,15 @@
 
         // Oyunu sıfırla
         function resetGame() {
+            // Zamanlayıcıları temizle
             if (timerInterval) {
                 clearInterval(timerInterval);
+                timerInterval = null;
             }
 
             if (countdownInterval) {
                 clearInterval(countdownInterval);
+                countdownInterval = null;
             }
 
             localStorage.removeItem('tabulagoGameState');
@@ -5442,6 +5532,8 @@
         // Partikül efekti oluştur
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
             const particleCount = 30;
             
             for (let i = 0; i < particleCount; i++) {
