@@ -52,6 +52,18 @@
     font-family: 'Poppins', sans-serif;
 }
 
+html, body {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;          /* Sağa-sola scroll'u kapat */
+    touch-action: pan-y;         /* Yatay kaydırma / double tap davranışını kısıtla */
+    overscroll-behavior-x: none; /* Android/Chrome yatay overscroll'u engelle */
+}
+
+/* body'yi ayrı tanımlıyoruz (görsel ayarlar aynı kalıyor) */
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
@@ -60,6 +72,11 @@ body {
     align-items: center;
     padding: 20px;
     color: white;
+}
+
+.container,
+.screen {
+    max-width: 100%;
     overflow-x: hidden;
 }
 
@@ -1199,6 +1216,7 @@ header .subtitle {
     min-width: 180px;
     letter-spacing: 0.5px;
 }
+
 
 .btn::before {
     content: '';
@@ -5451,36 +5469,42 @@ function createConfetti() {
 }
 
 // --- MOBİLDE ZOOM'U KONTROLLÜ KAPAT ---
-// Çift dokunma zoom'unu engelle
 (function () {
-    let lastTouchEnd = 0;
+    let lastTouchTime = 0;
 
-    document.addEventListener('touchend', function (event) {
+    // Double-tap zoom'u ve pinch zoom'u engelle
+    document.addEventListener('touchstart', function (event) {
         const now = Date.now();
 
         // İki dokunuş arası süre çok kısa ise (double tap)
         // VE hedef input/textarea/select DEĞİLSE zoom'u engelle
         if (
-            now - lastTouchEnd <= 300 &&
+            now - lastTouchTime <= 300 &&
             !event.target.closest('input, textarea, select')
         ) {
             event.preventDefault(); // zoom'u engelle
         }
 
-        lastTouchEnd = now;
+        lastTouchTime = now;
+
+        // 2+ parmakla pinch zoom'u engelle
+        if (event.touches.length > 1) {
+            event.preventDefault();
+        }
     }, { passive: false });
 
-    // iOS Safari pinch zoom (iki parmakla büyütme) engelleme
+    // iOS Safari gesture zoom (pinch) engelle
     document.addEventListener('gesturestart', function (event) {
         event.preventDefault();
     }, { passive: false });
+
+    // 2+ parmakla sürüklemeyi de engelle (Android / iOS)
+    document.addEventListener('touchmove', function (event) {
+        if (event.touches.length > 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
 })();
-// İki parmakla pinch zoom'u da engelle (Android dahil daha agresif)
-document.addEventListener('touchmove', function (event) {
-    if (event.touches.length > 1) {
-        event.preventDefault();
-    }
-}, { passive: false });
 
     </script>
 </body>
