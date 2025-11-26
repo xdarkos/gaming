@@ -3446,6 +3446,12 @@ function createEmptyGameState() {
             currentPlayerIndex: 0,
             teamPasses: []
         },
+        // Oyuncu bazlı istatistikler:
+        // [
+        //   { teamId: 1, players: [ { name, correct, forbidden, passes }, ... ] },
+        //   ...
+        // ]
+        playerStats: [],
         isPaused: false,
         gameStarted: false,
         timerRunning: false,
@@ -3479,6 +3485,70 @@ function safeArrayAccess(array, index, defaultValue = 0) {
 // Element null kontrolü
 function safeElementAccess(element) {
     return element && element instanceof HTMLElement ? element : null;
+}
+
+// Belirli takım ve oyuncu için playerStats kaydını bulan helper
+function getPlayerStat(teamId, playerName) {
+    if (!gameState.playerStats || !Array.isArray(gameState.playerStats)) return null;
+
+    const teamStats = gameState.playerStats.find(ts => ts.teamId === teamId);
+    if (!teamStats) return null;
+
+    let playerStat = teamStats.players.find(p => p.name === playerName);
+
+    // Oyun sırasında isim değişirse yeni kayıt aç
+    if (!playerStat) {
+        playerStat = { name: playerName, correct: 0, forbidden: 0, passes: 0 };
+        teamStats.players.push(playerStat);
+    }
+
+    return playerStat;
+}
+
+// TAKIM PUANLARINI OYUNCULARIN NET SKORUNDAN (DOĞRU - YASAK) YENİDEN HESAPLA
+function recomputeTeamScoresFromPlayerStats() {
+    if (!gameState.playerStats || !Array.isArray(gameState.playerStats)) return;
+
+    // teams dizisindeki puanları güncelle
+    gameState.teams.forEach(team => {
+        const teamStats = gameState.playerStats.find(ts => ts.teamId === team.id);
+        if (!teamStats) return;
+
+        const totalNet = teamStats.players.reduce((sum, p) => {
+            const correct = p.correct || 0;
+            const forbidden = p.forbidden || 0;
+            return sum + (correct - forbidden);
+        }, 0);
+
+        team.score = totalNet;
+    });
+
+    // teamOrder içindeki kopyaları da senkronize et
+    if (gameState.teamOrder && Array.isArray(gameState.teamOrder)) {
+        gameState.teamOrder.forEach(orderTeam => {
+            const original = gameState.teams.find(t => t.id === orderTeam.id);
+            if (original) {
+                orderTeam.score = original.score;
+            }
+        });
+    }
+}
+
+// TAKIM SIRALAMASINI HESAPLA (1., 2., 3., 4.)
+// Eşit puan varsa aynı sırayı paylaşırlar
+function getTeamRankings() {
+    const sorted = [...gameState.teams].sort((a, b) => b.score - a.score);
+    const rankings = {}; // { teamId: rank }
+
+    let currentRank = 1;
+    sorted.forEach((team, index) => {
+        if (index > 0 && team.score < sorted[index - 1].score) {
+            currentRank = index + 1;
+        }
+        rankings[team.id] = currentRank;
+    });
+
+    return rankings;
 }
 
 // ===== OLAYLARI BAŞLATMA =====
@@ -3700,6 +3770,7 @@ window.addEventListener('DOMContentLoaded', () => {
             if (typeof parsedState.pausedTimeLeft === 'undefined') parsedState.pausedTimeLeft = 60;
             if (!parsedState.playerAvatars) parsedState.playerAvatars = [];
             if (!parsedState.teamFlags) parsedState.teamFlags = [];
+            if (!parsedState.playerStats) parsedState.playerStats = [];
             if (!parsedState.pauseState) {
                 parsedState.pauseState = {
                     screenBeforePause: null,
@@ -4043,8 +4114,9 @@ function startGame() {
     if (totalRoundsInput) totalRoundsInput.value = rounds;
     gameState.totalRounds = rounds;
 
+    // PUAN SİSTEMİ: Oyuncu bazlı istatistiklerden (doğru - yasak) ile takım net puanı hesaplanacak
     gameState.teams.forEach(team => {
-        team.score = 0;
+        team.score = 0; // Net skor sonradan playerStats üzerinden hesaplanacak
         team.passes = 3;
         team.diceValue = 0;
     });
@@ -4054,6 +4126,17 @@ function startGame() {
         correctAnswers: gameState.teams.map(() => 0),
         forbiddenWords: gameState.teams.map(() => 0)
     };
+
+    // OYUNCU BAZLI İSTATİSTİKLERİ BAŞLAT
+    gameState.playerStats = gameState.teams.map(team => ({
+        teamId: team.id,
+        players: team.players.map(name => ({
+            name,
+            correct: 0,
+            forbidden: 0,
+            passes: 0
+        }))
+    }));
 
     gameState.currentRound = 1;
     gameState.currentTeamIndex = 0;
@@ -4841,7 +4924,7 @@ function updatePlayerAvatars(team, player) {
     if (playerAvatar) {
         currentPlayerAvatar.innerHTML = `
             <img src="${avatarList[playerAvatar.avatarIndex]}" alt="${player}"
-                 onerror="this.parentElement.innerHTML='<div class=\'avatar-placeholder\'>${player}</div>'">
+                 onerror="this.parentElement.innerHTML='<div class='avatar-placeholder'>${player}</div>'">
         `;
     } else {
         currentPlayerAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
@@ -4928,6 +5011,9 @@ function timeUp() {
         gameState.currentRound++;
 
         if (gameState.currentRound > gameState.totalRounds) {
+            // OYUN BİTMEDEN ÖNCE TAKIM PUANLARINI OYUNCU NET SKORUNDAN YENİDEN HESAPLA
+            recomputeTeamScoresFromPlayerStats();
+
             const maxScore = Math.max(...gameState.teamOrder.map(team => team.score));
             const winners = gameState.teamOrder.filter(team => team.score === maxScore);
 
@@ -5042,7 +5128,7 @@ function nextCard() {
 
 // ===== OYUN OLAYLARI =====
 
-// Doğru cevap
+// Doğru cevap - OYUNCU DOĞRU SAYISI ARTAR, TAKIM NET SKORU (DOĞRU - YASAK) OYUNCU İSTATİSTİKLERİNDEN HESAPLANIR
 function handleCorrectAnswer(isOvertime) {
     if (isOvertime) {
         const teamIndex = gameState.overtime.currentTeamIndex;
@@ -5052,6 +5138,18 @@ function handleCorrectAnswer(isOvertime) {
         gameState.overtime.teamScores[teamIndex]++;
         gameState.stats.correctAnswers[teamIndex]++;
 
+        // OVERTIME'DA OYUNCU DOĞRUSU
+        const overtimeTeam = gameState.teamOrder[teamIndex];
+        const overtimePlayerName =
+            overtimeTeam.players[gameState.overtime.currentPlayerIndex] || overtimeTeam.players[0];
+        const overtimePlayerStat = getPlayerStat(overtimeTeam.id, overtimePlayerName);
+        if (overtimePlayerStat) {
+            overtimePlayerStat.correct++;
+        }
+
+        // Takım net skorlarını güncelle (doğru - yasak)
+        recomputeTeamScoresFromPlayerStats();
+
         updateOvertimeDisplay();
 
         const winningScore = 3;
@@ -5059,6 +5157,8 @@ function handleCorrectAnswer(isOvertime) {
 
         if (winnerIndex !== -1) {
             const winnerTeam = gameState.teamOrder[winnerIndex];
+            // OYUN BİTMEDEN ÖNCE TAKIM PUANLARINI OYUNCULARDAN YENİDEN HESAPLA
+            recomputeTeamScoresFromPlayerStats();
             endGame(winnerTeam.id);
         } else {
             const currentTeam = gameState.teamOrder[gameState.overtime.currentTeamIndex];
@@ -5072,8 +5172,22 @@ function handleCorrectAnswer(isOvertime) {
         }
     } else {
         const currentTeamIndex = gameState.currentTeamIndex;
-        gameState.teamOrder[currentTeamIndex].score++;
+        const currentTeam = gameState.teamOrder[currentTeamIndex];
+
+        // Takımın anlık skorunu oyuncu net skorlarından türeteceğimiz için
+        // burada sadece istatistikleri güncelliyoruz
         gameState.stats.correctAnswers[currentTeamIndex]++;
+
+        // OYUNCU BAZLI DOĞRU SAYISI
+        const currentPlayerName =
+            currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
+        const playerStat = getPlayerStat(currentTeam.id, currentPlayerName);
+        if (playerStat) {
+            playerStat.correct++;
+        }
+
+        // Takım net skorlarını güncelle (doğru - yasak)
+        recomputeTeamScoresFromPlayerStats();
 
         updateGameDisplay();
         nextCard();
@@ -5082,22 +5196,46 @@ function handleCorrectAnswer(isOvertime) {
     localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
-// Yasak kelime
+// Yasak kelime - OYUNCU YASAK SAYISI ARTAR, TAKIM NET SKORU (DOĞRU - YASAK) OYUNCU İSTATİSTİKLERİNDEN HESAPLANIR
 function handleForbiddenWord(isOvertime) {
     if (isOvertime) {
         const currentTeamIndex = gameState.overtime.currentTeamIndex;
         if (gameState.overtime.teamScores[currentTeamIndex] === undefined) {
             gameState.overtime.teamScores[currentTeamIndex] = 0;
         }
-        gameState.overtime.teamScores[currentTeamIndex]--;
+        // Yasak kelime, overtime skorunu değiştirmez; sadece istatistikte tutulur
         gameState.stats.forbiddenWords[currentTeamIndex]++;
+
+        const overtimeTeam = gameState.teamOrder[currentTeamIndex];
+        const overtimePlayerName =
+            overtimeTeam.players[gameState.overtime.currentPlayerIndex] || overtimeTeam.players[0];
+        const overtimePlayerStat = getPlayerStat(overtimeTeam.id, overtimePlayerName);
+        if (overtimePlayerStat) {
+            overtimePlayerStat.forbidden++;
+        }
+
+        // Takım net skorlarını güncelle (doğru - yasak)
+        recomputeTeamScoresFromPlayerStats();
 
         updateOvertimeDisplay();
         nextOvertimeCard();
     } else {
         const currentTeamIndex = gameState.currentTeamIndex;
-        gameState.teamOrder[currentTeamIndex].score--;
+        const currentTeam = gameState.teamOrder[currentTeamIndex];
+
+        // Takımın anlık skorunu oyuncu net skorlarından türeteceğimiz için
+        // burada sadece yasak istatistiğini güncelliyoruz
         gameState.stats.forbiddenWords[currentTeamIndex]++;
+
+        const currentPlayerName =
+            currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
+        const playerStat = getPlayerStat(currentTeam.id, currentPlayerName);
+        if (playerStat) {
+            playerStat.forbidden++;
+        }
+
+        // Takım net skorlarını güncelle (doğru - yasak)
+        recomputeTeamScoresFromPlayerStats();
 
         updateGameDisplay();
         nextCard();
@@ -5106,7 +5244,7 @@ function handleForbiddenWord(isOvertime) {
     localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
 
-// Pas
+// Pas - Skoru etkilemez, sadece istatistik
 function handlePass(isOvertime) {
     if (isOvertime) {
         const teamIndex = gameState.overtime.currentTeamIndex;
@@ -5115,16 +5253,33 @@ function handlePass(isOvertime) {
         if (currentPasses > 0) {
             gameState.overtime.teamPasses[teamIndex] = currentPasses - 1;
             gameState.stats.passes[teamIndex]++;
+
+            const overtimeTeam = gameState.teamOrder[teamIndex];
+            const overtimePlayerName =
+                overtimeTeam.players[gameState.overtime.currentPlayerIndex] || overtimeTeam.players[0];
+            const overtimePlayerStat = getPlayerStat(overtimeTeam.id, overtimePlayerName);
+            if (overtimePlayerStat) {
+                overtimePlayerStat.passes++;
+            }
+
             updatePassDisplay(true);
             nextOvertimeCard();
         }
     } else {
-        const currentTeam = gameState.teamOrder[gameState.currentTeamIndex];
         const currentTeamIndex = gameState.currentTeamIndex;
+        const currentTeam = gameState.teamOrder[currentTeamIndex];
 
         if (currentTeam.passes > 0) {
             currentTeam.passes--;
             gameState.stats.passes[currentTeamIndex]++;
+
+            const currentPlayerName =
+                currentTeam.players[gameState.currentPlayerIndex] || currentTeam.players[0];
+            const playerStat = getPlayerStat(currentTeam.id, currentPlayerName);
+            if (playerStat) {
+                playerStat.passes++;
+            }
+
             updatePassDisplay(false);
             nextCard();
         }
@@ -5142,7 +5297,7 @@ function pauseGame() {
     gameState.pauseState.timerWasRunning = gameState.timerRunning;
     gameState.pauseState.timeWhenPaused = Date.now();
 
-    // Kalan süreyi birebir kaydet (double subtract yok)
+    // Kalan süreyi birebir kaydet
     gameState.pausedTimeLeft = gameState.timeLeft;
 
     gameState.isPaused = true;
@@ -5186,8 +5341,6 @@ function updatePauseDisplay() {
             const teamScoreElement = document.createElement('div');
             teamScoreElement.className = 'team-score';
 
-            const scoreClass = team.score < 0 ? 'negative-score' : '';
-
             const teamFlag = gameState.teamFlags.find(tf => tf.teamId === team.id);
 
             teamScoreElement.innerHTML = `
@@ -5197,7 +5350,7 @@ function updatePauseDisplay() {
                     </div>` :
                     '<div class="pause-flag"><div class="team-flag-placeholder">?</div></div>'
                 }
-                <div class="info-value ${scoreClass}">${team.score}</div>
+                <div class="info-value">${team.score}</div>
             `;
             pauseTeamScoresContainer.appendChild(teamScoreElement);
         });
@@ -5445,6 +5598,9 @@ function nextOvertimeCard() {
 function endGame(winningTeamId) {
     clearAllIntervals();
 
+    // OYUN BİTMEDEN ÖNCE TAKIM PUANLARINI OYUNCU NET SKORUNDAN (DOĞRU - YASAK) YENİDEN HESAPLA
+    recomputeTeamScoresFromPlayerStats();
+
     gameState.sessionUsedWords = [];
     gameState.pausedTimeLeft = 60;
 
@@ -5460,10 +5616,8 @@ function endGame(winningTeamId) {
             const finalScoreElement = document.createElement('div');
             finalScoreElement.className = 'final-score';
 
-            const scoreClass = team.score < 0 ? 'negative-score' : '';
-
             finalScoreElement.innerHTML = `
-                <div class="score-value ${team.color}-score ${scoreClass}">${team.score}</div>
+                <div class="score-value ${team.color}-score">${team.score}</div>
                 <div class="score-label">${team.name}</div>
             `;
             finalScoresContainer.appendChild(finalScoreElement);
@@ -5479,21 +5633,26 @@ function endGame(winningTeamId) {
 function createStatsTable() {
     if (!statsTableContainer) return;
 
+    // Takım puanlarına göre 1., 2., 3., 4. sıralamaları hesapla
+    const rankings = getTeamRankings();
+
     statsTableContainer.innerHTML = `
         <h3 style="margin-bottom: 20px;">Oyun İstatistikleri</h3>
         <table class="stats-table">
             <thead>
                 <tr>
+                    <th>Sıralama</th>
                     <th>Takım</th>
-                    <th>Puan</th>
-                    <th>Doğru Kelime</th>
-                    <th>Yasak Kelime</th>
+                    <th>Puan (Net: Doğru - Yasak)</th>
+                    <th>Toplam Doğru</th>
+                    <th>Toplam Yasak</th>
                     <th>Pas Kullanımı</th>
                 </tr>
             </thead>
             <tbody>
                 ${gameState.teams.map((team, index) => `
                     <tr>
+                        <td>${rankings[team.id] || '-'}</td>
                         <td>${team.name}</td>
                         <td>${team.score}</td>
                         <td>${safeArrayAccess(gameState.stats.correctAnswers, index, 0)}</td>
@@ -5615,6 +5774,7 @@ function createConfetti() {
         }
     }, { passive: false });
 })();
+
 
     </script>
 </body>
