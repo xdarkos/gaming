@@ -4924,7 +4924,7 @@ function updatePlayerAvatars(team, player) {
     if (playerAvatar) {
         currentPlayerAvatar.innerHTML = `
             <img src="${avatarList[playerAvatar.avatarIndex]}" alt="${player}"
-                 onerror="this.parentElement.innerHTML='<div class='avatar-placeholder'>${player}</div>'">
+                 onerror="this.parentElement.innerHTML='<div class=\\'avatar-placeholder\\'>${player}</div>'">
         `;
     } else {
         currentPlayerAvatar.innerHTML = '<div class="avatar-placeholder">?</div>';
@@ -5610,9 +5610,12 @@ function endGame(winningTeamId) {
 
     if (winnerTeamNameDisplay) winnerTeamNameDisplay.textContent = `${winnerTeam.name} Kazandı!`;
 
+    // Takımları net skora göre sırala (1., 2., 3., 4. görsel olarak doğru görünsün)
+    const sortedTeams = [...gameState.teams].sort((a, b) => b.score - a.score);
+
     if (finalScoresContainer) {
         finalScoresContainer.innerHTML = '';
-        gameState.teams.forEach(team => {
+        sortedTeams.forEach(team => {
             const finalScoreElement = document.createElement('div');
             finalScoreElement.className = 'final-score';
 
@@ -5624,17 +5627,56 @@ function endGame(winningTeamId) {
         });
     }
 
-    createStatsTable();
+    // İstatistik tablosunu da aynı sıralamaya göre oluştur
+    createStatsTable(sortedTeams);
     showScreen('winner');
     createConfetti();
 }
 
 // İstatistik tablosu
-function createStatsTable() {
+function createStatsTable(sortedTeamsParam) {
     if (!statsTableContainer) return;
 
     // Takım puanlarına göre 1., 2., 3., 4. sıralamaları hesapla
     const rankings = getTeamRankings();
+
+    // Tablo için kullanılacak takım listesi:
+    // - Parametre geldiyse onu kullan
+    // - Yoksa teams'i skorlarına göre sırala
+    const teamsForTable = Array.isArray(sortedTeamsParam) && sortedTeamsParam.length
+        ? sortedTeamsParam
+        : [...gameState.teams].sort((a, b) => b.score - a.score);
+
+    const rowsHtml = teamsForTable.map(team => {
+        // Bu takımın istatistiklerdeki indeksini teamOrder üzerinden bul
+        let statsIndex = -1;
+        if (gameState.teamOrder && gameState.teamOrder.length) {
+            statsIndex = gameState.teamOrder.findIndex(t => t.id === team.id);
+        }
+
+        const correct = statsIndex >= 0
+            ? safeArrayAccess(gameState.stats.correctAnswers, statsIndex, 0)
+            : 0;
+        const forbidden = statsIndex >= 0
+            ? safeArrayAccess(gameState.stats.forbiddenWords, statsIndex, 0)
+            : 0;
+        const passes = statsIndex >= 0
+            ? safeArrayAccess(gameState.stats.passes, statsIndex, 0)
+            : 0;
+
+        const rank = rankings[team.id] || '-';
+
+        return `
+            <tr>
+                <td>${rank}</td>
+                <td>${team.name}</td>
+                <td>${team.score}</td>
+                <td>${correct}</td>
+                <td>${forbidden}</td>
+                <td>${passes}</td>
+            </tr>
+        `;
+    }).join('');
 
     statsTableContainer.innerHTML = `
         <h3 style="margin-bottom: 20px;">Oyun İstatistikleri</h3>
@@ -5650,16 +5692,7 @@ function createStatsTable() {
                 </tr>
             </thead>
             <tbody>
-                ${gameState.teams.map((team, index) => `
-                    <tr>
-                        <td>${rankings[team.id] || '-'}</td>
-                        <td>${team.name}</td>
-                        <td>${team.score}</td>
-                        <td>${safeArrayAccess(gameState.stats.correctAnswers, index, 0)}</td>
-                        <td>${safeArrayAccess(gameState.stats.forbiddenWords, index, 0)}</td>
-                        <td>${safeArrayAccess(gameState.stats.passes, index, 0)}</td>
-                    </tr>
-                `).join('')}
+                ${rowsHtml}
             </tbody>
         </table>
     `;
@@ -5774,8 +5807,6 @@ function createConfetti() {
         }
     }, { passive: false });
 })();
-
-
     </script>
 </body>
 </html>
