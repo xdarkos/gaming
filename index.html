@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>TabulaGo - Takım Kelime Oyunu</title>
     
     <!-- Mobil optimizasyon meta tag'leri -->
@@ -15,6 +15,10 @@
     <meta name="msapplication-tap-highlight" content="no">
     
     <!-- Preload avatarlar için -->
+	<link rel="apple-touch-icon" href="icons/icon-192x192.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="preload" as="image" href="avatar1.png">
     <link rel="preload" as="image" href="avatar2.png">
     <link rel="preload" as="image" href="avatar3.png">
@@ -23,6 +27,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="manifest" href="manifest.json">
     <script src="words.js"></script>
     
     <style>
@@ -2867,6 +2872,474 @@ header .subtitle {
 .no-spinner {
     -moz-appearance: textfield;
 }
+
+/* ===== EK MOBİL OPTİMİZASYONLARI ===== */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+    
+    header {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .screen {
+        padding: 15px 10px;
+        margin-bottom: 15px;
+    }
+    
+    .card-mobile {
+        width: 240px;
+        height: 340px;
+        border-width: 4px;
+    }
+    
+    .main-word-mobile {
+        font-size: 18px;
+        min-height: 40px;
+        padding: 6px 10px;
+    }
+    
+    .forbidden-word-mobile {
+        font-size: 11px;
+        padding: 6px 8px;
+        min-height: 35px;
+    }
+    
+    .game-controls-mobile {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+    
+    .control-btn-mobile {
+        padding: 10px 5px;
+        font-size: 0.75rem;
+        min-height: 44px; /* iOS için minimum dokunma alanı */
+    }
+    
+    .pause-btn-mobile {
+        grid-column: span 2;
+    }
+    
+    .game-header-mobile {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .game-info-mobile {
+        gap: 6px;
+    }
+    
+    .game-info-item-mobile {
+        min-width: 65px;
+        padding: 6px 8px;
+    }
+    
+    .timer-mobile {
+        font-size: 1.8rem;
+    }
+    
+    /* Avatar ve flama seçimi için mobil iyileştirmeler */
+    .avatar-grid {
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 8px;
+        max-height: 300px;
+    }
+    
+    .avatar-item {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .flag-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+        max-height: 300px;
+    }
+    
+    .flag-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    /* Takım kurma ekranı mobil iyileştirmeleri */
+    .team-setup {
+        gap: 12px;
+    }
+    
+    .team {
+        padding: 12px;
+    }
+    
+    .team-input, .player-name-input {
+        padding: 10px 12px;
+        font-size: 16px; /* iOS zoom'u önlemek için */
+    }
+    
+    /* Butonlar için mobil iyileştirme */
+    .btn {
+        padding: 14px 25px;
+        font-size: 1rem;
+        min-width: 160px;
+    }
+    
+    /* Zar ekranı mobil iyileştirmeleri */
+    .dice-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .dice {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== iOS ÖZEL DÜZELTMELERİ ===== */
+@supports (-webkit-touch-callout: none) {
+    .btn, .control-btn-mobile {
+        -webkit-appearance: none;
+        border-radius: 50px;
+    }
+    
+    input, textarea {
+        border-radius: 12px;
+    }
+    
+    /* iOS'ta smooth scroll */
+    .avatar-grid, .flag-grid {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ===== DOKUNMA HEDEFİ İYİLEŞTİRMELERİ ===== */
+@media (max-width: 767px) {
+    .btn, .control-btn-mobile, .avatar-item, .flag-item, 
+    .player-btn, .remove-team, .team-input, .player-name-input {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Daha büyük dokunma alanları */
+    .game-controls-mobile .control-btn-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ===== YATAY MOD İÇİN İYİLEŞTİRMELER ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+    #gameScreen {
+        min-height: 100vh;
+        padding: 10px;
+    }
+    
+    .game-header-mobile {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin-bottom: 10px;
+    }
+    
+    .game-main-content-mobile {
+        margin: 10px 0;
+    }
+    
+    .card-mobile {
+        width: 220px;
+        height: 300px;
+    }
+    
+    .game-controls-mobile {
+        margin-top: 10px;
+    }
+}
+
+/* ===== YÜKSEK ÇÖZÜNÜRLÜKLÜ EKRANLAR İÇİN ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .avatar-image, .flag-image, .header-logo {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* ===== GÜVENLİ ALAN DESTEĞİ ===== */
+@supports (padding: max(0px)) {
+    .container {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+    
+    body {
+        padding-top: max(10px, env(safe-area-inset-top));
+    }
+}
+
+/* ===== PERFORMANS İYİLEŞTİRMELERİ ===== */
+.avatar-item, .flag-item, .card-mobile, .btn {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* ===== EKSİK STİL TAMAMLAMALARI ===== */
+.rules-modal-close::before {
+    content: "×";
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+/* Loading animasyonu için stil */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* iOS input zoom önleme */
+@media (max-width: 767px) {
+    input, select, textarea {
+        font-size: 16px; /* iOS zoom'u engeller */
+    }
+}
+
+/* Daha iyi dokunma feedback'i */
+.control-btn-mobile:active, .btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* ===== GELİŞMİŞ GERİ SAYIM TASARIMI ===== */
+.turn-countdown {
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 800;
+    margin: 30px 0;
+    text-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        0 8px 24px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+    margin: 30px auto;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 
+        inset 0 0 40px rgba(255, 255, 255, 0.1),
+        0 15px 40px rgba(0, 0, 0, 0.25),
+        0 0 80px rgba(106, 17, 203, 0.3);
+    animation: countdownPulse 1.2s ease-in-out infinite alternate;
+    color: white;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.turn-countdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--team1), var(--team2), var(--team3), var(--team4));
+    z-index: -1;
+    opacity: 0.6;
+    filter: blur(15px);
+    animation: countdownRotate 4s linear infinite;
+}
+
+.turn-countdown::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border-radius: 21px;
+    background: linear-gradient(135deg, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9));
+    z-index: -1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Geri sayım sayıları için özel stiller */
+.turn-countdown.countdown-3 {
+    background: linear-gradient(135deg, rgba(255, 154, 60, 0.25), rgba(255, 107, 107, 0.2));
+    box-shadow: 
+        inset 0 0 40px rgba(255, 154, 60, 0.15),
+        0 15px 40px rgba(255, 107, 107, 0.25),
+        0 0 80px rgba(255, 154, 60, 0.35);
+}
+
+.turn-countdown.countdown-2 {
+    background: linear-gradient(135deg, rgba(0, 180, 219, 0.25), rgba(155, 89, 182, 0.2));
+    box-shadow: 
+        inset 0 0 40px rgba(0, 180, 219, 0.15),
+        0 15px 40px rgba(155, 89, 182, 0.25),
+        0 0 80px rgba(0, 180, 219, 0.35);
+}
+
+.turn-countdown.countdown-1 {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.25), rgba(39, 174, 96, 0.2));
+    box-shadow: 
+        inset 0 0 40px rgba(46, 204, 113, 0.15),
+        0 15px 40px rgba(39, 174, 96, 0.25),
+        0 0 80px rgba(46, 204, 113, 0.35);
+    animation: countdownFinalPulse 0.6s ease-in-out infinite alternate;
+}
+
+/* Animasyonlar */
+@keyframes countdownPulse {
+    0% {
+        transform: scale(1) translateY(0);
+        box-shadow: 
+            inset 0 0 40px rgba(255, 255, 255, 0.1),
+            0 15px 40px rgba(0, 0, 0, 0.25),
+            0 0 80px rgba(106, 17, 203, 0.3);
+    }
+    100% {
+        transform: scale(1.03) translateY(-5px);
+        box-shadow: 
+            inset 0 0 40px rgba(255, 255, 255, 0.12),
+            0 20px 50px rgba(0, 0, 0, 0.35),
+            0 0 100px rgba(106, 17, 203, 0.4);
+    }
+}
+
+@keyframes countdownFinalPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 
+            inset 0 0 40px rgba(46, 204, 113, 0.15),
+            0 15px 40px rgba(39, 174, 96, 0.25),
+            0 0 80px rgba(46, 204, 113, 0.35);
+    }
+    100% {
+        transform: scale(1.05);
+        box-shadow: 
+            inset 0 0 40px rgba(46, 204, 113, 0.2),
+            0 20px 50px rgba(39, 174, 96, 0.3),
+            0 0 100px rgba(46, 204, 113, 0.45);
+    }
+}
+
+@keyframes countdownRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Sayı değişim animasyonu */
+.turn-countdown span {
+    display: inline-block;
+    animation: numberPop 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes numberPop {
+    0% {
+        transform: scale(0.3) rotate(-180deg);
+        opacity: 0;
+        filter: blur(10px);
+    }
+    60% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 1;
+        filter: blur(0);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+/* Geri sayım metni */
+.countdown-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 20px;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 767px) {
+    .turn-countdown {
+        width: 140px;
+        height: 140px;
+        font-size: clamp(3rem, 10vw, 5rem);
+        margin: 25px auto;
+        border-radius: 20px;
+    }
+    
+    .turn-countdown::before {
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        bottom: -4px;
+        border-radius: 24px;
+    }
+    
+    .turn-countdown::after {
+        top: 2px;
+        left: 2px;
+        right: 2px;
+        bottom: 2px;
+        border-radius: 18px;
+    }
+    
+    .countdown-text {
+        font-size: 1rem;
+        padding: 6px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .turn-countdown {
+        width: 120px;
+        height: 120px;
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        margin: 20px auto;
+        border-radius: 18px;
+    }
+    
+    .countdown-text {
+        font-size: 0.9rem;
+        padding: 5px 14px;
+    }
+}
+
+/* Karanlık tema desteği */
+@media (prefers-color-scheme: dark) {
+    .turn-countdown {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    }
+}
     </style>
 </head>
 <body>
@@ -3438,6 +3911,51 @@ let flagSelectionState = {
 
 // ===== YARDIMCI FONKSİYONLAR =====
 
+// ===== MOBİL TESPİT VE OPTİMİZASYON =====
+function isMobileDevice() {
+    return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0));
+}
+
+function optimizeForMobile() {
+    if (!isMobileDevice()) return;
+    
+    // Mobil cihazlar için performans iyileştirmeleri
+    document.body.classList.add('mobile-device');
+    
+    // Daha az agresif timer interval'i
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 500); // 250ms yerine 500ms
+    }
+}
+
+// Debounce fonksiyonu
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Bellek temizleme fonksiyonu
+function cleanupGameState() {
+    // Gereksiz büyük verileri temizle
+    if (gameState.sessionUsedWords.length > 1000) {
+        gameState.sessionUsedWords = gameState.sessionUsedWords.slice(-500);
+    }
+    
+    if (gameState.usedWords.length > 2000) {
+        gameState.usedWords = gameState.usedWords.slice(-1000);
+    }
+}
+
 // Tüm zamanlayıcıları temizle
 function clearAllIntervals() {
     if (timerInterval) {
@@ -3472,16 +3990,16 @@ function createEmptyGameState() {
             correctAnswers: [],
             forbiddenWords: []
         },
-// === UZATMA (TIE-BREAK) İÇİN GENİŞLETİLDİ ===
-tie: {
-    isTie: false,
-    tieTeams: [],
-    tieRounds: 0,
-    tieMaxRounds: 1,  // <--- BURASI 1 YAPILDI
-    tieScores: [],
-    baseScores: [],
-    isTieBreakerActive: false
-},
+        // === UZATMA (TIE-BREAK) İÇİN GENİŞLETİLDİ ===
+        tie: {
+            isTie: false,
+            tieTeams: [],
+            tieRounds: 0,
+            tieMaxRounds: 1,  // <--- BURASI 1 YAPILDI
+            tieScores: [],
+            baseScores: [],
+            isTieBreakerActive: false
+        },
         // Oyuncu bazlı istatistikler:
         // [
         //   { teamId: 1, players: [ { name, correct, forbidden, passes }, ... ] },
@@ -3868,6 +4386,23 @@ function handlePauseScreenShortcuts(e) {
 window.addEventListener('DOMContentLoaded', () => {
     initializeEventListeners();
     createParticles();
+    
+    // MOBİL OPTİMİZASYONLARI BAŞLAT
+    optimizeForMobile();
+    initializeMobileTouchEvents();
+    iOSOptimizations();
+    preventScrollOnGame();
+
+    // Resize event'ini debounce et
+    window.addEventListener('resize', debounce(function() {
+        if (isMobileDevice()) {
+            // Mobil cihazlarda ekran döndürme sonrası işlemler
+            console.log('Mobil cihaz - ekran boyutu değişti');
+        }
+    }, 250));
+
+    // Bellek temizleme için interval (mobilde önemli)
+    setInterval(cleanupGameState, 60000); // 1 dakikada bir
 
     const savedGameState = localStorage.getItem('tabulagoGameState');
     if (savedGameState) {
@@ -3889,25 +4424,25 @@ window.addEventListener('DOMContentLoaded', () => {
                     timeWhenPaused: null
                 };
             }
-// === UZATMA İÇİN TIE NESNESİNİ TAMAMLA ===
-if (!parsedState.tie) {
-    parsedState.tie = {
-        isTie: false,
-        tieTeams: [],
-        tieRounds: 0,
-        tieMaxRounds: 1, 
-        tieScores: [],
-        baseScores: [],
-        isTieBreakerActive: false
-    };
-} else {
-    if (!parsedState.tie.tieTeams) parsedState.tie.tieTeams = [];
-    if (typeof parsedState.tie.tieRounds === 'undefined') parsedState.tie.tieRounds = 0;
-    if (typeof parsedState.tie.tieMaxRounds === 'undefined') parsedState.tie.tieMaxRounds = 1; 
-    if (!parsedState.tie.tieScores) parsedState.tie.tieScores = [];
-    if (!parsedState.tie.baseScores) parsedState.tie.baseScores = [];
-    if (typeof parsedState.tie.isTieBreakerActive === 'undefined') parsedState.tie.isTieBreakerActive = false;
-}
+            // === UZATMA İÇİN TIE NESNESİNİ TAMAMLA ===
+            if (!parsedState.tie) {
+                parsedState.tie = {
+                    isTie: false,
+                    tieTeams: [],
+                    tieRounds: 0,
+                    tieMaxRounds: 1, 
+                    tieScores: [],
+                    baseScores: [],
+                    isTieBreakerActive: false
+                };
+            } else {
+                if (!parsedState.tie.tieTeams) parsedState.tie.tieTeams = [];
+                if (typeof parsedState.tie.tieRounds === 'undefined') parsedState.tie.tieRounds = 0;
+                if (typeof parsedState.tie.tieMaxRounds === 'undefined') parsedState.tie.tieMaxRounds = 1; 
+                if (!parsedState.tie.tieScores) parsedState.tie.tieScores = [];
+                if (!parsedState.tie.baseScores) parsedState.tie.baseScores = [];
+                if (typeof parsedState.tie.isTieBreakerActive === 'undefined') parsedState.tie.isTieBreakerActive = false;
+            }
 
             gameState = parsedState;
 
@@ -4991,18 +5526,40 @@ function startTurnCountdown() {
     readyBtn.style.display = 'none';
     turnCountdownDisplay.style.display = 'block';
 
+    // Geri sayım metni ekle
+    let countdownText = document.querySelector('.countdown-text');
+    if (!countdownText) {
+        countdownText = document.createElement('div');
+        countdownText.className = 'countdown-text';
+        countdownText.textContent = 'Hazır olun! Oyun başlıyor...';
+        turnCountdownDisplay.parentNode.insertBefore(countdownText, turnCountdownDisplay.nextSibling);
+    }
+
     let countdown = 3;
     turnCountdownDisplay.textContent = countdown;
+    turnCountdownDisplay.className = 'turn-countdown countdown-3';
 
     if (countdownInterval) clearInterval(countdownInterval);
 
     countdownInterval = setInterval(() => {
         countdown--;
-        turnCountdownDisplay.textContent = countdown;
-
-        if (countdown <= 0) {
+        
+        if (countdown > 0) {
+            // Sayı değişiminde class'ı güncelle
+            turnCountdownDisplay.className = `turn-countdown countdown-${countdown}`;
+            turnCountdownDisplay.innerHTML = `<span>${countdown}</span>`;
+            
+            // Son sayıda metni güncelle
+            if (countdown === 1) {
+                countdownText.textContent = 'Son hazırlıklar!';
+            }
+        } else {
             clearInterval(countdownInterval);
-            startRound();
+            countdownText.textContent = 'Başla!';
+            setTimeout(() => {
+                if (countdownText) countdownText.remove();
+                startRound();
+            }, 500);
         }
     }, 1000);
 }
@@ -5070,9 +5627,12 @@ function updateTeamFlag(team) {
     }
 }
 
-// Zamanlayıcıyı başlat - OPTİMİZE EDİLDİ
+// Zamanlayıcıyı başlat - MOBİL OPTİMİZE
 function startTimer() {
     if (gameState.timerRunning) return;
+
+    // Mobil cihazlarda daha uzun interval kullan
+    const timerIntervalMs = isMobileDevice() ? 500 : 250;
 
     // Duraklatılmış zamanı kullan
     gameState.timeLeft = gameState.pausedTimeLeft > 0 ? gameState.pausedTimeLeft : 60;
@@ -5094,6 +5654,10 @@ function startTimer() {
             if (timerDisplay) {
                 if (gameState.timeLeft <= 10) {
                     timerDisplay.classList.add('timer-warning');
+                    // Mobilde son 10 saniyede titreşim efekti (desteklenirse)
+                    if (isMobileDevice() && navigator.vibrate) {
+                        navigator.vibrate(100);
+                    }
                 } else {
                     timerDisplay.classList.remove('timer-warning');
                 }
@@ -5107,7 +5671,7 @@ function startTimer() {
                 timeUp();
             }
         }
-    }, 250);
+    }, timerIntervalMs); // <-- Mobil için 500ms, desktop için 250ms
 
     gameState.timerRunning = true;
 }
@@ -5416,7 +5980,6 @@ function pauseGame() {
 
     localStorage.setItem('tabulagoGameState', JSON.stringify(gameState));
 }
-
 
 // Duraklat ekranını güncelle
 function updatePauseDisplay() {
@@ -5731,6 +6294,119 @@ function createConfetti() {
     }
 }
 
+// ===== MOBİL ÖZEL FONKSİYONLAR =====
+
+// MOBİL DOKUNMA OLAYLARI
+function initializeMobileTouchEvents() {
+    if (!isMobileDevice()) return;
+    
+    // Doğru butonu için touch event'leri
+    if (correctBtn) {
+        let correctTouchTimer;
+        
+        correctBtn.addEventListener('touchstart', function(e) {
+            correctTouchTimer = setTimeout(() => {
+                // Uzun basma için feedback
+                this.style.opacity = '0.8';
+            }, 500);
+            e.preventDefault();
+        });
+        
+        correctBtn.addEventListener('touchend', function(e) {
+            clearTimeout(correctTouchTimer);
+            this.style.opacity = '';
+            e.preventDefault();
+        });
+    }
+    
+    // Pas butonu için touch event'leri
+    if (passBtn) {
+        let passTouchTimer;
+        
+        passBtn.addEventListener('touchstart', function(e) {
+            passTouchTimer = setTimeout(() => {
+                this.style.opacity = '0.8';
+            }, 500);
+            e.preventDefault();
+        });
+        
+        passBtn.addEventListener('touchend', function(e) {
+            clearTimeout(passTouchTimer);
+            this.style.opacity = '';
+            e.preventDefault();
+        });
+    }
+    
+    // Yasak kelime butonu için touch event'leri
+    if (forbiddenBtn) {
+        let forbiddenTouchTimer;
+        
+        forbiddenBtn.addEventListener('touchstart', function(e) {
+            forbiddenTouchTimer = setTimeout(() => {
+                this.style.opacity = '0.8';
+            }, 500);
+            e.preventDefault();
+        });
+        
+        forbiddenBtn.addEventListener('touchend', function(e) {
+            clearTimeout(forbiddenTouchTimer);
+            this.style.opacity = '';
+            e.preventDefault();
+        });
+    }
+    
+    // Oyun kartı için touch event'leri (mobilde tıklanabilirliği artır)
+    if (gameCard) {
+        gameCard.style.cursor = 'pointer';
+        gameCard.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        gameCard.addEventListener('touchend', function() {
+            this.style.transform = 'scale(1)';
+        });
+    }
+}
+
+// Mobil cihazlarda sayfa kaydırmayı engelle (oyun sırasında)
+function preventScrollOnGame() {
+    if (!isMobileDevice()) return;
+    
+    document.addEventListener('touchmove', function(e) {
+        const activeScreen = document.querySelector('.screen.active-screen');
+        if (activeScreen && activeScreen.id === 'gameScreen') {
+            // Oyun ekranındayken scroll'u kısıtla
+            if (e.target.closest('.card-container-mobile') || 
+                e.target.closest('.game-controls-mobile')) {
+                e.preventDefault();
+            }
+        }
+    }, { passive: false });
+}
+
+// Sayfa görünürlüğü değiştiğinde (mobilde uygulama değiştirme)
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Sayfa gizlendiğinde oyunu duraklat
+        if (gameState.timerRunning && !gameState.isPaused) {
+            pauseGame();
+        }
+    }
+});
+
+// iOS için özel düzenlemeler
+function iOSOptimizations() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
+    if (isIOS) {
+        // iOS özel stil class'ı ekle
+        document.body.classList.add('ios-device');
+        
+        // iOS'ta input focus sorunlarını çöz
+        document.addEventListener('touchstart', function() {}, { passive: true });
+    }
+}
+
 // --- MOBİLDE ZOOM'U KONTROLLÜ KAPAT ---
 (function () {
     let lastTouchTime = 0;
@@ -5762,6 +6438,12 @@ function createConfetti() {
         }
     }, { passive: false });
 })();
+
+// Sayfa yükleme tamamlandığında iOS optimizasyonlarını başlat
+window.addEventListener('load', function() {
+    iOSOptimizations();
+    preventScrollOnGame();
+});
 
     </script>
 </body>
