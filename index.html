@@ -3177,47 +3177,106 @@ header .subtitle {
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Geri sayım sayıları için özel stiller */
-.turn-countdown.countdown-3 {
-    background: linear-gradient(135deg, rgba(255, 154, 60, 0.25), rgba(255, 107, 107, 0.2));
+/* ===== MOBİL UYUMLU GELİŞMİŞ GERİ SAYIM TASARIMI ===== */
+.turn-countdown {
+    font-size: clamp(3.5rem, 18vw, 6rem);
+    font-weight: 800;
+    margin: 20px 0;
+    text-shadow: 
+        0 3px 10px rgba(0, 0, 0, 0.4),
+        0 6px 18px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(120px, 40vw, 160px);
+    height: clamp(120px, 40vw, 160px);
+    margin: 20px auto;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
     box-shadow: 
-        inset 0 0 40px rgba(255, 154, 60, 0.15),
-        0 15px 40px rgba(255, 107, 107, 0.25),
-        0 0 80px rgba(255, 154, 60, 0.35);
+        inset 0 0 30px rgba(255, 255, 255, 0.1),
+        0 10px 30px rgba(0, 0, 0, 0.25),
+        0 0 60px rgba(106, 17, 203, 0.25);
+    animation: countdownPulse 1.5s ease-in-out infinite alternate;
+    color: white;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 10;
+}
+
+.turn-countdown::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--team1), var(--team2), var(--team3), var(--team4));
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
+    animation: countdownRotate 6s linear infinite;
+}
+
+.turn-countdown::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(106, 17, 203, 0.85), rgba(37, 117, 252, 0.85));
+    z-index: -1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Geri sayım sayıları için özel stiller - MOBİL OPTİMİZE */
+.turn-countdown.countdown-3 {
+    background: linear-gradient(135deg, rgba(255, 154, 60, 0.22), rgba(255, 107, 107, 0.18));
+    box-shadow: 
+        inset 0 0 30px rgba(255, 154, 60, 0.12),
+        0 10px 30px rgba(255, 107, 107, 0.2),
+        0 0 60px rgba(255, 154, 60, 0.25);
 }
 
 .turn-countdown.countdown-2 {
-    background: linear-gradient(135deg, rgba(0, 180, 219, 0.25), rgba(155, 89, 182, 0.2));
+    background: linear-gradient(135deg, rgba(0, 180, 219, 0.22), rgba(155, 89, 182, 0.18));
     box-shadow: 
-        inset 0 0 40px rgba(0, 180, 219, 0.15),
-        0 15px 40px rgba(155, 89, 182, 0.25),
-        0 0 80px rgba(0, 180, 219, 0.35);
+        inset 0 0 30px rgba(0, 180, 219, 0.12),
+        0 10px 30px rgba(155, 89, 182, 0.2),
+        0 0 60px rgba(0, 180, 219, 0.25);
 }
 
 .turn-countdown.countdown-1 {
-    background: linear-gradient(135deg, rgba(46, 204, 113, 0.25), rgba(39, 174, 96, 0.2));
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.22), rgba(39, 174, 96, 0.18));
     box-shadow: 
-        inset 0 0 40px rgba(46, 204, 113, 0.15),
-        0 15px 40px rgba(39, 174, 96, 0.25),
-        0 0 80px rgba(46, 204, 113, 0.35);
-    animation: countdownFinalPulse 0.6s ease-in-out infinite alternate;
+        inset 0 0 30px rgba(46, 204, 113, 0.12),
+        0 10px 30px rgba(39, 174, 96, 0.2),
+        0 0 60px rgba(46, 204, 113, 0.25);
+    animation: countdownFinalPulse 0.8s ease-in-out infinite alternate;
 }
 
-/* Animasyonlar */
+/* Animasyonlar - MOBİL PERFORMANS ODAKLI */
 @keyframes countdownPulse {
     0% {
         transform: scale(1) translateY(0);
         box-shadow: 
-            inset 0 0 40px rgba(255, 255, 255, 0.1),
-            0 15px 40px rgba(0, 0, 0, 0.25),
-            0 0 80px rgba(106, 17, 203, 0.3);
+            inset 0 0 30px rgba(255, 255, 255, 0.1),
+            0 10px 30px rgba(0, 0, 0, 0.25),
+            0 0 60px rgba(106, 17, 203, 0.25);
     }
     100% {
-        transform: scale(1.03) translateY(-5px);
+        transform: scale(1.04) translateY(-3px);
         box-shadow: 
-            inset 0 0 40px rgba(255, 255, 255, 0.12),
-            0 20px 50px rgba(0, 0, 0, 0.35),
-            0 0 100px rgba(106, 17, 203, 0.4);
+            inset 0 0 30px rgba(255, 255, 255, 0.12),
+            0 12px 35px rgba(0, 0, 0, 0.3),
+            0 0 70px rgba(106, 17, 203, 0.3);
     }
 }
 
@@ -3225,16 +3284,16 @@ header .subtitle {
     0% {
         transform: scale(1);
         box-shadow: 
-            inset 0 0 40px rgba(46, 204, 113, 0.15),
-            0 15px 40px rgba(39, 174, 96, 0.25),
-            0 0 80px rgba(46, 204, 113, 0.35);
+            inset 0 0 30px rgba(46, 204, 113, 0.12),
+            0 10px 30px rgba(39, 174, 96, 0.2),
+            0 0 60px rgba(46, 204, 113, 0.25);
     }
     100% {
-        transform: scale(1.05);
+        transform: scale(1.06);
         box-shadow: 
-            inset 0 0 40px rgba(46, 204, 113, 0.2),
-            0 20px 50px rgba(39, 174, 96, 0.3),
-            0 0 100px rgba(46, 204, 113, 0.45);
+            inset 0 0 30px rgba(46, 204, 113, 0.15),
+            0 12px 35px rgba(39, 174, 96, 0.25),
+            0 0 70px rgba(46, 204, 113, 0.3);
     }
 }
 
@@ -3247,20 +3306,20 @@ header .subtitle {
     }
 }
 
-/* Sayı değişim animasyonu */
+/* Sayı değişim animasyonu - MOBİL UYUMLU */
 .turn-countdown span {
     display: inline-block;
-    animation: numberPop 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    animation: numberPopMobile 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-@keyframes numberPop {
+@keyframes numberPopMobile {
     0% {
-        transform: scale(0.3) rotate(-180deg);
+        transform: scale(0.4) rotate(-180deg);
         opacity: 0;
-        filter: blur(10px);
+        filter: blur(8px);
     }
     60% {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.08) rotate(5deg);
         opacity: 1;
         filter: blur(0);
     }
@@ -3271,73 +3330,207 @@ header .subtitle {
     }
 }
 
-/* Geri sayım metni */
+/* Geri sayım metni - MOBİL UYUMLU */
 .countdown-text {
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.95);
     text-align: center;
-    margin-top: -10px;
-    margin-bottom: 20px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    background: rgba(255, 255, 255, 0.1);
+    margin: 10px auto 15px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.12);
     padding: 8px 20px;
     border-radius: 50px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-width: 280px;
+    line-height: 1.4;
 }
 
-/* Mobil uyumluluk */
-@media (max-width: 767px) {
+/* Takım sırası ekranı için responsive düzen */
+.team-turn-screen .turn-team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/* Mobil cihazlar için özel düzenlemeler */
+@media (max-width: 768px) {
+    .team-turn-screen {
+        padding: 20px 15px;
+    }
+    
+    .turn-team-container {
+        gap: 12px;
+    }
+    
+    .turn-team {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        padding: 12px 20px;
+    }
+    
+    .current-player {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        padding: 10px 16px;
+    }
+    
+    .team-stats-container {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+    
+    .team-stat-card {
+        padding: 15px;
+    }
+    
+    .team-stat-header {
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .team-stat-flag {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .team-stat-name {
+        font-size: 1.1rem;
+    }
+    
+    .stat-value {
+        font-size: 1.2rem;
+    }
+}
+
+/* Küçük mobil cihazlar için ek iyileştirmeler */
+@media (max-width: 480px) {
     .turn-countdown {
-        width: 140px;
-        height: 140px;
-        font-size: clamp(3rem, 10vw, 5rem);
-        margin: 25px auto;
-        border-radius: 20px;
+        width: clamp(100px, 35vw, 140px);
+        height: clamp(100px, 35vw, 140px);
+        border-radius: 18px;
+        margin: 15px auto;
     }
     
     .turn-countdown::before {
-        top: -4px;
-        left: -4px;
-        right: -4px;
-        bottom: -4px;
-        border-radius: 24px;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        border-radius: 21px;
     }
     
     .turn-countdown::after {
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        bottom: 2px;
-        border-radius: 18px;
+        top: 1px;
+        left: 1px;
+        right: 1px;
+        bottom: 1px;
+        border-radius: 16px;
     }
     
     .countdown-text {
-        font-size: 1rem;
         padding: 6px 16px;
+        margin: 8px auto 12px;
+        font-size: clamp(0.8rem, 3.5vw, 1rem);
+    }
+    
+    .team-turn-screen {
+        padding: 15px 10px;
+    }
+    
+    .team-stats-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .team-stat-scores {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .stat-item {
+        padding: 8px;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .stat-value {
+        font-size: 1.1rem;
     }
 }
 
-@media (max-width: 480px) {
+/* Yatay mod için optimizasyon */
+@media (max-height: 500px) and (orientation: landscape) {
+    .team-turn-screen {
+        padding: 15px 10px;
+    }
+    
     .turn-countdown {
-        width: 120px;
-        height: 120px;
-        font-size: clamp(2.5rem, 8vw, 4rem);
-        margin: 20px auto;
-        border-radius: 18px;
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+        margin: 10px auto;
     }
     
     .countdown-text {
+        margin: 5px auto 10px;
+        padding: 4px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .turn-team-container {
+        gap: 8px;
+    }
+    
+    .turn-team {
+        font-size: 1.3rem;
+        padding: 8px 16px;
+    }
+    
+    .current-player {
         font-size: 0.9rem;
-        padding: 5px 14px;
+        padding: 6px 12px;
     }
 }
 
-/* Karanlık tema desteği */
-@media (prefers-color-scheme: dark) {
+/* Yüksek çözünürlüklü ekranlar için */
+@media (min-width: 1200px) {
     .turn-countdown {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+        width: 180px;
+        height: 180px;
+        font-size: 5rem;
+    }
+}
+
+/* Performans iyileştirmeleri */
+.turn-countdown {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* Erişilebilirlik için */
+@media (prefers-reduced-motion: reduce) {
+    .turn-countdown {
+        animation: none;
+    }
+    
+    .turn-countdown::before {
+        animation: none;
+    }
+    
+    .turn-countdown span {
+        animation: none;
+    }
+}
+
+/* iOS özel düzeltmeleri */
+@supports (-webkit-touch-callout: none) {
+    .turn-countdown {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
     }
 }
     </style>
@@ -5526,14 +5719,15 @@ function startTurnCountdown() {
     readyBtn.style.display = 'none';
     turnCountdownDisplay.style.display = 'block';
 
-    // Geri sayım metni ekle
+    // Mevcut countdown text'i temizle veya oluştur
     let countdownText = document.querySelector('.countdown-text');
     if (!countdownText) {
         countdownText = document.createElement('div');
         countdownText.className = 'countdown-text';
-        countdownText.textContent = 'Hazır olun! Oyun başlıyor...';
         turnCountdownDisplay.parentNode.insertBefore(countdownText, turnCountdownDisplay.nextSibling);
     }
+    
+    countdownText.textContent = 'Hazır olun! Oyun başlıyor...';
 
     let countdown = 3;
     turnCountdownDisplay.textContent = countdown;
@@ -5545,12 +5739,13 @@ function startTurnCountdown() {
         countdown--;
         
         if (countdown > 0) {
-            // Sayı değişiminde class'ı güncelle
             turnCountdownDisplay.className = `turn-countdown countdown-${countdown}`;
             turnCountdownDisplay.innerHTML = `<span>${countdown}</span>`;
             
-            // Son sayıda metni güncelle
-            if (countdown === 1) {
+            // Mobil için optimize metin güncellemeleri
+            if (countdown === 2) {
+                countdownText.textContent = 'Neredeyse hazır...';
+            } else if (countdown === 1) {
                 countdownText.textContent = 'Son hazırlıklar!';
             }
         } else {
@@ -5559,7 +5754,7 @@ function startTurnCountdown() {
             setTimeout(() => {
                 if (countdownText) countdownText.remove();
                 startRound();
-            }, 500);
+            }, 400);
         }
     }, 1000);
 }
