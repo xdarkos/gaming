@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>TabulaGo - KVKK / Aydınlatma Metni</title>
+
+  <!-- PWA / Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TabulaGo" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#6a11cb" />
+  <meta name="msapplication-TileColor" content="#6a11cb" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Performans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Fontlar / ikonlar -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+/* ===== CSS DEĞİŞKENLERİ (ANA SAYFA İLE AYNI) ===== */
+:root{
+  --primary:#6a11cb;
+  --secondary:#2575fc;
+  --accent:#ff6b6b;
+  --success:#4cd964;
+  --light:#f8f9fa;
+  --dark:#212529;
+
+  --team1:#ff9a3c;
+  --team2:#00b4db;
+  --team3:#9b59b6;
+  --team4:#2ecc71;
+
+  --transition: all .3s cubic-bezier(.25,.8,.25,1);
+  --shadow: 0 10px 30px rgba(0,0,0,.15);
+  --shadow-lg: 0 20px 50px rgba(0,0,0,.2);
+
+  --radius:16px;
+  --radius-lg:24px;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* ===== RESET / GENEL ===== */
+*{ margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
+html, body{ max-width:100vw; overflow-x:hidden; }
+
+body{
+  background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+  color:#fff;
+
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+}
+
+.container{ width:100%; max-width:1200px; text-align:center; }
+
+:focus-visible{
+  outline: 3px solid rgba(255,255,255,.85);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}
+
+/* =========================================================
+   HEADER (ANA SAYFA İLE AYNI DİL)
+========================================================= */
+header{
+  margin-bottom:30px;
+  padding:25px;
+  background: rgba(255,255,255,.10);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: var(--shadow);
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.15);
+}
+header::before{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0;
+  height:5px;
+  background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.subtitle{
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  opacity:.9;
+  font-weight:300;
+  margin-top:10px;
+  line-height:1.45;
+}
+
+/* Logo: default (desktop dahil) bozulmasın */
+.header-logo-wrapper{
+  position:absolute;
+  top:50%; left:50%;
+  transform: translate(-50%,-78%);
+  pointer-events:none;
+  z-index:5;
+}
+.header-logo{ width:260px; height:auto; display:block; }
+
+/* subtitle logonun altına indiği alan */
+header .subtitle{ position:relative; margin-top:130px; z-index:1; }
+
+.header-actions{
+  position:relative;
+  z-index:2;
+  margin-top:18px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.action-btn{
+  border:none;
+  border-radius:999px;
+  padding:12px 16px;
+  font-weight:900;
+  cursor:pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  min-height:44px;
+  touch-action: manipulation;
+  color:#fff;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.18);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+.action-btn:hover{ transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.action-btn:active{ transform: translateY(1px); }
+.action-btn-primary{
+  background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
+  border:0;
+}
+
+/* =========================================================
+   MAIN CONTENT (ANA SAYFA İLE AYNI)
+========================================================= */
+.main-content{
+  background: rgba(255,255,255,.10);
+  border-radius: var(--radius-lg);
+  padding:30px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,.15);
+  position:relative;
+  overflow:hidden;
+  width:100%;
+}
+.main-content::before{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0;
+  height:5px;
+  background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* =========================================================
+   KVKK BÖLÜMLERİ
+========================================================= */
+.kvkk-wrap{ position:relative; z-index:1; text-align:left; }
+
+.kvkk-topbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.kvkk-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:.85rem;
+  background: rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+}
+.badge i{ opacity:.95; }
+
+.kvkk-title{
+  font-size: clamp(1.35rem, 2.8vw, 2rem);
+  font-weight:900;
+  letter-spacing:-.2px;
+  margin-bottom:6px;
+}
+.kvkk-lead{
+  color: rgba(255,255,255,.88);
+  line-height:1.6;
+  font-size:1rem;
+  margin-bottom:18px;
+}
+
+.kvkk-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:14px;
+}
+@media (max-width: 900px){
+  .kvkk-grid{ grid-template-columns: 1fr; }
+}
+
+.kvkk-card{
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: var(--radius);
+  padding:16px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+.kvkk-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,180,219,.16), transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,154,60,.14), transparent 55%),
+    radial-gradient(circle at 70% 90%, rgba(155,89,182,.14), transparent 55%);
+  pointer-events:none;
+}
+.kvkk-card-inner{ position:relative; z-index:1; }
+
+.kvkk-head{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:10px;
+}
+.kvkk-icon{
+  width:44px; height:44px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.16);
+  flex:0 0 auto;
+}
+.kvkk-icon i{
+  font-size:18px;
+  color: rgba(255,255,255,.92);
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.25));
+}
+.kvkk-card-title{
+  font-weight:900;
+  letter-spacing:-.2px;
+  font-size:1.05rem;
+  margin-top:2px;
+}
+.kvkk-card-desc{
+  margin-top:8px;
+  color: rgba(255,255,255,.82);
+  font-size:.95rem;
+  line-height:1.55;
+}
+
+.kvkk-list{
+  margin-top:10px;
+  margin-left:18px;
+  color: rgba(255,255,255,.86);
+  line-height:1.6;
+}
+.kvkk-list li{ margin:6px 0; }
+.kvkk-list strong{ color:#fff; font-weight:900; }
+
+.note{
+  margin-top:14px;
+  padding:14px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.86);
+  line-height:1.55;
+}
+.note strong{ color:#fff; font-weight:900; }
+
+.hr{
+  height:1px;
+  background: rgba(255,255,255,.16);
+  margin:18px 0;
+}
+
+/* =========================================================
+   FOOTER (ANA SAYFA İLE UYUMLU)
+========================================================= */
+.site-footer{ width:100%; margin-top:10px; padding-bottom:12px; }
+
+.footer-inner{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:14px 18px;
+  background: rgba(255,255,255,.08);
+  border-radius: var(--radius-lg);
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+.footer-inner::before{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0;
+  height:5px;
+  background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.footer-glow{
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,183,3,.25), transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(255,154,60,.20), transparent 55%),
+    radial-gradient(circle at 60% 90%, rgba(155,89,182,.18), transparent 60%);
+  filter: blur(14px);
+  animation: footerGlowMove 12s linear infinite;
+  pointer-events:none;
+}
+.footer-content{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  row-gap:2px;
+  text-align:center;
+}
+.footer-text{ color: rgba(255,255,255,.85); font-size:.95rem; font-weight:600; }
+
+.footer-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:8px 12px;
+  font-weight:900;
+  text-decoration:none;
+  position:relative;
+  border-radius:12px;
+  background: linear-gradient(135deg,#fff6c2 0%,#ffd36a 22%,#ffb703 50%,#e6a100 78%,#fff1a8 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow: 0 2px 4px rgba(0,0,0,.55), 0 0 10px rgba(255,183,3,.35);
+  transition: transform .25s ease, text-shadow .25s ease, filter .25s ease;
+  touch-action: manipulation;
+  user-select:none;
+}
+.footer-link::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-4px;
+  height:3px;
+  border-radius:999px;
+  background: linear-gradient(to right,#fff6c2,#ffb703,#e6a100);
+  box-shadow: 0 0 8px rgba(255,183,3,.60);
+  transform: scaleX(0);
+  transition: transform .3s ease;
+}
+.footer-link:hover{
+  transform: translateY(-2px) scale(1.03);
+  text-shadow: 0 4px 8px rgba(0,0,0,.65), 0 0 18px rgba(255,183,3,.60);
+  filter: brightness(1.12);
+}
+.footer-link:hover::after{ transform: scaleX(1); }
+.footer-link:active{ transform: scale(.96); }
+
+.footer-fix{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:42px;
+  min-height:42px;
+  margin-left:6px;
+  border-radius:50%;
+  background: rgba(255,255,255,.06);
+  border:1px solid rgba(255,183,3,.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.footer-fix img{
+  width:20px; height:20px;
+  transform: scale(3.7);
+  pointer-events:none;
+}
+.footer-fix:hover{
+  transform: translateY(-1px);
+  background: rgba(255,183,3,.15);
+  box-shadow: 0 0 10px rgba(255,183,3,.45);
+}
+
+.footer-legal{
+  width:100%;
+  display:block;
+  margin-top:-2px;
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.3px;
+  color: rgba(255,255,255,.42);
+  text-align:center;
+  user-select:none;
+  opacity:.9;
+  transition: opacity .25s ease, color .25s ease;
+}
+.footer-legal strong{ color: rgba(255,183,3,.85); font-weight:900; }
+.site-footer:hover .footer-legal{ opacity:1; color: rgba(255,255,255,.55); }
+
+@keyframes footerGlowMove{
+  0%{ transform: translateX(-2%) rotate(0deg); }
+  50%{ transform: translateX(2%) rotate(180deg); }
+  100%{ transform: translateX(-2%) rotate(360deg); }
+}
+
+/* =========================================================
+   RESPONSIVE (LOGO SADECE MOBİLDE YUKARI)
+========================================================= */
+@media (max-width: 767px){
+  body{ padding:10px; }
+  header{ padding:15px; margin-bottom:20px; }
+  .main-content{ padding:20px 15px; }
+
+  .header-logo{ width:190px; }
+
+  /* ✅ Mobilde logo biraz yukarı */
+  .header-logo-wrapper{
+    transform: translate(-50%,-66%);
+  }
+
+  /* Subtitle ile logo çakışmasın */
+  header .subtitle{ margin-top:100px; font-size:1rem; }
+}
+
+@media (max-width: 480px){
+  .header-logo{ width:160px; }
+
+  /* ✅ Daha küçük ekranda az daha yukarı */
+  .header-logo-wrapper{
+    transform: translate(-50%,-70%);
+  }
+
+  header .subtitle{ margin-top:80px; font-size:.9rem; }
+  .main-content{ padding:15px 10px; }
+}
+
+
+@media (max-width: 767px){
+  .header-logo-wrapper{
+    transform: translate(-50%,-66%); /* değeri büyütürsen daha da yukarı çıkar */
+  }
+}
+
+@media (max-width: 480px){
+  .header-logo-wrapper{
+    transform: translate(-50%,-108%); /* küçük ekranda biraz daha yukarı */
+  }
+}
+/* ================================
+   Instagram Icon (Premium & Stabil)
+   ================================ */
+
+.ig-icon{
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+
+  /* Görünüm */
+  opacity: 0.88;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+
+  /* Sadece ikon büyür */
+  transform: scale(1.7);
+  transform-origin: center;
+
+  /* Akıcı animasyon */
+  transition:
+    transform .22s cubic-bezier(.4,0,.2,1),
+    opacity .22s ease,
+    filter .22s ease;
+
+  pointer-events: none; /* link alanını bozmaz */
+}
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <div style="max-width:900px;margin:16px auto;padding:14px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.2);color:#fff;">
+      Bu sayfanın çalışması için JavaScript gereklidir. Lütfen tarayıcınızda JavaScript’i etkinleştirin.
+    </div>
+  </noscript>
+
+  <div class="container">
+    <header>
+      <div class="header-logo-wrapper">
+        <img src="logo.png" alt="TabulaGo" class="header-logo" onerror="this.style.display='none'" />
+      </div>
+
+      <p class="subtitle">
+        KVKK kapsamında aydınlatma metni: Sorun Bildir sayfası üzerinden işlenen kişisel veriler ve çerez tercihleri hakkında bilgi.
+      </p>
+
+      <div class="header-actions">
+        <a class="action-btn action-btn-primary" href="fix.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Sorun Bildir’e Dön
+        </a>
+        <a class="action-btn" href="#haklar">
+          <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Haklarım
+        </a>
+        <a class="action-btn" href="#cerezler">
+          <i class="fa-solid fa-cookie-bite" aria-hidden="true"></i> Çerezler
+        </a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="kvkk-wrap">
+        <div class="kvkk-topbar">
+          <div>
+            <div class="kvkk-title">KVKK / Aydınlatma Metni</div>
+            <div class="kvkk-lead">
+              Bu metin, <strong>TabulaGo - Sorun Bildir</strong> sayfası üzerinden ilettiğiniz bildirimlerin alınması, değerlendirilmesi
+              ve gerekli durumlarda sizinle iletişime geçilebilmesi amacıyla işlenen veriler hakkında bilgilendirme sağlar.
+            </div>
+          </div>
+
+          <div class="kvkk-badges" aria-label="Özet Bilgiler">
+            <span class="badge"><i class="fa-solid fa-clock" aria-hidden="true"></i> Güncelleme: <span id="updateDate">—</span></span>
+            <span class="badge"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> KVKK 6698</span>
+          </div>
+        </div>
+
+        <div class="kvkk-grid">
+          <section class="kvkk-card" aria-label="Veri Sorumlusu">
+            <div class="kvkk-card-inner">
+              <div class="kvkk-head">
+                <div class="kvkk-icon"><i class="fa-solid fa-building" aria-hidden="true"></i></div>
+                <div>
+                  <div class="kvkk-card-title">Veri Sorumlusu</div>
+                  <div class="kvkk-card-desc">
+                    <strong>[TabulaGo / Şirket-Adı]</strong> (“Veri Sorumlusu”) olarak; bu sayfa üzerinden ilettiğiniz bildirimi almak ve
+                    değerlendirmek amacıyla verilerinizi işleriz.
+                    <div class="note" style="margin-top:10px;">
+                      <strong>İletişim:</strong> [destek@tabulago.com] • [Adres / Şehir]
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="kvkk-card" aria-label="İşleme Amaçları">
+            <div class="kvkk-card-inner">
+              <div class="kvkk-head">
+                <div class="kvkk-icon"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></div>
+                <div>
+                  <div class="kvkk-card-title">İşleme Amaçları</div>
+                  <div class="kvkk-card-desc">
+                    Bildirimlerinizi yönetmek için veriler; aşağıdaki amaçlarla işlenebilir:
+                    <ul class="kvkk-list">
+                      <li><strong>Destek talebinin alınması</strong> ve ilgili ekibe yönlendirilmesi</li>
+                      <li><strong>Hata/öneri/geri bildirim</strong> değerlendirmesi ve geri dönüş yapılması</li>
+                      <li><strong>Güvenlik</strong> ve kötüye kullanımın önlenmesi (spam, bot, rate-limit)</li>
+                      <li><strong>Teknik teşhis</strong> (izin verilirse) sorunların tespiti ve giderilmesi</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="kvkk-card" aria-label="Toplanan Veri Kategorileri">
+            <div class="kvkk-card-inner">
+              <div class="kvkk-head">
+                <div class="kvkk-icon"><i class="fa-solid fa-database" aria-hidden="true"></i></div>
+                <div>
+                  <div class="kvkk-card-title">Toplanan Veri Kategorileri</div>
+                  <div class="kvkk-card-desc">
+                    Bu sayfada, form alanları ve teknik kayıtlarla sınırlı olacak şekilde:
+                    <ul class="kvkk-list">
+                      <li><strong>İletişim:</strong> E-posta adresiniz</li>
+                      <li><strong>Bildirim içeriği:</strong> Başlık, açıklama, seçtiğiniz tür/öncelik/kategori/tekrar bilgisi</li>
+                      <li><strong>Teknik özet:</strong> Cihaz/OS/tarayıcı özeti</li>
+                      <li><strong>Sayfa kayıtları:</strong> Gönderim tarihi ve sayfa adresi</li>
+                      <li><strong>Güvenlik:</strong> Hızlı gönderim ve sık gönderimi engelleyen yerel zaman damgaları</li>
+                      <li><strong>Opsiyonel:</strong> Teşhis izni verirseniz <code>Session ID</code> rapora eklenebilir</li>
+                      <li><strong>Performans izni ile:</strong> IP ve ayrıntılı tarayıcı bilgisi (UA / userAgentData)</li>
+                    </ul>
+                    <div class="note">
+                      <strong>Dosya/ek yükleme:</strong> Bu sayfada ekran görüntüsü/dosya yükleme alanı bulunmamaktadır.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="kvkk-card" aria-label="Hukuki Sebep">
+            <div class="kvkk-card-inner">
+              <div class="kvkk-head">
+                <div class="kvkk-icon"><i class="fa-solid fa-gavel" aria-hidden="true"></i></div>
+                <div>
+                  <div class="kvkk-card-title">Hukuki Sebep</div>
+                  <div class="kvkk-card-desc">
+                    Kişisel verileriniz; KVKK’nın 5. maddesi kapsamında aşağıdaki hukuki sebeplere dayanarak işlenebilir:
+                    <ul class="kvkk-list">
+                      <li><strong>Bir hakkın tesisi, kullanılması veya korunması</strong></li>
+                      <li><strong>Meşru menfaat</strong> (hizmet kalitesi, güvenlik ve suistimal önleme)</li>
+                      <li><strong>Açık rıza</strong> (özellikle “Performans / Hata Ayıklama” izni ile ek teknik veriler)</li>
+                    </ul>
+                    <div class="note">
+                      Çerez tercihlerinizi dilediğiniz zaman sayfadaki çerez penceresinden güncelleyebilirsiniz.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="hr" role="separator"></div>
+
+        <section class="kvkk-card" aria-label="Aktarım ve Üçüncü Taraflar">
+          <div class="kvkk-card-inner">
+            <div class="kvkk-head">
+              <div class="kvkk-icon"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i></div>
+              <div>
+                <div class="kvkk-card-title">Aktarım ve Üçüncü Taraf Hizmetleri</div>
+                <div class="kvkk-card-desc">
+                  Bildiriminizi iletmek ve sayfanın çalışmasını sağlamak için bazı hizmet sağlayıcılar kullanılabilir:
+                  <ul class="kvkk-list">
+                    <li><strong>Form gönderimi:</strong> Formspree</li>
+                    <li><strong>IP bilgisi (opsiyonel):</strong> ipify (Performans izni verilirse)</li>
+                  </ul>
+                  <div class="note">
+                    Bu sağlayıcılar yalnızca hizmetin sunulması amacıyla sınırlı şekilde veri işleyebilir.
+                    Zorunlu olmadıkça üçüncü kişilerle veri paylaşımı yapılmaz.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="hr" role="separator"></div>
+
+        <!-- Çerezler (örnek içeriksiz) -->
+        <section id="cerezler" class="kvkk-card" aria-label="Çerezler ve Yerel Depolama">
+          <div class="kvkk-card-inner">
+            <div class="kvkk-head">
+              <div class="kvkk-icon"><i class="fa-solid fa-cookie-bite" aria-hidden="true"></i></div>
+              <div>
+                <div class="kvkk-card-title">Çerezler ve Yerel Depolama</div>
+                <div class="kvkk-card-desc">
+                  Bu sayfada; tercihlerinizi hatırlamak, güvenliği sağlamak ve sayfanın düzgün çalışmasını temin etmek için
+                  çerezler ve/veya tarayıcı yerel depolama (ör. localStorage) kullanılabilir.
+                </div>
+              </div>
+            </div>
+
+            <div class="note" style="margin-top:10px;">
+              Analitik veya performans amaçlı işlemler, yalnızca <strong>açık rızanız</strong> doğrultusunda etkinleştirilir.
+              Tercihlerinizi dilediğiniz zaman çerez yönetim penceresinden güncelleyebilirsiniz.
+            </div>
+
+            <div class="note">
+              Bu teknolojiler aracılığıyla elde edilen bilgiler, <strong>kimliğinizi doğrudan tanımlamak amacıyla kullanılmaz</strong>
+              ve zorunlu olmadıkça üçüncü kişilerle paylaşılmaz.
+            </div>
+          </div>
+        </section>
+
+        <div class="hr" role="separator"></div>
+
+        <section class="kvkk-card" aria-label="Saklama Süresi">
+          <div class="kvkk-card-inner">
+            <div class="kvkk-head">
+              <div class="kvkk-icon"><i class="fa-solid fa-box-archive" aria-hidden="true"></i></div>
+              <div>
+                <div class="kvkk-card-title">Saklama Süresi</div>
+                <div class="kvkk-card-desc">
+                  Bildirim içerikleri ve iletişim verileri; destek sürecinin yürütülmesi için gerekli süre boyunca ve ilgili mevzuatın öngördüğü
+                  zamanaşımı/saklama yükümlülükleri çerçevesinde saklanabilir. Süre sonunda veriler silinir, yok edilir veya anonim hale getirilir.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="haklar" class="kvkk-card" aria-label="KVKK Kapsamındaki Haklarınız" style="margin-top:14px;">
+          <div class="kvkk-card-inner">
+            <div class="kvkk-head">
+              <div class="kvkk-icon"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i></div>
+              <div>
+                <div class="kvkk-card-title">KVKK Kapsamındaki Haklarınız</div>
+                <div class="kvkk-card-desc">
+                  KVKK’nın 11. maddesi kapsamındaki haklarınız arasında:
+                  <ul class="kvkk-list">
+                    <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
+                    <li>İşlenmişse buna ilişkin bilgi talep etme</li>
+                    <li>İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme</li>
+                    <li>Yurt içinde/yurt dışında aktarıldığı üçüncü kişileri bilme</li>
+                    <li>Eksik/yanlış işlenmişse düzeltilmesini isteme</li>
+                    <li>KVKK’ya uygun olarak silinmesini/yok edilmesini isteme</li>
+                    <li>İşlemlerin aktarıldığı üçüncü kişilere bildirilmesini isteme</li>
+                    <li>Otomatik sistemlerle analiz sonucu aleyhe sonuca itiraz etme</li>
+                    <li>Kanuna aykırı işleme nedeniyle zarara uğranması hâlinde zararın giderilmesini talep etme</li>
+                  </ul>
+
+                  <div class="note">
+                    <strong>Başvuru:</strong> Haklarınızı kullanmak için <strong>[destek@tabulago.com]</strong> adresine e-posta gönderebilirsiniz.
+                    Başvurunuzda kimlik doğrulaması için gerekli bilgileri isteyebiliriz.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-glow" aria-hidden="true"></div>
+
+      <div class="footer-content">
+        <span class="footer-text">Designed by</span>
+
+        <a class="footer-link"
+           href="https://www.instagram.com/ileri.official?igsh=MXo0bmczdHVtbjFm&utm_source=qr"
+           target="_blank" rel="noopener noreferrer">
+          Eren İlhan
+        </a>
+
+        <a href="fix.html" class="footer-fix" aria-label="Sorun Bildir sayfası">
+          <img src="fix.png" alt="Sorun Bildir" />
+        </a>
+      </div>
+
+      <span class="footer-legal">© <span id="footerYear"></span> <strong>TabulaGo</strong> • Tüm hakları saklıdır</span>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const footerYear = document.getElementById("footerYear");
+      if (footerYear) footerYear.textContent = String(new Date().getFullYear());
+
+      const updateDate = document.getElementById("updateDate");
+      if (updateDate) {
+        updateDate.textContent = new Date().toLocaleDateString("tr-TR", { year:"numeric", month:"long", day:"numeric" });
+      }
+    })();
+  </script>
+</body>
+</html>
