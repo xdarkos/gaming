@@ -5077,6 +5077,68 @@ body.modal-open{
 .dice-ready-btn:active .dice-ready-img{
   transform: scale(0.98);
 }
+/* =========================================
+   ZARLARI AT (zarat.png) - TEK ve SAĞLAM (OPTİMİZE)
+   ========================================= */
+
+#rollDiceBtn{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-width: unset !important;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+
+  /* 🔥 taşmayı engelle */
+  max-width: 100%;
+}
+
+/* Görsel: hem mobil hem PC düzgün ölçek */
+#rollDiceBtn .dice-btn-img{
+  width: clamp(220px, 28vw, 360px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+
+  user-select: none;
+  pointer-events: none;
+  transform: translateZ(0);
+
+  /* 🔥 görünüm bozulmasın */
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Hover / Active hissi */
+#rollDiceBtn:hover .dice-btn-img{
+  transform: scale(1.04);
+  transition: transform .18s ease;
+}
+#rollDiceBtn:active .dice-btn-img{
+  transform: scale(.97);
+}
+
+/* Mobilde: büyük ama taşmadan sığsın */
+@media (max-width: 480px){
+  #rollDiceBtn .dice-btn-img{
+    width: min(320px, 92vw) !important;  /* ✅ 420 -> 320 */
+  }
+}
+
+/* Çok küçük ekran güvenliği */
+@media (max-width: 360px){
+  #rollDiceBtn .dice-btn-img{
+    width: min(300px, 90vw) !important;
+  }
+}
+
 
 
     </style>
@@ -5201,24 +5263,36 @@ body.modal-open{
 </div>
 
         
-        <!-- Zar Atma Ekranı -->
-        <div class="screen" id="diceScreen">
-            <div class="dice-screen">
-                <h2 class="dice-title">Sıra Belirleme</h2>
-                <div class="info-label">Tüm takımlar zar atsın! En yüksek atan başlayacak.</div>
-                <div id="tieInfoContainer"></div>
-                <div class="dice-container" id="diceContainer"></div>
-                <div class="dice-controls">
-                    <button class="btn dice-btn" id="rollDiceBtn"><i class="fas fa-dice"></i> Zarları At</button>
-                </div>
-                <div class="order-list" id="orderList" style="display: none;">
-                    <h3 class="order-title">Oyun Sırası</h3>
-                </div>
-                <button class="btn" id="startAfterDiceBtn" style="display: none; margin: 40px auto 0 auto;">
-                    <i class="fas fa-flag-checkered"></i> Hadi Başlayalım!
-                </button>
-            </div>
-        </div>
+<!-- Zar Atma Ekranı -->
+<div class="screen" id="diceScreen">
+  <div class="dice-screen">
+    <h2 class="dice-title">Sıra Belirleme</h2>
+
+    <p class="dice-subtitle">
+      Tüm takımlar zar atsın! En yüksek atan başlayacak.
+    </p>
+
+    <div id="tieInfoContainer"></div>
+
+    <div class="dice-container" id="diceContainer"></div>
+
+<div class="dice-controls">
+  <button class="btn dice-btn dice-image-btn" id="rollDiceBtn" aria-label="Zarları At"></button>
+
+</div>
+
+
+    <div class="order-list" id="orderList" hidden>
+      <h3 class="order-title">Oyun Sırası</h3>
+    </div>
+
+    <button class="btn start-after-dice-btn" id="startAfterDiceBtn" hidden>
+      <i class="fas fa-flag-checkered" aria-hidden="true"></i>
+      Hadi Başlayalım!
+    </button>
+  </div>
+</div>
+
         
         <!-- Takım Sırası Ekranı -->
         <div class="screen" id="teamTurnScreen">
@@ -6625,11 +6699,13 @@ const DiceManager = {
     if (DOM.orderList) DOM.orderList.style.display = 'none';
     if (DOM.startAfterDiceBtn) DOM.startAfterDiceBtn.style.display = 'none';
 
-    if (DOM.rollDiceBtn) {
-      DOM.rollDiceBtn.style.display = 'block';
-      DOM.rollDiceBtn.disabled = false;
-      DOM.rollDiceBtn.innerHTML = '<i class="fas fa-dice"></i> Zarları At';
-    }
+if (DOM.rollDiceBtn) {
+  DOM.rollDiceBtn.style.display = 'block';
+  DOM.rollDiceBtn.disabled = false;
+  DOM.rollDiceBtn.innerHTML = `
+    <img src="zarat.png" alt="Zar At" class="dice-btn-img">
+  `;
+}
 
     ScreenManager.showScreen('dice');
     StorageManager.saveGameStateThrottled(true);
