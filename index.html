@@ -5139,6 +5139,54 @@ body.modal-open{
   }
 }
 
+/* =========================================
+   HADI BAŞLAYALIM (hadibasla.png)
+   ========================================= */
+
+#startAfterDiceBtn{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 28px auto 0; /* ortada dursun */
+}
+
+/* Görsel */
+#startAfterDiceBtn .start-after-dice-img{
+  width: clamp(220px, 30vw, 360px);
+  height: auto;
+  display: block;
+
+  user-select: none;
+  pointer-events: none; /* tıklama butonda kalsın */
+}
+
+/* Hover / Active hissi */
+#startAfterDiceBtn:hover .start-after-dice-img{
+  transform: scale(1.04);
+  transition: transform .18s ease;
+}
+#startAfterDiceBtn:active .start-after-dice-img{
+  transform: scale(.97);
+}
+
+/* 📱 Mobil optimizasyon */
+@media (max-width: 480px){
+  #startAfterDiceBtn .start-after-dice-img{
+    width: min(320px, 90vw);
+  }
+}
+
+@media (max-width: 360px){
+  #startAfterDiceBtn .start-after-dice-img{
+    width: min(300px, 88vw);
+  }
+}
 
 
     </style>
@@ -5286,10 +5334,9 @@ body.modal-open{
       <h3 class="order-title">Oyun Sırası</h3>
     </div>
 
-    <button class="btn start-after-dice-btn" id="startAfterDiceBtn" hidden>
-      <i class="fas fa-flag-checkered" aria-hidden="true"></i>
-      Hadi Başlayalım!
-    </button>
+<button class="btn start-after-dice-btn" id="startAfterDiceBtn" hidden aria-label="Hadi Başlayalım">
+  <img src="hadibasla.png" alt="Hadi Başlayalım" class="start-after-dice-img">
+</button>
   </div>
 </div>
 
