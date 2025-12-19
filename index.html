@@ -5188,6 +5188,55 @@ body.modal-open{
   }
 }
 
+/* =========================================
+   HAZIRIM (hazir.png)
+   ========================================= */
+
+#readyBtn{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 20px auto 0;
+  cursor: pointer;
+}
+
+/* Görsel */
+#readyBtn .ready-btn-img{
+  width: clamp(200px, 28vw, 340px);
+  height: auto;
+  display: block;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hover / Active hissi */
+#readyBtn:hover .ready-btn-img{
+  transform: scale(1.04);
+  transition: transform .18s ease;
+}
+#readyBtn:active .ready-btn-img{
+  transform: scale(.96);
+}
+
+/* 📱 Mobil */
+@media (max-width: 480px){
+  #readyBtn .ready-btn-img{
+    width: min(300px, 88vw);
+  }
+}
+
+@media (max-width: 360px){
+  #readyBtn .ready-btn-img{
+    width: min(280px, 86vw);
+  }
+}
 
     </style>
 </head>
@@ -5354,7 +5403,9 @@ body.modal-open{
                 </div>
                 <div class="team-stats-container" id="teamStatsContainer"></div>
                 <div class="turn-countdown" id="turnCountdown">3</div>
-                <button class="btn btn-primary" id="readyBtn"><i class="fas fa-play"></i> Hazırım!</button>
+               <button class="btn btn-primary" id="readyBtn" aria-label="Hazırım">
+  <img src="hazir.png" alt="Hazırım" class="ready-btn-img">
+</button>
             </div>
         </div>
         
