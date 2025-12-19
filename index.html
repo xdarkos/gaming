@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -2296,22 +2296,83 @@
             to { box-shadow: 0 0 25px rgba(255, 107, 107, 0.9); }
         }
 
-        .rules-btn {
-            margin: 25px 0;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
+/* ===========================
+   START ACTIONS (KURALLAR + BAŞLA)
+   =========================== */
+
+/* Genel (desktop/tablet) */
+.start-actions{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* Butonların kendi boşluklarını sıfırla */
+.start-actions .rules-btn,
+.start-actions #startGameBtn{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  line-height: 0;          /* 🔥 inline kaynaklı boşluğu bitirir */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Görseller net dursun */
+.start-actions .rules-img,
+.start-actions .start-img{
+  display: block;
+  margin: 0;
+  height: auto;
+}
+
+/* Mobil: alt alta + daha derli toplu + boşluklar toparlandı */
+@media (max-width: 480px){
+  .start-actions{
+    flex-direction: column;
+    gap: 8px;              /* 🔥 iki buton arası mesafe */
+    margin-top: -6px;      /* 🔥 üst boşluğu toparlar (görseldeki büyük boşluğu alır) */
+  }
+
+  /* İki buton aynı anda düzenli büyüsün (tek yerden) */
+  .start-actions{
+    transform: scale(1.10);        /* sadece bunu değiştir */
+    transform-origin: top center;
+  }
+
+  /* Mobilde boyutlar daha dengeli (ikisi de düzgün hizalanır) */
+  .start-actions .rules-img{
+    width: min(240px, 82vw);
+  }
+
+  .start-actions .start-img{
+    width: min(260px, 86vw);
+  }
+}
+@media (max-width: 480px){
+
+  /* Sadece OYUNA BAŞLA */
+  .start-actions #startGameBtn{
+    margin-top: -80px;   /* 🔼 yukarı alır */
+  }
+
+}
+@media (max-width: 480px){
+
+  /* Sadece OYUN KURALLARI */
+  .start-actions .rules-btn{
+    margin-top: -50px;   /* 🔼 yukarı alır */
+  }
+
+}
+
+
+
 
         .rules-btn:hover {
             background: rgba(255, 255, 255, 0.25);
@@ -4578,9 +4639,10 @@ body.modal-open{
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;                 
-  margin-top: 24px;
-  flex-wrap: wrap;           /* dar ekranda alt alta inebilir */
+  gap: 16px;        /* 🔽 masaüstü boşluk azaltıldı */
+  margin-top: 18px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 /* Oyun Kuralları butonu */
@@ -4629,8 +4691,9 @@ body.modal-open{
 /* Mobil ayar (daha büyük + daha iyi tıklanabilir) */
 @media (max-width: 480px){
   .start-actions{
-    gap: 14px;
-    margin-top: 18px;
+    flex-direction: column;
+    gap: 6px !important;   /* 🔥 mobilde boşluk ciddi azaltıldı */
+    margin-top: 10px;
   }
 
   /* Kurallar butonu mobilde biraz genişleyip rahat tıklansın */
@@ -4654,7 +4717,7 @@ body.modal-open{
   gap: 10px;          /* aradaki mesafe */
   width: 100%;
   margin-top: 14px;
-  flex-wrap: nowrap; /* ASLA alt alta düşmesin */
+  flex-wrap: wrap; /* ASLA alt alta düşmesin */
 }
 
 /* Butonlar */
