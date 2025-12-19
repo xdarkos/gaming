@@ -5054,6 +5054,29 @@ body.modal-open{
   }
 }
 
+.dice-ready-btn{
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.dice-ready-img{
+  width: clamp(220px, 55vw, 420px);
+  height: auto;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Hover hissi */
+.dice-ready-btn:hover .dice-ready-img{
+  transform: scale(1.05);
+}
+
+.dice-ready-btn:active .dice-ready-img{
+  transform: scale(0.98);
+}
 
 
     </style>
@@ -5162,17 +5185,21 @@ body.modal-open{
             </div>
         </div>
         
-        <!-- Zar Atmaya Hazır Ekranı -->
-        <div class="screen" id="readyForDiceScreen">
-            <div class="ready-for-dice-screen">
-                <h2 class="ready-title">Herkes Hazır!</h2>
-                <div class="ready-info">
-                    <p>Tüm takımlar avatar ve flama seçimini tamamladı. Zar atarak oyun sırasını belirleyelim!</p>
-                </div>
-                <div class="ready-teams" id="readyTeams"></div>
-                <button class="btn" id="goToDiceBtn"><i class="fas fa-dice"></i> Zar Atmaya Hazırız!</button>
-            </div>
+<!-- Zar Atmaya Hazır Ekranı -->
+<div class="screen" id="readyForDiceScreen">
+    <div class="ready-for-dice-screen">
+        <h2 class="ready-title">Herkes Hazır!</h2>
+        <div class="ready-info">
+            <p>Tüm takımlar avatar ve flama seçimini tamamladı. Zar atarak oyun sırasını belirleyelim!</p>
         </div>
+        <div class="ready-teams" id="readyTeams"></div>
+
+        <button class="btn dice-ready-btn" id="goToDiceBtn" aria-label="Zar atmaya hazırız">
+            <img src="zarhazir.png" alt="Zar Atmaya Hazırız" class="dice-ready-img">
+        </button>
+    </div>
+</div>
+
         
         <!-- Zar Atma Ekranı -->
         <div class="screen" id="diceScreen">
