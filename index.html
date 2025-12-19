@@ -4882,6 +4882,180 @@ body.modal-open{
   }
 }
 
+@media (max-width: 767px){
+
+  /* Winner ekranı genel */
+  #winnerScreen{
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 14px 12px 18px;
+  }
+
+  /* Tabloyu kart gibi göster */
+  #winnerScreen .stats-table{
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    background: rgba(255,255,255,0.06);   /* 🔥 sade cam efekti */
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  }
+
+  /* Tablo iç genişliği */
+  #winnerScreen .stats-table table{
+    min-width: 520px;   /* yatay scroll tetiklenir */
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  /* Başlık satırı */
+  #winnerScreen .stats-table thead th{
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.12);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: .3px;
+  }
+
+  /* Hücreler */
+  #winnerScreen .stats-table th,
+  #winnerScreen .stats-table td{
+    padding: 10px 12px;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+  }
+
+  /* Zebra satır (çok hafif) */
+  #winnerScreen .stats-table tbody tr:nth-child(even){
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Kazanan takım satırı */
+  #winnerScreen .stats-table tbody tr.winner{
+    background: linear-gradient(
+      90deg,
+      rgba(106,17,203,0.35),
+      rgba(37,117,252,0.35)
+    );
+    font-weight: 600;
+  }
+}
+/* ===== Toplam Tur Sayısı (siteyle uyumlu, geniş kutu YOK) ===== */
+.rounds-selector{
+  margin-top: 16px;
+
+  /* 🔥 kırmızıyla işaretlediğin geniş alanı kaldırır */
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+
+  /* ortada dursun */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rounds-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 16px;
+
+  /* artık tek kutu bu olsun */
+  padding: 14px 16px;
+  border-radius: 22px;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.rounds-label{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: .98rem;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: .2px;
+  opacity: .95;
+}
+
+/* küçük, “+/– balonları” gibi */
+.rounds-picker{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+
+  padding: 8px 10px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+.rounds-pill{
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.90);
+
+  font-family: 'Poppins', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+
+  cursor:pointer;
+  user-select:none;
+  transition: transform .16s ease, background .16s ease, box-shadow .16s ease, border-color .16s ease, opacity .16s ease;
+}
+
+.rounds-pill:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.22);
+}
+
+.rounds-pill:active{
+  transform: translateY(0) scale(0.98);
+}
+
+.rounds-pill.is-active{
+  background: linear-gradient(135deg, rgba(255,154,60,0.32), rgba(0,180,219,0.22));
+  border-color: rgba(255,255,255,0.26);
+  box-shadow:
+    0 12px 26px rgba(0,0,0,0.20),
+    0 0 0 2px rgba(255,255,255,0.10) inset,
+    0 0 18px rgba(0,180,219,0.18);
+}
+
+/* Mobilde daha kompakt */
+@media (max-width: 520px){
+  .rounds-row{ gap: 12px; padding: 12px 12px; }
+  .rounds-label{ font-size: .92rem; }
+  .rounds-pill{ width: 38px; height: 38px; border-radius: 13px; }
+}
+@media (max-width: 360px){
+  .rounds-row{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+
+
     </style>
 </head>
 <body>
@@ -4919,12 +5093,22 @@ body.modal-open{
         <i class="fas fa-plus"></i><span>Takım Ekle</span>
     </button>
 
-    <div class="rounds-selector">
-        <div class="info-label">Toplam Tur Sayısı (Max-10)</div>
-        <input type="number" inputmode="numeric" pattern="[0-9]*"
-               class="rounds-input no-spinner" id="totalRounds"
-               min="1" max="10" value="10">
+<div class="rounds-selector">
+  <div class="rounds-row" role="group" aria-label="Toplam tur sayısı seçimi">
+    <div class="rounds-label">Toplam Tur Sayısı</div>
+
+    <div class="rounds-picker" aria-label="Tur seçimi">
+      <button type="button" class="rounds-pill" data-round="1" aria-pressed="false">1</button>
+      <button type="button" class="rounds-pill" data-round="2" aria-pressed="false">2</button>
+      <button type="button" class="rounds-pill" data-round="3" aria-pressed="false">3</button>
     </div>
+  </div>
+
+  <!-- Sistem aynı kalsın -->
+  <input type="number" id="totalRounds" min="1" max="3" value="3" hidden>
+</div>
+
+
 
     <!-- Kurallar + Başla (yan yana) -->
     <div class="start-actions">
@@ -5422,7 +5606,7 @@ const CONFIG = {
   TURN_SECONDS_DEFAULT: 60,
   MAX_TEAMS: 4,
   MIN_TEAMS: 2,
-  MAX_ROUNDS: 10,
+  MAX_ROUNDS: 3,
   MAX_PLAYERS_PER_TEAM: 5,
   PASS_LIMIT: 3
 };
@@ -8212,35 +8396,44 @@ const EventManager = {
 
     if (DOM.continueTieBtn) DOM.continueTieBtn.addEventListener('click', () => TieManager.continueTieGame());
 
-    if (DOM.totalRoundsInput) {
-      if (!DOM.totalRoundsInput.value) DOM.totalRoundsInput.value = CONFIG.MAX_ROUNDS;
+if (DOM.totalRoundsInput) {
+  const picker = document.querySelector('.rounds-picker');
+  const pills = picker ? Array.from(picker.querySelectorAll('.rounds-pill')) : [];
 
-      DOM.totalRoundsInput.addEventListener('focus', function () { this.select(); });
+  const applyRoundsUI = (value) => {
+    const v = Utils.clamp(parseInt(value, 10) || CONFIG.MAX_ROUNDS, 1, CONFIG.MAX_ROUNDS);
 
-      DOM.totalRoundsInput.addEventListener('keydown', function (event) {
-        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'];
-        const isNumber = (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105);
-        if (!isNumber && !allowedKeys.includes(event.key)) event.preventDefault();
-      });
+    // hidden input (mevcut sistemin kullandığı)
+    DOM.totalRoundsInput.value = v;
 
-      DOM.totalRoundsInput.addEventListener('input', function () {
-        if (this.value === '') return;
-        let value = parseInt(this.value, 10);
-        if (Number.isNaN(value)) return;
-        value = Utils.clamp(value, 1, CONFIG.MAX_ROUNDS);
-        this.value = value;
-        StorageManager.gameState.totalRounds = value;
-        StorageManager.saveGameStateThrottled();
-      });
+    // state
+    StorageManager.gameState.totalRounds = v;
 
-      DOM.totalRoundsInput.addEventListener('blur', function () {
-        if (this.value === '' || this.value === null) {
-          this.value = CONFIG.MAX_ROUNDS;
-          StorageManager.gameState.totalRounds = CONFIG.MAX_ROUNDS;
-          StorageManager.saveGameStateThrottled();
-        }
-      });
-    }
+    // UI
+    pills.forEach(btn => {
+      const r = parseInt(btn.getAttribute('data-round'), 10);
+      const active = r === v;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    StorageManager.saveGameStateThrottled();
+  };
+
+  // İlk açılışta: saved state varsa onu, yoksa input/value’yu uygula
+  const initial = StorageManager.gameState?.totalRounds ?? parseInt(DOM.totalRoundsInput.value, 10) ?? CONFIG.MAX_ROUNDS;
+  applyRoundsUI(initial);
+
+  // Buton click
+  pills.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = parseInt(btn.getAttribute('data-round'), 10);
+      applyRoundsUI(r);
+    });
+  });
+}
+
+
 
     document.addEventListener('keydown', (e) => KeyboardManager.handleKeyboardShortcuts(e));
   }
@@ -8543,7 +8736,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 6500);
 
 })();
-
     </script>
 </body>
 </html>
