@@ -113,7 +113,7 @@ header::before{
 .header-logo-wrapper{
   position:absolute;
   top:50%; left:50%;
-  transform: translate(-50%,-78%);
+  transform: translate(-50%,-71%);
   pointer-events:none;
   z-index:5;
 }
@@ -519,6 +519,18 @@ header .subtitle{ position:relative; margin-top:130px; z-index:1; }
     filter .22s ease;
 
   pointer-events: none; /* link alanını bozmaz */
+}
+
+@media (max-width: 767px){
+  header .subtitle{
+    margin-top: 100px; /* mobilde logo altından aşağı indirir */
+  }
+}
+
+@media (max-width: 767px){
+  .header-logo-wrapper{
+    top: 52%; /* 50 → yukarı çıkar */
+  }
 }
   </style>
 </head>
