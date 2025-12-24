@@ -5866,6 +5866,104 @@ body.modal-open{
     border-radius: 13px;
   }
 }
+/* =========================================
+   PAUSE SCREEN - GÖRSEL BUTONLAR (OPTİMİZE)
+   Mobil: alt alta / Desktop: yan yana
+   ========================================= */
+
+#pauseScreen .pause-options{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;              /* dar alanda taşma olmasın */
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Buton reset */
+#pauseScreen .image-btn{
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;               /* img alt boşluğu fix */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Görsel */
+#pauseScreen .pause-btn-img{
+  width: clamp(170px, 22vw, 260px);  /* desktop dengeli */
+  max-width: 100%;
+  height: auto;
+  display: block;
+
+  transition: transform .15s ease, filter .15s ease;
+  will-change: transform;
+}
+
+/* Hover (PC) */
+@media (hover:hover){
+  #pauseScreen .image-btn:hover .pause-btn-img{
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
+  }
+}
+
+/* Mobil: alt alta + ortalı + tam otursun */
+@media (max-width: 560px){
+  #pauseScreen .pause-options{
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  #pauseScreen .image-btn{
+    width: 100%;                 /* ortalamayı garantiler */
+  }
+
+  #pauseScreen .pause-btn-img{
+    width: min(78vw, 240px);      /* mobilde ideal boy */
+  }
+}
+
+/* Çok küçük ekranlarda biraz daha küçült */
+@media (max-width: 360px){
+  #pauseScreen .pause-btn-img{
+    width: min(84vw, 220px);
+  }
+}
+/* 1) Oyundan Çık butonunu yukarı al (layout ile) */
+#pauseScreen #quitBtn{
+  margin-top: -35px;      /* eksi = yukarı */
+}
+
+/* 2) Alt boşluğu da azaltmak istersen */
+#pauseScreen #quitBtn{
+  margin-bottom: -10px;    /* eksi = daha az boşluk */
+}
+
+/* 3) Yukarı alınca kesiliyorsa (parent taşmayı kesiyordur) */
+#pauseScreen .pause-options,
+#pauseScreen .pause-screen{
+  overflow: visible;
+}
+
+/* (İstersen) Mobilde farklı miktar */
+@media (max-width: 560px){
+  #pauseScreen #quitBtn{
+    margin-top: -22px;
+    margin-bottom: -8px;
+  }
+}
+
 
     </style>
 </head>
@@ -6195,54 +6293,60 @@ body.modal-open{
         
 <!-- Duraklatma Ekranı -->
 <div class="screen" id="pauseScreen">
-    <div class="pause-screen">
+  <div class="pause-screen">
 
-        <!-- MOLA GÖRSELİ -->
-        <div class="pause-title">
-            <img src="mola.png" alt="Mola" class="mola-image">
+    <!-- MOLA GÖRSELİ -->
+    <div class="pause-title">
+      <img src="mola.png" alt="Mola" class="mola-image">
+    </div>
+
+    <div class="info-label pause-info-text">
+      MOLADASINIZ! Ne zaman isterseniz kaldığınız yerden devam edebilirsiniz.
+    </div>
+
+    <div class="game-info pause-game-info">
+      <div class="round-info">
+        <div class="info-item">
+          <div class="info-label">Tur</div>
+          <div class="info-value" id="pauseCurrentRound">1/10</div>
         </div>
 
-        <div class="info-label pause-info-text">
-            MOLADASINIZ! Ne zaman isterseniz kaldığınız yerden devam edebilirsiniz.
+        <div class="info-item">
+          <div class="info-label">Anlatan Takım</div>
+          <div class="info-value" id="pauseCurrentTeam">Takım 1</div>
+          <div class="pause-flag" id="pauseTeamFlag">
+            <div class="team-flag-placeholder">?</div>
+          </div>
         </div>
 
-        <div class="game-info pause-game-info">
-            <div class="round-info">
-                <div class="info-item">
-                    <div class="info-label">Tur</div>
-                    <div class="info-value" id="pauseCurrentRound">1/10</div>
-                </div>
-
-                <div class="info-item">
-                    <div class="info-label">Anlatan Takım</div>
-                    <div class="info-value" id="pauseCurrentTeam">Takım 1</div>
-                    <div class="pause-flag" id="pauseTeamFlag">
-                        <div class="team-flag-placeholder">?</div>
-                    </div>
-                </div>
-
-                <div class="info-item">
-                    <div class="info-label">Anlatıcı</div>
-                    <div class="info-value" id="pauseCurrentPlayer">Oyuncu 1</div>
-                    <div class="pause-avatar" id="pausePlayerAvatar">
-                        <div class="avatar-placeholder">?</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="team-scores" id="pauseTeamScores"></div>
+        <div class="info-item">
+          <div class="info-label">Anlatıcı</div>
+          <div class="info-value" id="pauseCurrentPlayer">Oyuncu 1</div>
+          <div class="pause-avatar" id="pausePlayerAvatar">
+            <div class="avatar-placeholder">?</div>
+          </div>
         </div>
+      </div>
 
-        <div class="pause-options">
-            <button class="btn pause-btn" id="resumeBtn">
-                <i class="fas fa-play"></i> Devam Et
-            </button>
-            <button class="btn pause-btn" id="quitBtn">
-                <i class="fas fa-sign-out-alt"></i> Oyundan Çık
-            </button>
-        </div>
+      <div class="team-scores" id="pauseTeamScores"></div>
+    </div>
+
+    <!-- BUTONLAR (GÖRSEL) -->
+    <div class="pause-options">
+
+      <!-- DEVAM ET -->
+      <button class="btn pause-btn image-btn" id="resumeBtn" aria-label="Devam Et">
+        <img src="devamet.png" alt="Devam Et" class="pause-btn-img">
+      </button>
+
+      <!-- OYUNDAN ÇIK -->
+      <button class="btn pause-btn image-btn" id="quitBtn" aria-label="Oyundan Çık">
+        <img src="oyuncik.png" alt="Oyundan Çık" class="pause-btn-img">
+      </button>
 
     </div>
+
+  </div>
 </div>
 
         
