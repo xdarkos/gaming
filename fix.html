@@ -106,6 +106,8 @@ header::before{
   background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+
+
 .subtitle{
   font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   opacity:.9;
@@ -115,12 +117,13 @@ header::before{
 .header-logo-wrapper{
   position:absolute;
   top:50%; left:50%;
-  transform: translate(-50%,-58%);
+  transform: translate(-50%,-50%);
   pointer-events:none;
   z-index:5;
 }
 .header-logo{ width:280px; height:auto; display:block; }
 header .subtitle{ position:relative; margin-top:140px; z-index:1; }
+
 
 /* =========================================================
    MAIN CONTENT
@@ -1277,6 +1280,13 @@ body::before{
 
 /* particles zaten -1, arka plan katmanı -2 olmalı */
 .floating-particles{ z-index: -1; }
+
+@media (max-width: 767px){
+  header .subtitle{
+    margin-top: 130px; /* mobilde logo altından aşağı indirir */
+  }
+}
+
 
   </style>
 </head>
