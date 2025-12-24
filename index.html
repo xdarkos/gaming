@@ -163,6 +163,11 @@
             margin-top: 140px;
             z-index: 1;
         }
+		@media (min-width: 1024px) {
+  .header-logo {
+    width: 340px;   /* mevcut 280px → büyüt */
+  }
+}
 
         /* ===== EKRAN STİLLERİ ===== */
         .screen {
@@ -5963,6 +5968,205 @@ body.modal-open{
     margin-bottom: -8px;
   }
 }
+/* =========================
+   OYUNDAN ÇIK MODALI (OPTİMİZE)
+   LOGO: ÇERÇEVESİZ + BOŞLUK KONTROLÜ
+   Mobil + Desktop uyumlu
+   ========================= */
+
+:root{
+  --qm-backdrop: rgba(0,0,0,.58);
+
+  --qm-card-w: 560px;
+  --qm-card-radius: 24px;
+
+  --qm-glass-1: rgba(255,255,255,.14);
+  --qm-glass-2: rgba(255,255,255,.10);
+  --qm-border: rgba(255,255,255,.20);
+  --qm-shadow: 0 26px 70px rgba(0,0,0,.42);
+
+  /* LOGO AYARLARI (BURADAN) */
+  --qm-logo-size: 280px;
+
+  /* boşlukları burada kontrol et */
+  --qm-logo-mt: -6px;     /* logo üst boşluk */
+  --qm-logo-mb: 4px;      /* ✅ logo alt boşluk (10px -> 4px) */
+
+  /* eğer PNG'nin kendi içinde alt boşluk varsa bunu kullan */
+  --qm-logo-shift-y: 20px; /* ✅ logo içeriğini yukarı çek (0 / -4 / -8 deneyebilirsin) */
+
+
+  /* başlık ile logo arasındaki ekstra boşluğu da azalt */
+  --qm-title-mt: -2px;    /* ✅ başlığı biraz yukarı al */
+  --qm-title-mb: 6px;
+
+  --qm-gap: 12px;
+}
+
+/* Backdrop */
+.quit-modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  z-index: 9999;
+
+  background: var(--qm-backdrop);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: 16px;
+  overscroll-behavior: contain;
+}
+.quit-modal.is-open{ display: grid; }
+
+/* Kart */
+.quit-card{
+  width: min(var(--qm-card-w), 100%);
+  border-radius: var(--qm-card-radius);
+  padding: 22px 18px;
+
+  background: linear-gradient(180deg, var(--qm-glass-1), var(--qm-glass-2));
+  border: 1px solid var(--qm-border);
+  box-shadow: var(--qm-shadow);
+
+  color: #fff;
+  text-align: center;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* Parıltı arkada */
+.quit-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,107,107,.22), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(0,180,219,.18), transparent 40%);
+  pointer-events:none;
+  z-index: 0;
+}
+
+/* İçerik parıltının üstünde */
+.quit-card > *{
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo alanı: çerçevesiz */
+.quit-icon{
+  display: grid;
+  place-items: center;
+
+  margin-top: var(--qm-logo-mt);
+  margin-bottom: var(--qm-logo-mb);
+
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+
+  line-height: 0; /* ✅ img altındaki satır boşluğu riskini sıfırlar */
+}
+
+/* Logo */
+.quit-icon img{
+  width: var(--qm-logo-size);
+  height: var(--qm-logo-size);
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  /* ✅ PNG iç boşluğu varsa bunu yukarı çekerek toparlar */
+  transform: translate3d(0, var(--qm-logo-shift-y), 0);
+  will-change: transform, filter;
+
+  filter: drop-shadow(0 12px 22px rgba(0,0,0,.38));
+}
+
+/* Hover sadece PC */
+@media (hover:hover) and (pointer:fine){
+  .quit-card:hover .quit-icon img{
+    transform: translate3d(0, calc(var(--qm-logo-shift-y) - 2px), 0) scale(1.02);
+    filter: drop-shadow(0 16px 28px rgba(0,0,0,.45));
+  }
+}
+
+.quit-title{
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: .2px;
+
+  /* ✅ logo-alt boşluk + başlık üst boşluk kontrolü */
+  margin-top: var(--qm-title-mt);
+  margin-bottom: var(--qm-title-mb);
+}
+
+.quit-text{
+  opacity: .92;
+  line-height: 1.5;
+  font-size: 1rem;
+  margin: 0 0 18px 0;
+}
+
+.quit-actions{
+  display:flex;
+  gap: var(--qm-gap);
+  justify-content:center;
+  flex-wrap: wrap;
+}
+
+.quit-btn{
+  border: 0;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 16px;
+
+  font-weight: 900;
+  min-width: 150px;
+
+  transition: transform .15s ease, background .2s ease, opacity .2s ease, box-shadow .2s ease;
+}
+.quit-btn:active{ transform: scale(.98); }
+
+.quit-btn.cancel{
+  background: rgba(255,255,255,.14);
+  color:#fff;
+  border: 1px solid rgba(255,255,255,.22);
+}
+
+.quit-btn.confirm{
+  background: linear-gradient(180deg, rgba(255,107,107,.98), rgba(255,80,80,.94));
+  color:#fff;
+  box-shadow: 0 16px 34px rgba(255,107,107,.28);
+}
+
+.quit-btn:hover{ opacity: .96; }
+
+/* Mobil */
+@media (max-width: 420px){
+  :root{
+    --qm-logo-size: 140px;
+    --qm-logo-mt: -4px;
+    --qm-logo-mb: 2px;        /* ✅ mobilde daha da sıkı */
+    --qm-logo-shift-y: -4px;  /* ✅ */
+    --qm-title-mt: -2px;
+    --qm-title-mb: 6px;
+  }
+  .quit-btn{ min-width: 100%; }
+  .quit-card{ padding: 20px 16px; }
+}
+
+/* Hareket azaltma */
+@media (prefers-reduced-motion: reduce){
+  .quit-btn, .quit-icon img{ transition: none !important; }
+}
+
+body.modal-open{ overflow: hidden; }
 
 
     </style>
@@ -6190,8 +6394,6 @@ body.modal-open{
   </div>
 </div>
 
-
-        
         <!-- Takım Sırası Ekranı -->
         <div class="screen" id="teamTurnScreen">
             <div class="team-turn-screen">
@@ -6597,6 +6799,32 @@ body.modal-open{
 
   </div>
 </div>
+
+<!-- OYUNDAN ÇIK ONAY MODALI -->
+<div class="quit-modal" id="quitConfirmModal" aria-hidden="true">
+  <div class="quit-card">
+
+<div class="quit-icon">
+  <img src="logo.png" alt="TabulaGo Logo" class="quit-logo" loading="eager" decoding="async">
+</div>
+
+
+    <div class="quit-title">Oyundan Çıkmak Üzeresiniz</div>
+    <div class="quit-text">
+      Oyundan çıkarsanız mevcut oyun sonlanır.<br>
+      Emin misiniz?
+    </div>
+
+    <div class="quit-actions">
+      <button class="quit-btn cancel" id="quitCancelBtn">Vazgeç</button>
+      <button class="quit-btn confirm" id="quitConfirmBtn">Çık</button>
+    </div>
+
+  </div>
+</div>
+
+
+
     <!-- Kurallar Modal -->
     <div class="rules-modal" id="rulesModal">
     <script>
@@ -6795,6 +7023,9 @@ const DOM = {
   pauseTeamScoresContainer: document.getElementById('pauseTeamScores'),
   resumeBtn: document.getElementById('resumeBtn'),
   quitBtn: document.getElementById('quitBtn'),
+  quitConfirmModal: document.getElementById('quitConfirmModal'),
+quitCancelBtn: document.getElementById('quitCancelBtn'),
+quitConfirmBtn: document.getElementById('quitConfirmBtn'),
 
   tieTeamsContainer: document.getElementById('tieTeams'),
   tieExplanationContainer: document.getElementById('tieExplanation'),
@@ -7123,8 +7354,10 @@ const TeamManager = {
             </button>` : ''
         }
         </div>
-        <input type="text" class="team-input team-name-input"
-          data-team-id="${team.id}" value="${team.name}" placeholder="Takım İsmi">
+<input type="text" class="team-input team-name-input"
+  data-team-id="${team.id}" value="${team.name}" placeholder="Takım İsmi"
+  maxlength="10">
+
         <div class="player-count">
           <button class="player-btn team-decrease" data-team-id="${team.id}" aria-label="Oyuncu sayısını azalt">
             <i class="fas fa-minus"></i>
@@ -7137,9 +7370,11 @@ const TeamManager = {
         <div>Oyuncu Sayısı: 1-5</div>
         <div class="player-names" id="playerNames-${team.id}">
           ${team.players.map((p, idx) => `
-            <input type="text" class="player-name-input"
-              data-team-id="${team.id}" data-player-index="${idx}"
-              value="${p}" placeholder="Oyuncu ${idx + 1}">
+<input type="text" class="player-name-input"
+  data-team-id="${team.id}" data-player-index="${idx}"
+  value="${p}" placeholder="Oyuncu ${idx + 1}"
+  maxlength="10">
+
           `).join('')}
         </div>
       `;
@@ -7177,13 +7412,17 @@ const TeamManager = {
         if (e.target.value === `Takım ${id}`) e.target.value = '';
       });
 
-      input.addEventListener('input', (e) => {
-        e.target.value = e.target.value.toUpperCase();
-        const teamId = parseInt(e.target.getAttribute('data-team-id'), 10);
-        const team = StorageManager.gameState.teams.find(t => t.id === teamId);
-        if (team) team.name = e.target.value;
-        StorageManager.saveGameStateThrottled();
-      });
+input.addEventListener('input', (e) => {
+  // 10 karakter (boşluk dahil) + büyük harf
+  e.target.value = e.target.value.toUpperCase().slice(0, 10);
+
+  const teamId = parseInt(e.target.getAttribute('data-team-id'), 10);
+  const team = StorageManager.gameState.teams.find(t => t.id === teamId);
+  if (team) team.name = e.target.value;
+
+  StorageManager.saveGameStateThrottled();
+});
+
     });
 
     document.querySelectorAll('.player-name-input').forEach(input => {
@@ -7192,14 +7431,18 @@ const TeamManager = {
         if (e.target.value === `Oyuncu ${idx + 1}`) e.target.value = '';
       });
 
-      input.addEventListener('input', (e) => {
-        e.target.value = e.target.value.toUpperCase();
-        const teamId = parseInt(e.target.getAttribute('data-team-id'), 10);
-        const idx = parseInt(e.target.getAttribute('data-player-index'), 10);
-        const team = StorageManager.gameState.teams.find(t => t.id === teamId);
-        if (team && team.players[idx] !== undefined) team.players[idx] = e.target.value;
-        StorageManager.saveGameStateThrottled();
-      });
+input.addEventListener('input', (e) => {
+  // 10 karakter (boşluk dahil) + büyük harf
+  e.target.value = e.target.value.toUpperCase().slice(0, 10);
+
+  const teamId = parseInt(e.target.getAttribute('data-team-id'), 10);
+  const idx = parseInt(e.target.getAttribute('data-player-index'), 10);
+  const team = StorageManager.gameState.teams.find(t => t.id === teamId);
+  if (team && team.players[idx] !== undefined) team.players[idx] = e.target.value;
+
+  StorageManager.saveGameStateThrottled();
+});
+
     });
   }
 };
@@ -9125,10 +9368,34 @@ const PauseManager = {
     }, 1000);
   },
 
-  quitGame() {
-    ScreenManager.clearAllIntervals();
-    GameManager.resetGame();
-  }
+openQuitModal() {
+  if (!DOM.quitConfirmModal) return;
+
+  document.body.classList.add('modal-open');
+  DOM.quitConfirmModal.classList.add('is-open');
+  DOM.quitConfirmModal.setAttribute('aria-hidden', 'false');
+
+  // odak
+  setTimeout(() => DOM.quitCancelBtn?.focus?.(), 0);
+},
+
+closeQuitModal() {
+  if (!DOM.quitConfirmModal) return;
+
+  DOM.quitConfirmModal.classList.remove('is-open');
+  DOM.quitConfirmModal.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+},
+
+confirmQuitGame() {
+  // modal kapat
+  this.closeQuitModal();
+
+  // oyundan çık
+  ScreenManager.clearAllIntervals();
+  GameManager.resetGame();
+},
+
 };
 
 // ==========================================
@@ -9409,7 +9676,7 @@ const EventManager = {
     if (DOM.pauseBtn) DOM.pauseBtn.addEventListener('click', () => PauseManager.pauseGame());
 
     if (DOM.resumeBtn) DOM.resumeBtn.addEventListener('click', () => PauseManager.resumeGame());
-    if (DOM.quitBtn) DOM.quitBtn.addEventListener('click', () => PauseManager.quitGame());
+    if (DOM.quitBtn) DOM.quitBtn.addEventListener('click', () => PauseManager.openQuitModal());
 
     if (DOM.continueTieBtn) DOM.continueTieBtn.addEventListener('click', () => TieManager.continueTieGame());
 
@@ -9582,6 +9849,25 @@ const App = {
     EventManager.initializeEventListeners();
     AutoSaveManager.startAutoSave();
     AutoSaveManager.startCleanup();
+
+// ✅ Quit modal butonları
+if (DOM.quitCancelBtn) DOM.quitCancelBtn.addEventListener('click', () => PauseManager.closeQuitModal());
+if (DOM.quitConfirmBtn) DOM.quitConfirmBtn.addEventListener('click', () => PauseManager.confirmQuitGame());
+
+// ✅ Backdrop tıklayınca kapat (kart dışı alan)
+if (DOM.quitConfirmModal) {
+  DOM.quitConfirmModal.addEventListener('click', (e) => {
+    if (e.target === DOM.quitConfirmModal) PauseManager.closeQuitModal();
+  });
+}
+
+// ✅ ESC ile kapat
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && DOM.quitConfirmModal?.classList.contains('is-open')) {
+    PauseManager.closeQuitModal();
+  }
+});
+
 
     window.addEventListener('beforeunload', () => {
       const gameState = StorageManager.gameState;
