@@ -1222,11 +1222,12 @@ header .subtitle{ position:relative; margin-top:140px; z-index:1; }
 /* =========================================================
    RESPONSIVE
 ========================================================= */
+
 @media (max-width: 767px){
   body{ padding:10px; }
   header{ padding:15px; margin-bottom:20px; }
   .main-content{ padding:20px 15px; }
-  .header-logo{ width:200px; }
+  .header-logo{ width:300px; }
   header .subtitle{ margin-top:100px; font-size:1rem; }
 
   .info-cards{ grid-template-columns: 1fr; gap:15px; }
@@ -1283,10 +1284,15 @@ body::before{
 
 @media (max-width: 767px){
   header .subtitle{
-    margin-top: 130px; /* mobilde logo altından aşağı indirir */
+    margin-top: 100px; /* mobilde logo altından aşağı indirir */
   }
 }
 
+@media (max-width: 767px){
+  .header-logo-wrapper{
+    top: 40%; /* 50 → yukarı çıkar */
+  }
+}
 
   </style>
 </head>
