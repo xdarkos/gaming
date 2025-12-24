@@ -5238,6 +5238,240 @@ body.modal-open{
   }
 }
 
+/* =========================================
+   ANLATMAYA HAZIR TAKIM (anlatmayahazirtakim.png)
+   ========================================= */
+
+.turn-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Görsel */
+.turn-title-img{
+  width: clamp(220px, 32vw, 420px);
+  height: auto;
+  display: block;
+
+  margin-top: 18px;          /* 🔥 SADECE BURASI: aşağı kaydırır */
+
+  user-select: none;
+  pointer-events: none;
+}
+
+/* 📱 Mobil optimizasyon */
+@media (max-width: 480px){
+  .turn-title-img{
+    width: min(320px, 90vw);
+    margin-top: 22px;        /* mobilde biraz daha aşağı */
+  }
+}
+
+@media (max-width: 360px){
+  .turn-title-img{
+    width: min(300px, 88vw);
+    margin-top: 24px;        /* küçük ekran güvenliği */
+  }
+}
+
+/* =========================================
+   TEAM SETUP TITLE (Takımlarını Oluştur görseli)
+   ========================================= */
+
+#teamSetupScreen .team-setup-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0 18px;      /* genel boşluk */
+  padding: 0;
+  line-height: 0;           /* 🔥 görsel alt boşluk bug fix */
+}
+
+#teamSetupScreen .team-setup-title-img{
+  width: clamp(220px, 34vw, 460px);
+  height: auto;
+  display: block;
+
+  user-select: none;
+  pointer-events: none;
+
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,0.22));
+  transform: translateY(var(--title-offset-y, 90px)) translateZ(0);
+  max-width: 100%;
+}
+
+
+/* Mobil: biraz daha büyük ama taşmaz */
+@media (max-width: 480px){
+  #teamSetupScreen .team-setup-title{
+    margin: 6px 0 14px;
+  }
+  #teamSetupScreen .team-setup-title-img{
+    width: min(340px, 92vw);
+  }
+}
+
+/* Desktop: biraz daha “premium” dursun */
+@media (min-width: 1024px){
+  #teamSetupScreen .team-setup-title{
+    margin: 12px 0 22px;
+  }
+  #teamSetupScreen .team-setup-title-img{
+    width: clamp(320px, 26vw, 520px);
+  }
+}
+#teamSetupScreen{
+  padding-top: 1px !important;
+}
+
+#teamSetupScreen .team-setup-title{
+  margin-top: -120px;
+}
+/* Anlatmaya Hazır Takım – Team Turn Screen üst boşluk ayarı */
+#teamTurnScreen{
+  padding-top: 0px !important;
+}
+
+#teamTurnScreen .turn-title{
+  margin-top: -1px;
+}
+
+
+/* =========================================
+   AVATAR SEÇİMİ BAŞLIK GÖRSELİ (FLOW)
+   ========================================= */
+:root{
+  --avatar-title-min: 180px;
+  --avatar-title-ideal: 26vw;
+  --avatar-title-max: 360px;
+
+  --avatar-title-scale: 0.92;
+
+  /* 🔥 sadece bunu değiştir */
+  --avatar-title-flow-offset: -12px; /* eksi yukarı, artı aşağı */
+
+  /* istersen başlık-alt boşluğu */
+  --avatar-title-gap-after: 12px;
+}
+
+#avatarSelectionScreen{
+  padding-top: 0;
+}
+
+/* Akış buradan kontrol edilir */
+#avatarSelectionScreen .avatar-selection-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: var(--avatar-title-flow-offset);
+  margin-bottom: var(--avatar-title-gap-after);
+
+  padding: 0;
+  line-height: 0;
+}
+
+#avatarSelectionScreen .avatar-title-img{
+  width: clamp(var(--avatar-title-min), var(--avatar-title-ideal), var(--avatar-title-max));
+  height: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  user-select: none;
+  pointer-events: none;
+  image-rendering: -webkit-optimize-contrast;
+
+  filter:
+    drop-shadow(0 8px 18px rgba(0,0,0,0.22))
+    drop-shadow(0 0 14px rgba(106,17,203,0.22));
+
+  /* translateY yok -> alttakiler takip eder */
+  transform: scale(var(--avatar-title-scale));
+}
+
+/* Mobil */
+@media (max-width: 480px){
+  :root{
+    --avatar-title-min: 160px;
+    --avatar-title-ideal: 60vw;
+    --avatar-title-max: 260px;
+
+    --avatar-title-scale: 0.90;
+    --avatar-title-flow-offset: -8px;
+    --avatar-title-gap-after: 10px;
+  }
+}
+
+/* Büyük ekran */
+@media (min-width: 1024px){
+  :root{
+    --avatar-title-min: 220px;
+    --avatar-title-ideal: 22vw;
+    --avatar-title-max: 420px;
+
+    --avatar-title-scale: 0.95;
+    --avatar-title-flow-offset: -16px;
+    --avatar-title-gap-after: 14px;
+  }
+}
+
+/* ================================
+   AVATAR SEÇİMİ - avatarsec.png
+   ================================ */
+
+/* ekran */
+#avatarSelectionScreen{
+  padding-top: 0;
+}
+
+/* sadece başlık kapsayıcısı */
+#avatarSelectionScreen .avatar-selection-title{
+  margin-top: -90px;     /* 🔼 üstten yukarı alır */
+  margin-bottom: -5px;   /* 🔽 altındaki içerik yukarı gelir */
+  line-height: 0;
+}
+
+/* SADECE avatarsec.png */
+#avatarSelectionScreen .avatar-title-img[src*="avatarsec"]{
+  display: block;
+  margin: 0 auto;
+}
+
+#avatarSelectionScreen .avatar-title-img{
+  transform: scale(1.6);  /* 🔧 1.05 / 1.1 / 1.2 */
+}
+
+/* ===============================
+   SADECE MOBİL (≤480px)
+   =============================== */
+@media (max-width: 480px){
+
+  /* Sadece avatar seçim ekranı */
+  #avatarSelectionScreen{
+    padding-top: 0 !important;
+  }
+
+  /* Başlık kapsayıcı (akış bozulmaz) */
+  #avatarSelectionScreen .avatar-selection-title{
+    margin-top: -60px !important;   /* 🔼 yukarı/aşağı ayarla */
+    margin-bottom: -10px !important;
+    line-height: 0;
+  }
+
+  /* SADECE avatarsec.png */
+  #avatarSelectionScreen .avatar-title-img[src*="avatarsec"]{
+    width: 90vw !important;   /* 🔥 mobilde düzgün büyür */
+    max-width: 300px;
+    height: auto;
+
+    /* ❌ scale kapalı (mobilde bozulma yapıyordu) */
+    transform: none !important;
+  }
+}
+
     </style>
 </head>
 <body>
@@ -5268,62 +5502,81 @@ body.modal-open{
         
 <!-- Takım Kurma Ekranı -->
 <div class="screen active-screen" id="teamSetupScreen">
-    <h2 class="screen-title">Takımlarını Oluştur</h2>
-    <div class="team-setup" id="teamsContainer"></div>
 
-    <button class="add-team-btn" id="addTeamBtn">
-        <i class="fas fa-plus"></i><span>Takım Ekle</span>
-    </button>
-
-<div class="rounds-selector">
-  <div class="rounds-row" role="group" aria-label="Toplam tur sayısı seçimi">
-    <div class="rounds-label">Toplam Tur Sayısı</div>
-
-    <div class="rounds-picker" aria-label="Tur seçimi">
-      <button type="button" class="rounds-pill" data-round="1" aria-pressed="false">1</button>
-      <button type="button" class="rounds-pill" data-round="2" aria-pressed="false">2</button>
-      <button type="button" class="rounds-pill" data-round="3" aria-pressed="false">3</button>
-    </div>
+  <!-- BAŞLIK: yazı yerine görsel -->
+  <div class="team-setup-title" aria-label="Takımlarını Oluştur">
+    <img src="takimlarolus.png" alt="Takımlarını Oluştur" class="team-setup-title-img">
   </div>
 
-  <!-- Sistem aynı kalsın -->
-  <input type="number" id="totalRounds" min="1" max="3" value="3" hidden>
-</div>
+  <div class="team-setup" id="teamsContainer"></div>
 
+  <button class="add-team-btn" id="addTeamBtn">
+    <i class="fas fa-plus"></i><span>Takım Ekle</span>
+  </button>
 
+  <div class="rounds-selector">
+    <div class="rounds-row" role="group" aria-label="Toplam tur sayısı seçimi">
+      <div class="rounds-label">Toplam Tur Sayısı</div>
 
-    <!-- Kurallar + Başla (yan yana) -->
-    <div class="start-actions">
-<button class="rules-btn" id="rulesBtn">
-    <img src="kurallar.png" alt="Oyun Kuralları" class="rules-img">
-</button>
-
-        <button class="btn" id="startGameBtn">
-            <img src="basla.png" alt="Oyuna Başla" class="start-img">
-        </button>
+      <div class="rounds-picker" aria-label="Tur seçimi">
+        <button type="button" class="rounds-pill" data-round="1" aria-pressed="false">1</button>
+        <button type="button" class="rounds-pill" data-round="2" aria-pressed="false">2</button>
+        <button type="button" class="rounds-pill" data-round="3" aria-pressed="false">3</button>
+      </div>
     </div>
+
+    <!-- Sistem aynı kalsın -->
+    <input type="number" id="totalRounds" min="1" max="3" value="3" hidden>
+  </div>
+
+  <!-- Kurallar + Başla (yan yana) -->
+  <div class="start-actions">
+    <button class="rules-btn" id="rulesBtn">
+      <img src="kurallar.png" alt="Oyun Kuralları" class="rules-img">
+    </button>
+
+    <button class="btn" id="startGameBtn">
+      <img src="basla.png" alt="Oyuna Başla" class="start-img">
+    </button>
+  </div>
+
 </div>
+
 
         
-        <!-- Avatar Seçim Ekranı -->
-        <div class="screen" id="avatarSelectionScreen">
-            <h2 class="avatar-selection-title">Avatar Seçimi</h2>
-            <p class="avatar-selection-subtitle">Her oyuncu kendine bir avatar seçsin!</p>
-            <div class="current-team-info">
-                <div class="current-team-name" id="currentTeamName">Takım 1</div>
-                <div class="current-player-name" id="currentPlayerName">Oyuncu 1</div>
-            </div>
-            <div class="avatar-grid" id="avatarGrid"></div>
-            <div class="avatar-selection-controls">
-                <div class="team-progress">
-                    <div class="progress-dots" id="teamProgressDots"></div>
-                    <span id="progressText">0/3 oyuncu tamamlandı</span>
-                </div>
-                <button class="team-ready-btn" id="teamReadyBtn" disabled>
-                    <i class="fas fa-check-circle"></i> Devam Et
-                </button>
-            </div>
-        </div>
+<!-- Avatar Seçim Ekranı -->
+<div class="screen" id="avatarSelectionScreen">
+
+  <!-- Başlık görseli -->
+  <div class="avatar-selection-title">
+    <img class="avatar-title-img" src="avatarsec.png" alt="Avatar Seçimi" draggable="false">
+  </div>
+
+  <!-- Sıra bilgisi -->
+  <div class="current-team-info" aria-label="Sıra bilgisi">
+    <div class="current-team-name" id="currentTeamName">Takım 1</div>
+    <div class="current-player-name" id="currentPlayerName">Oyuncu 1</div>
+  </div>
+
+  <!-- Avatar listesi -->
+  <div class="avatar-grid" id="avatarGrid" aria-label="Avatar seçimi"></div>
+
+  <!-- Kontroller -->
+  <div class="avatar-selection-controls">
+    <div class="team-progress" aria-label="Takım ilerlemesi">
+      <div class="progress-dots" id="teamProgressDots"></div>
+      <span id="progressText">0/3 oyuncu tamamlandı</span>
+    </div>
+
+    <button class="team-ready-btn" id="teamReadyBtn" type="button" disabled>
+      <i class="fas fa-check-circle" aria-hidden="true"></i>
+      <span>Devam Et</span>
+    </button>
+  </div>
+
+</div>
+
+
         
         <!-- Flama Seçim Ekranı -->
         <div class="screen" id="flagSelectionScreen">
@@ -5393,7 +5646,15 @@ body.modal-open{
         <!-- Takım Sırası Ekranı -->
         <div class="screen" id="teamTurnScreen">
             <div class="team-turn-screen">
-                <h2 class="turn-title">Anlatmaya Hazır Takım</h2>
+                <h2 class="turn-title">
+  <img
+    src="anlatmayahazirtakim.png"
+    alt="Anlatmaya Hazır Takım"
+    class="turn-title-img"
+    draggable="false"
+  >
+</h2>
+
                 <div class="turn-team-container">
                     <div class="turn-team-avatar" id="turnTeamAvatar">
                         <div class="avatar-placeholder">?</div>
