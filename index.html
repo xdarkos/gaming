@@ -5541,6 +5541,56 @@ body.modal-open{
   }
 }
 
+#readyForDiceScreen .ready-title{
+  display: flex;
+  justify-content: center;
+  margin-top: -80px;
+  margin-bottom: -50px;
+}
+
+#readyForDiceScreen .ready-title-img{
+  width: clamp(240px, 30vw, 420px);
+  height: auto;
+  display: block;
+}
+@media (max-width: 480px){
+
+  #readyForDiceScreen .ready-title{
+    margin-top: -28px;   /* mobilde çok yukarı kaçmasın */
+    margin-bottom: 8px;  /* alttaki içerikle çakışmasın */
+  }
+
+  #readyForDiceScreen .ready-title-img{
+    width: clamp(260px, 80vw, 360px); /* mobilde daha dengeli */
+    max-width: 90vw;                 /* taşmayı engeller */
+  }
+}
+
+#diceScreen .dice-title{
+  display: flex;
+  justify-content: center;
+  margin-top: -60px;
+  margin-bottom: -40px;
+}
+
+#diceScreen .dice-title-img{
+  width: clamp(260px, 34vw, 440px);
+  height: auto;
+  display: block;
+}
+
+/* 📱 Mobil */
+@media (max-width: 480px){
+  #diceScreen .dice-title{
+    margin-top: -24px;
+    margin-bottom: -50px;
+  }
+
+  #diceScreen .dice-title-img{
+    width: clamp(260px, 82vw, 380px);
+    max-width: 90vw;
+  }
+}
 
     </style>
 </head>
@@ -5683,24 +5733,49 @@ body.modal-open{
         
 <!-- Zar Atmaya Hazır Ekranı -->
 <div class="screen" id="readyForDiceScreen">
-    <div class="ready-for-dice-screen">
-        <h2 class="ready-title">Herkes Hazır!</h2>
-        <div class="ready-info">
-            <p>Tüm takımlar avatar ve flama seçimini tamamladı. Zar atarak oyun sırasını belirleyelim!</p>
-        </div>
-        <div class="ready-teams" id="readyTeams"></div>
+  <div class="ready-for-dice-screen">
 
-        <button class="btn dice-ready-btn" id="goToDiceBtn" aria-label="Zar atmaya hazırız">
-            <img src="zarhazir.png" alt="Zar Atmaya Hazırız" class="dice-ready-img">
-        </button>
+    <!-- BAŞLIK: Yazı yerine görsel -->
+    <div class="ready-title">
+      <img
+        src="herkeshazir.png"
+        alt="Herkes Hazır"
+        class="ready-title-img"
+        draggable="false"
+      >
     </div>
+
+    <div class="ready-info">
+      <p>
+        Tüm takımlar avatar ve flama seçimini tamamladı.
+        Zar atarak oyun sırasını belirleyelim!
+      </p>
+    </div>
+
+    <div class="ready-teams" id="readyTeams"></div>
+
+    <button class="btn dice-ready-btn" id="goToDiceBtn" aria-label="Zar atmaya hazırız">
+      <img src="zarhazir.png" alt="Zar Atmaya Hazırız" class="dice-ready-img">
+    </button>
+
+  </div>
 </div>
+
 
         
 <!-- Zar Atma Ekranı -->
 <div class="screen" id="diceScreen">
   <div class="dice-screen">
-    <h2 class="dice-title">Sıra Belirleme</h2>
+
+    <!-- BAŞLIK: Yazı yerine görsel -->
+    <div class="dice-title">
+      <img
+        src="sirabelirleme.png"
+        alt="Sıra Belirleme"
+        class="dice-title-img"
+        draggable="false"
+      >
+    </div>
 
     <p class="dice-subtitle">
       Tüm takımlar zar atsın! En yüksek atan başlayacak.
@@ -5710,21 +5785,32 @@ body.modal-open{
 
     <div class="dice-container" id="diceContainer"></div>
 
-<div class="dice-controls">
-  <button class="btn dice-btn dice-image-btn" id="rollDiceBtn" aria-label="Zarları At"></button>
-
-</div>
-
+    <div class="dice-controls">
+      <button
+        class="btn dice-btn dice-image-btn"
+        id="rollDiceBtn"
+        aria-label="Zarları At">
+      </button>
+    </div>
 
     <div class="order-list" id="orderList" hidden>
       <h3 class="order-title">Oyun Sırası</h3>
     </div>
 
-<button class="btn start-after-dice-btn" id="startAfterDiceBtn" hidden aria-label="Hadi Başlayalım">
-  <img src="hadibasla.png" alt="Hadi Başlayalım" class="start-after-dice-img">
-</button>
+    <button
+      class="btn start-after-dice-btn"
+      id="startAfterDiceBtn"
+      hidden
+      aria-label="Hadi Başlayalım">
+      <img
+        src="hadibasla.png"
+        alt="Hadi Başlayalım"
+        class="start-after-dice-img">
+    </button>
+
   </div>
 </div>
+
 
         
         <!-- Takım Sırası Ekranı -->
