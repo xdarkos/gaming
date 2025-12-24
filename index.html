@@ -5473,6 +5473,74 @@ body.modal-open{
     transform: none !important;
   }
 }
+/* ================================
+   FLAMA SEÇİMİ BAŞLIK GÖRSELİ
+   ================================ */
+
+:root{
+  /* Görsel boyutu */
+  --flag-title-min: 190px;
+  --flag-title-ideal: 52vw;   /* mobilde daha iyi */
+  --flag-title-max: 360px;
+
+  /* Başlığın yukarı/aşağı akışı */
+  --flag-title-offset: -110px;  /* eksi yukarı alır */
+  --flag-title-gap-after: -100px;
+}
+
+#flagSelectionScreen{
+  padding-top: 0 !important;
+}
+
+#flagSelectionScreen .flag-selection-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: var(--flag-title-offset);
+  margin-bottom: var(--flag-title-gap-after);
+
+  padding: 0;
+  line-height: 0;
+}
+
+#flagSelectionScreen .flag-selection-title-img{
+  width: clamp(300px, 36vw, 460px); /* ⬆️ büyütüldü */
+  height: auto;
+  display: block;
+  max-width: 94vw;
+}
+
+/* 📱 Mobil */
+@media (max-width: 480px){
+  #flagSelectionScreen .flag-selection-title-img{
+    width: clamp(280px, 86vw, 420px); /* ⬆️ mobilde de büyüdü */
+    max-width: 92vw;
+  }
+}
+
+
+
+/* Mobil ince ekran düzeltmesi */
+@media (max-width: 480px){
+  :root{
+    --flag-title-offset: -60px;   /* mobilda çok yukarı kaçmasın */
+    --flag-title-gap-after: -30px;
+    --flag-title-ideal: 70vw;     /* mobilda daha dengeli ölçek */
+  }
+
+  #flagSelectionScreen .flag-selection-title-img{
+    max-width: 88vw;
+  }
+}
+
+/* Çok kısa ekranlar (adres çubuğu vs. taşma) */
+@media (max-height: 700px){
+  :root{
+    --flag-title-offset: -10px;
+  }
+}
+
 
     </style>
 </head>
@@ -5580,24 +5648,38 @@ body.modal-open{
 
 
         
-        <!-- Flama Seçim Ekranı -->
-        <div class="screen" id="flagSelectionScreen">
-            <h2 class="flag-selection-title">Flamalarımızı Seçelim!</h2>
-            <p class="flag-selection-subtitle">Her takım kendine bir flama seçsin!</p>
-            <div class="current-team-info">
-                <div class="current-team-name" id="currentFlagTeamName">Takım 1</div>
-            </div>
-            <div class="flag-grid" id="flagGrid"></div>
-            <div class="flag-selection-controls">
-                <div class="flag-progress">
-                    <div class="flag-progress-dots" id="flagProgressDots"></div>
-                    <span id="flagProgressText">0/2 takım tamamlandı</span>
-                </div>
-                <button class="flag-ready-btn" id="flagReadyBtn" disabled>
-                    <i class="fas fa-check-circle"></i> Devam Et
-                </button>
-            </div>
-        </div>
+<!-- Flama Seçim Ekranı -->
+<div class="screen" id="flagSelectionScreen">
+
+  <!-- BAŞLIK: Yazı yerine görsel -->
+  <div class="flag-selection-title">
+    <img
+      src="flamasec.png"
+      alt="Flama Seçimi"
+      class="flag-selection-title-img"
+      draggable="false"
+    >
+  </div>
+
+  <div class="current-team-info">
+    <div class="current-team-name" id="currentFlagTeamName">Takım 1</div>
+  </div>
+
+  <div class="flag-grid" id="flagGrid"></div>
+
+  <div class="flag-selection-controls">
+    <div class="flag-progress">
+      <div class="flag-progress-dots" id="flagProgressDots"></div>
+      <span id="flagProgressText">0/2 takım tamamlandı</span>
+    </div>
+
+    <button class="flag-ready-btn" id="flagReadyBtn" disabled>
+      <i class="fas fa-check-circle"></i> Devam Et
+    </button>
+  </div>
+
+</div>
+
         
 <!-- Zar Atmaya Hazır Ekranı -->
 <div class="screen" id="readyForDiceScreen">
