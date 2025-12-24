@@ -727,73 +727,115 @@ header .subtitle{ position:relative; margin-top:140px; z-index:1; }
 
 /* =========================================================
    FOOTER
-========================================================= */
-.site-footer{ width:100%; margin-top:10px; padding-bottom:12px; }
+   ========================================================= */
 
+.site-footer{
+  width: 100%;
+  margin-top: 10px;
+  padding-bottom: 12px;
+}
+
+/* ana kapsayıcı */
 .footer-inner{
-  position:relative;
-  overflow:hidden;
-  width:100%;
-  max-width:1200px;
-  margin:0 auto;
-  padding:14px 18px;
-  background: rgba(255,255,255,.08);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px;
+
+  background: rgba(255,255,255,0.08);
   border-radius: var(--radius-lg);
-  border:1px solid rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,0.15);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--shadow);
 }
+
+/* üst renk şeridi */
 .footer-inner::before{
   content:"";
   position:absolute;
-  top:0; left:0; right:0;
+  top:0;
+  left:0;
+  right:0;
   height:5px;
-  background: linear-gradient(to right,var(--team1),var(--team2),var(--team3),var(--team4));
+  background: linear-gradient(
+    to right,
+    var(--team1),
+    var(--team2),
+    var(--team3),
+    var(--team4)
+  );
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+
+/* glow */
 .footer-glow{
   position:absolute;
   inset:-40%;
   background:
     radial-gradient(circle at 20% 30%, rgba(255,183,3,.25), transparent 55%),
-    radial-gradient(circle at 80% 20%, rgba(255,154,60,.20), transparent 55%),
+    radial-gradient(circle at 80% 20%, rgba(255,154,60,.2), transparent 55%),
     radial-gradient(circle at 60% 90%, rgba(155,89,182,.18), transparent 60%);
   filter: blur(14px);
   animation: footerGlowMove 12s linear infinite;
   pointer-events:none;
 }
+
+/* içerik */
 .footer-content{
-  position:relative;
-  z-index:2;
+  position: relative;
+  z-index: 2;
   display:flex;
-  flex-wrap:nowrap;
+  flex-wrap: nowrap;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  row-gap:2px;
+  gap: 10px;
+  row-gap: 2px;
   text-align:center;
 }
-.footer-text{ color: rgba(255,255,255,.85); font-size:.95rem; font-weight:600; }
 
+/* designed by */
+.footer-text{
+  color: rgba(255,255,255,.85);
+  font-size:.95rem;
+  font-weight:500;
+}
+
+/* Eren İlhan */
 .footer-link{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   min-height:44px;
   padding:8px 12px;
-  font-weight:900;
+
+  font-weight:800;
   text-decoration:none;
   position:relative;
   border-radius:12px;
-  background: linear-gradient(135deg,#fff6c2 0%,#ffd36a 22%,#ffb703 50%,#e6a100 78%,#fff1a8 100%);
+
+  background: linear-gradient(
+    135deg,
+    #fff6c2 0%,
+    #ffd36a 22%,
+    #ffb703 50%,
+    #e6a100 78%,
+    #fff1a8 100%
+  );
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow: 0 2px 4px rgba(0,0,0,.55), 0 0 10px rgba(255,183,3,.35);
+
+  text-shadow:
+    0 2px 4px rgba(0,0,0,.55),
+    0 0 10px rgba(255,183,3,.35);
+
   transition: transform .25s ease, text-shadow .25s ease, filter .25s ease;
   touch-action: manipulation;
   user-select:none;
 }
+
 .footer-link::after{
   content:"";
   position:absolute;
@@ -803,18 +845,22 @@ header .subtitle{ position:relative; margin-top:140px; z-index:1; }
   height:3px;
   border-radius:999px;
   background: linear-gradient(to right,#fff6c2,#ffb703,#e6a100);
-  box-shadow: 0 0 8px rgba(255,183,3,.60);
-  transform: scaleX(0);
-  transition: transform .3s ease;
+  box-shadow:0 0 8px rgba(255,183,3,.6);
+  transform:scaleX(0);
+  transition:transform .3s ease;
 }
+
 .footer-link:hover{
   transform: translateY(-2px) scale(1.03);
-  text-shadow: 0 4px 8px rgba(0,0,0,.65), 0 0 18px rgba(255,183,3,.60);
-  filter: brightness(1.12);
+  text-shadow:
+    0 4px 8px rgba(0,0,0,.65),
+    0 0 18px rgba(255,183,3,.6);
+  filter:brightness(1.12);
 }
-.footer-link:hover::after{ transform: scaleX(1); }
-.footer-link:active{ transform: scale(.96); }
+.footer-link:hover::after{ transform:scaleX(1); }
+.footer-link:active{ transform:scale(.96); }
 
+/* fix logo */
 .footer-fix{
   display:inline-flex;
   align-items:center;
@@ -826,45 +872,59 @@ header .subtitle{ position:relative; margin-top:140px; z-index:1; }
   background: rgba(255,255,255,.06);
   border:1px solid rgba(255,183,3,.35);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 .footer-fix img{
-  width:20px; height:20px;
-  transform: scale(3.7);
+  width:20px;
+  height:20px;
+  transform:scale(3.7);
   pointer-events:none;
 }
 .footer-fix:hover{
   transform: translateY(-1px);
   background: rgba(255,183,3,.15);
-  box-shadow: 0 0 10px rgba(255,183,3,.45);
+  box-shadow:0 0 10px rgba(255,183,3,.45);
 }
 
+/* telif */
 .footer-legal{
   width:100%;
   display:block;
   margin-top:-2px;
   font-size:.72rem;
-  font-weight:600;
+  font-weight:500;
   letter-spacing:.3px;
   color: rgba(255,255,255,.42);
   text-align:center;
   user-select:none;
   opacity:.9;
-  transition: opacity .25s ease, color .25s ease;
+  transition:opacity .25s ease,color .25s ease;
 }
-.footer-legal strong{ color: rgba(255,183,3,.85); font-weight:900; }
-.site-footer:hover .footer-legal{ opacity:1; color: rgba(255,255,255,.55); }
+.footer-legal strong{
+  color: rgba(255,183,3,.85);
+  font-weight:800;
+}
+.site-footer:hover .footer-legal{
+  opacity:1;
+  color: rgba(255,255,255,.55);
+}
 
-.footer-sparkles{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+/* sparkles */
+.footer-sparkles{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
 .spark{
   position:absolute;
-  width:6px; height:6px;
+  width:6px;
+  height:6px;
   border-radius:50%;
-  background: rgba(255,255,255,.70);
-  box-shadow: 0 0 12px rgba(255,255,255,.60);
+  background: rgba(255,255,255,.7);
+  box-shadow:0 0 12px rgba(255,255,255,.6);
   opacity:.35;
-  animation: sparkFloat 4.5s ease-in-out infinite;
+  animation:sparkFloat 4.5s ease-in-out infinite;
 }
 .spark.s1{ left:12%; top:60%; }
 .spark.s2{ left:38%; top:32%; animation-delay:1s; }
@@ -872,13 +932,229 @@ header .subtitle{ position:relative; margin-top:140px; z-index:1; }
 .spark.s4{ left:88%; top:38%; animation-delay:3s; }
 
 @keyframes footerGlowMove{
-  0%{ transform: translateX(-2%) rotate(0deg); }
-  50%{ transform: translateX(2%) rotate(180deg); }
-  100%{ transform: translateX(-2%) rotate(360deg); }
+  0%{ transform:translateX(-2%) rotate(0deg); }
+  50%{ transform:translateX(2%) rotate(180deg); }
+  100%{ transform:translateX(-2%) rotate(360deg); }
 }
 @keyframes sparkFloat{
-  0%,100%{ transform: translateY(0) scale(1); opacity:.25; }
-  50%{ transform: translateY(-10px) scale(1.15); opacity:.55; }
+  0%,100%{ transform:translateY(0) scale(1); opacity:.25; }
+  50%{ transform:translateY(-10px) scale(1.15); opacity:.55; }
+}
+
+/* =========================================================
+   LEAVE MODAL
+   ========================================================= */
+
+.leave-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background: rgba(20,18,40,.65);
+  backdrop-filter: blur(8px);
+  z-index:9999;
+}
+.leave-modal.is-open{ display:flex; }
+
+.leave-box{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:420px;
+  padding:22px 20px;
+  border-radius:22px;
+  text-align:center;
+  background: linear-gradient(160deg, rgba(130,120,200,.95), rgba(100,90,170,.95));
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 25px 60px rgba(0,0,0,.45);
+  animation: leaveModalIn .25s ease-out;
+}
+
+/* orbit */
+.leave-orbit{
+  position:absolute;
+  width:520px;
+  height:520px;
+  border-radius:50%;
+  pointer-events:none;
+  background: conic-gradient(#ffb703,#ff5ec4,#8a5cff,#00f5d4,#ffb703);
+  filter:blur(22px);
+  opacity:.65;
+  animation: orbitSpin 8s linear infinite;
+}
+.leave-modal .leave-orbit{
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:0;
+}
+
+@keyframes orbitSpin{
+  from{ transform:translate(-50%,-50%) rotate(0); }
+  to{ transform:translate(-50%,-50%) rotate(360deg); }
+}
+
+/* logo */
+.leave-logo img{
+  width:150px;
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));
+}
+
+/* metinler */
+.leave-warning{
+  font-size:1.15rem;
+  font-weight:800;
+  color:#ffe29a;
+  text-shadow:0 2px 8px rgba(255,183,3,.45);
+}
+.leave-subinfo{
+  font-size:.9rem;
+  color: rgba(255,255,255,.5);
+  margin-top:6px;
+}
+.leave-subinfo strong{
+  color:#ffb703;
+  font-weight:800;
+  font-size:1.08em;
+}
+
+/* butonlar */
+.leave-actions{
+  display:flex;
+  gap:12px;
+}
+.leave-actions button{
+  flex:1;
+  height:46px;
+  border-radius:14px;
+  border:none;
+  font-weight:800;
+  cursor:pointer;
+}
+.leave-cancel{
+  background: rgba(255,255,255,.15);
+  color:#fff;
+}
+.leave-confirm{
+  background: linear-gradient(135deg,#ffe29a,#ffb703);
+  color:#2b2b2b;
+}
+
+/* loading */
+.leave-status[hidden]{ display:none!important; }
+.leave-status{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin:8px 0 18px;
+}
+.leave-spinner{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+@keyframes leaveModalIn{
+  from{ opacity:0; transform:translateY(10px) scale(.97); }
+  to{ opacity:1; transform:none; }
+}
+
+/* scroll kilidi */
+body.modal-open{
+  overflow:hidden;
+  touch-action:none;
+}
+
+/* mobil */
+@media(max-width:480px){
+  .leave-box{ padding:20px 16px; }
+  .leave-logo img{ width:130px; }
+}
+
+
+.footer-instagram{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-instagram{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;                 /* ikon – yazı arası */
+}
+
+/* ================================
+   Instagram Icon (Premium & Stabil)
+   ================================ */
+
+.ig-icon{
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+
+  /* Görünüm */
+  opacity: 0.88;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.35));
+
+  /* Sadece ikon büyür */
+  transform: scale(1.7);
+  transform-origin: center;
+
+  /* Akıcı animasyon */
+  transition:
+    transform .22s cubic-bezier(.4,0,.2,1),
+    opacity .22s ease,
+    filter .22s ease;
+
+  pointer-events: none; /* link alanını bozmaz */
+}
+
+/* Hover – desktop */
+.footer-instagram:hover .ig-icon{
+  opacity: 1;
+  transform: scale(1.6);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+}
+
+/* Active – dokunma hissi */
+.footer-instagram:active .ig-icon{
+  transform: scale(1.45);
+}
+
+/* ================================
+   Mobil Optimizasyon
+   ================================ */
+
+@media (max-width: 767px){
+  .ig-icon{
+    width: 18px;
+    height: 18px;
+
+    transform: scale(1.55);
+  }
+
+  /* mobilde hover yok → stabil kalsın */
+  .footer-instagram:hover .ig-icon{
+    transform: scale(1.55);
+  }
+}
+.rules-icon{
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+
+  transform: scale(4) translateX(1px);   /* 🔥 sadece görsel büyür */
+  transform-origin: center;
 }
 
 /* =========================================================
@@ -1810,31 +2086,46 @@ body::before{
     </div>
   </div>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-inner">
-      <div class="footer-glow" aria-hidden="true"></div>
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-glow" aria-hidden="true"></div>
 
-      <div class="footer-content">
-        <span class="footer-text">Designed by</span>
+<div class="footer-content">
+  <span class="footer-text">Designed by</span>
 
-        <a class="footer-link"
-           href="https://www.instagram.com/ileri.official?igsh=MXo0bmczdHVtbjFm&utm_source=qr"
-           target="_blank" rel="noopener noreferrer">
-          Eren İlhan
-        </a>
+<a class="footer-link footer-instagram"
+   href="https://www.instagram.com/ileri.official?igsh=MXo0bmczdHVtbjFm&utm_source=qr"
+   target="_blank"
+   rel="noopener noreferrer">
 
-        <a href="fix.html" class="footer-fix" aria-label="Sorun Bildir sayfası">
-          <img src="fix.png" alt="Sorun Bildir" />
-        </a>
-      </div>
+  <img src="insta.png"
+       alt="Instagram"
+       class="ig-icon"
+       draggable="false">
 
-      <span class="footer-legal">© <span id="footerYear"></span> <strong>TabulaGo</strong> • Tüm hakları saklıdır</span>
+  Eren İlhan
+</a>
 
-      <div class="footer-sparkles" aria-hidden="true">
-        <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span><span class="spark s4"></span>
-      </div>
+
+  <a href="fix.html" class="footer-fix">
+    <img src="fix.png" alt="Sorun Bildir">
+  </a>
+</div>
+
+<!-- ⬇️ AYRI SATIR -->
+<span class="footer-legal">
+  © <span id="footerYear"></span> <strong>TabulaGo</strong> • Tüm hakları saklıdır
+</span>
+
+    <div class="footer-sparkles" aria-hidden="true">
+      <span class="spark s1"></span>
+      <span class="spark s2"></span>
+      <span class="spark s3"></span>
+      <span class="spark s4"></span>
     </div>
-  </footer>
+  </div>
+</footer>
 
 <script>
 (function () {
