@@ -5591,6 +5591,281 @@ body.modal-open{
     max-width: 90vw;
   }
 }
+/* =========================================
+   TEAM SETUP - TOPLAM TUR SAYISI (SADECE BU ALAN)
+   Görsel üstte, 1-2-3 altta
+   Diğer ekranları/alanları etkilemez
+   ========================================= */
+
+#teamSetupScreen .rounds-selector{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 8px;
+}
+
+/* Sadece bu blok: görsel + butonlar */
+#teamSetupScreen .rounds-selector > .rounds-row{
+  width: min(720px, 92%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+
+  /* dış kutu/çerçeve olmasın */
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Görsel kapsayıcı */
+#teamSetupScreen .rounds-selector .rounds-label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* ToplamTurSayi görseli */
+#teamSetupScreen .rounds-selector .rounds-label-img{
+  width: clamp(240px, 32vw, 440px);
+  height: auto;
+  display: block;
+  max-width: 92vw;
+
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* 1-2-3 bar */
+#teamSetupScreen .rounds-selector .rounds-picker{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.20);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+
+  /* 🔧 1-2-3’ü yukarı almak için sadece burayı oynat */
+  transform: translateY(var(--rounds-picker-y, -60px));
+}
+
+/* Butonlar */
+#teamSetupScreen .rounds-selector .rounds-pill{
+  width: 46px;
+  height: 40px;
+  border-radius: 12px;
+
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+
+  font-weight: 800;
+  font-size: 16px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+}
+
+@media (hover:hover){
+  #teamSetupScreen .rounds-selector .rounds-pill:hover{
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+  }
+}
+
+#teamSetupScreen .rounds-selector .rounds-pill[aria-pressed="true"]{
+  background: rgba(255,255,255,0.28);
+  border-color: rgba(255,255,255,0.35);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.22);
+  transform: translateY(-1px);
+}
+
+/* Mobil */
+@media (max-width: 560px){
+  #teamSetupScreen .rounds-selector{
+    margin: 14px 0 6px;
+  }
+
+  #teamSetupScreen .rounds-selector .rounds-label-img{
+    width: clamp(220px, 72vw, 340px);
+  }
+
+  #teamSetupScreen .rounds-selector .rounds-picker{
+    gap: 8px;
+    padding: 10px 10px;
+    border-radius: 14px;
+  }
+
+  #teamSetupScreen .rounds-selector .rounds-pill{
+    width: 44px;
+    height: 38px;
+    font-size: 15px;
+    border-radius: 11px;
+  }
+}
+/* =========================================
+   TEAM SETUP - TOPLAM TUR SAYISI
+   Kare/transparan arka planı kaldır (SADECE BU ALAN)
+   ========================================= */
+
+/* Görselin arkasındaki kare/kutu CSS'ten geliyorsa: tamamen sıfırla */
+#teamSetupScreen .rounds-selector,
+#teamSetupScreen .rounds-selector .rounds-row,
+#teamSetupScreen .rounds-selector .rounds-label{
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Görselin kendisi */
+#teamSetupScreen .rounds-selector .rounds-label-img{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* 1-2-3'ün arkasındaki paneli de tamamen kaldırmak istersen */
+#teamSetupScreen .rounds-selector .rounds-picker{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 0 !important;          /* panel kalkınca boşluk istemiyorsan */
+}
+
+/* Butonlar aynı kalsın (istersen çok hafif gölge bırakabilirsin) */
+#teamSetupScreen .rounds-selector .rounds-pill{
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+}
+
+/* =========================================
+   1-2-3 BUTON TASARIMI (SADECE BUTONLAR)
+   ========================================= */
+
+#teamSetupScreen .rounds-pill{
+  position: relative;
+
+  width: 52px;
+  height: 44px;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.28),
+    rgba(255,255,255,0.12)
+  );
+
+  border: 1px solid rgba(255,255,255,0.35);
+  color: #ffffff;
+
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  box-shadow:
+    0 10px 18px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.30);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    background .15s ease,
+    border-color .15s ease;
+}
+
+/* Üst parlama efekti */
+#teamSetupScreen .rounds-pill::before{
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 70%;
+  height: 35%;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.22);
+  pointer-events: none;
+}
+
+/* Hover (masaüstü) */
+@media (hover:hover){
+  #teamSetupScreen .rounds-pill:hover{
+    transform: translateY(-2px);
+    background: linear-gradient(
+      180deg,
+      rgba(255,255,255,0.34),
+      rgba(255,255,255,0.16)
+    );
+    box-shadow:
+      0 16px 26px rgba(0,0,0,0.28),
+      inset 0 1px 0 rgba(255,255,255,0.34);
+  }
+}
+
+/* Seçili */
+#teamSetupScreen .rounds-pill[aria-pressed="true"]{
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.42),
+    rgba(255,255,255,0.20)
+  );
+  border-color: rgba(255,255,255,0.60);
+  box-shadow:
+    0 18px 30px rgba(0,0,0,0.32),
+    0 0 0 3px rgba(255,255,255,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.36);
+  transform: translateY(-1px);
+}
+
+/* Mobil */
+@media (max-width: 560px){
+  #teamSetupScreen .rounds-pill{
+    width: 48px;
+    height: 42px;
+    font-size: 15px;
+    border-radius: 13px;
+  }
+}
 
     </style>
 </head>
@@ -5625,7 +5900,7 @@ body.modal-open{
 
   <!-- BAŞLIK: yazı yerine görsel -->
   <div class="team-setup-title" aria-label="Takımlarını Oluştur">
-    <img src="takimlarolus.png" alt="Takımlarını Oluştur" class="team-setup-title-img">
+    <img src="takimlarolus.png" alt="Takımlarını Oluştur" class="team-setup-title-img" draggable="false">
   </div>
 
   <div class="team-setup" id="teamsContainer"></div>
@@ -5634,33 +5909,39 @@ body.modal-open{
     <i class="fas fa-plus"></i><span>Takım Ekle</span>
   </button>
 
+  <!-- TOPLAM TUR SAYISI -->
   <div class="rounds-selector">
     <div class="rounds-row" role="group" aria-label="Toplam tur sayısı seçimi">
-      <div class="rounds-label">Toplam Tur Sayısı</div>
+
+      <div class="rounds-label" aria-hidden="true">
+        <img src="toplamtursayi.png" alt="Toplam Tur Sayısı" class="rounds-label-img" draggable="false">
+      </div>
 
       <div class="rounds-picker" aria-label="Tur seçimi">
         <button type="button" class="rounds-pill" data-round="1" aria-pressed="false">1</button>
         <button type="button" class="rounds-pill" data-round="2" aria-pressed="false">2</button>
         <button type="button" class="rounds-pill" data-round="3" aria-pressed="false">3</button>
       </div>
+
     </div>
 
-    <!-- Sistem aynı kalsın -->
     <input type="number" id="totalRounds" min="1" max="3" value="3" hidden>
   </div>
 
   <!-- Kurallar + Başla (yan yana) -->
   <div class="start-actions">
     <button class="rules-btn" id="rulesBtn">
-      <img src="kurallar.png" alt="Oyun Kuralları" class="rules-img">
+      <img src="kurallar.png" alt="Oyun Kuralları" class="rules-img" draggable="false">
     </button>
 
     <button class="btn" id="startGameBtn">
-      <img src="basla.png" alt="Oyuna Başla" class="start-img">
+      <img src="basla.png" alt="Oyuna Başla" class="start-img" draggable="false">
     </button>
   </div>
 
 </div>
+
+
 
 
         
