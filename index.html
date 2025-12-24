@@ -13,14 +13,19 @@
   <meta name="keywords" content="tabula go, kelime oyunu, takım oyunu, eğlenceli oyun, arkadaş oyunu, online oyun" />
   <meta name="author" content="TabulaGo" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="/" />
+
+  <!-- Canonical (GitHub Pages repo altında genelde dinamik olur; domainin varsa tam URL yaz) -->
+  <!-- Örn: <link rel="canonical" href="https://siteadresin.com/" /> -->
+  <link rel="canonical" href="./" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="TabulaGo - Takım Kelime Oyunu" />
   <meta property="og:description" content="Arkadaşlarınızla birlikte oynayabileceğiniz eğlenceli takım kelime oyunu" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="tr_TR" />
-
+  <!-- Domainin varsa aç -->
+  <!-- <meta property="og:url" content="https://siteadresin.com/" /> -->
+  <!-- <meta property="og:image" content="og-image.png" /> -->
 
   <!-- Mobil / PWA -->
   <meta name="theme-color" content="#6a11cb" />
@@ -30,13 +35,13 @@
   <meta name="msapplication-TileColor" content="#6a11cb" />
   <meta name="msapplication-tap-highlight" content="no" />
 
-  <!-- PWA Manifest (senin dosya adın: site.webmanifest) -->
-  <link rel="manifest" href="/site.webmanifest" />
+  <!-- PWA Manifest (dosya adın: site.webmanifest) -->
+  <link rel="manifest" href="site.webmanifest" />
 
-  <!-- Favicon & App Icons (attığın dosyalara uyumlu) -->
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <!-- Favicon & App Icons (GitHub Pages uyumlu: relative path) -->
+  <link rel="icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 
   <!-- Fontlar -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -10058,3 +10063,4 @@ window.addEventListener('DOMContentLoaded', () => {
     </script>
 </body>
 </html>
+
