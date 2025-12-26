@@ -736,5 +736,6 @@
 { main: "PENSE", forbidden: ["ALET", "TUTMAK", "SÖKMEK", "EL", "TAMİR"] },
 { main: "RADYATÖR", forbidden: ["ISITMA", "PETEK", "KALORİFER", "EV", "SICAK"] },
 { main: "GÖLGE", forbidden: ["IŞIK", "GÜNEŞ", "KARANLIK", "ŞEKİL", "YANSIMA"] },
-{ main: "SİREN", forbidden: ["SES", "ALARM", "POLİS", "AMBULANS", "UYARI"] }
+{ main: "SİREN", forbidden: ["SES", "ALARM", "POLİS", "AMBULANS", "UYARI"] },
  ];
+
