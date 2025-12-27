@@ -6189,6 +6189,77 @@ body.modal-open{
 }
 
 body.modal-open{ overflow: hidden; }
+/* =========================
+   OYUN SIRASI - MOBİL LAYOUT FIX (GÜNCEL)
+   ========================= */
+
+.order-item{
+  display: grid;
+  grid-template-columns: 44px 44px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.order-dice{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.dice-pill{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .3px;
+  line-height: 1;
+  white-space: nowrap;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.20);
+}
+
+/* ✅ Mobil fix */
+@media (max-width: 480px){
+  .order-item{
+    grid-template-columns: 38px 34px 1fr;
+    grid-template-areas:
+      "no flag team"
+      ".  .    dice";
+    row-gap: 6px;
+    column-gap: 10px;
+    align-items: center;
+  }
+
+  .order-number{ grid-area: no; }
+  .order-team-flag{ grid-area: flag; }
+
+  .order-team{
+    grid-area: team;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .order-dice{
+    grid-area: dice;
+    justify-content: flex-start;
+    margin-top: 2px;
+    gap: 6px;
+  }
+
+  .dice-pill{
+    font-size: 11px;
+    padding: 6px 9px;
+  }
+}
+
 
 
     </style>
@@ -6880,18 +6951,25 @@ const CONFIG = {
 //  DATA MODELLERİ
 // ==========================================
 const GameModels = {
-  Team: class {
-    constructor(id, name, color, players) {
-      this.id = id;
-      this.name = name;
-      this.color = color;
-      this.players = players;
-      this.playerCount = players.length;
-      this.score = 0;
-      this.passes = CONFIG.PASS_LIMIT;
-      this.diceValue = 0;
-    }
-  },
+Team: class {
+  constructor(id, name, color, players) {
+    this.id = id;
+    this.name = name;
+    this.color = color;
+    this.players = players;
+    this.playerCount = players.length;
+    this.score = 0;
+    this.passes = CONFIG.PASS_LIMIT;
+
+    // ✅ Zar sıralama FIX
+    // diceBaseValue: ilk atış (grup sırasını kilitler)
+    // diceTieValue : eşit olanların tekrar atışı (grup içi sıra)
+    this.diceValue = 0;         // istersen UI'da "son atış" olarak dursun
+    this.diceBaseValue = null;  // ilk atış değeri
+    this.diceTieValue = null;   // tie-break değeri
+  }
+},
+
 
   GameState: class {
     constructor() {
@@ -7870,21 +7948,27 @@ const DiceManager = {
       DOM.diceContainer.appendChild(item);
     });
 
+    // katılımcılar: ilk tur tüm takımlar
     gameState.diceParticipants = gameState.teams.map(t => t.id);
     gameState.diceRounds = 0;
     gameState.diceRolled = false;
+
+    // ✅ FIX: zar değerlerini temizle
+    gameState.teams.forEach(t => {
+      t.diceValue = 0;
+      t.diceBaseValue = null;
+      t.diceTieValue = null;
+    });
 
     if (DOM.tieInfoContainer) DOM.tieInfoContainer.innerHTML = '';
     if (DOM.orderList) DOM.orderList.style.display = 'none';
     if (DOM.startAfterDiceBtn) DOM.startAfterDiceBtn.style.display = 'none';
 
-if (DOM.rollDiceBtn) {
-  DOM.rollDiceBtn.style.display = 'block';
-  DOM.rollDiceBtn.disabled = false;
-  DOM.rollDiceBtn.innerHTML = `
-    <img src="zarat.png" alt="Zar At" class="dice-btn-img">
-  `;
-}
+    if (DOM.rollDiceBtn) {
+      DOM.rollDiceBtn.style.display = 'block';
+      DOM.rollDiceBtn.disabled = false;
+      DOM.rollDiceBtn.innerHTML = `<img src="zarat.png" alt="Zar At" class="dice-btn-img">`;
+    }
 
     ScreenManager.showScreen('dice');
     StorageManager.saveGameStateThrottled(true);
@@ -7963,6 +8047,16 @@ if (DOM.rollDiceBtn) {
 
     const promises = participants.map(team => {
       const diceValue = Math.floor(Math.random() * 6) + 1;
+
+      // ✅ FIX: ilk atışsa base'e yaz, tie atışsa tie'a yaz
+      if (team.diceBaseValue == null) {
+        team.diceBaseValue = diceValue;   // ilk atış: grup sırası kilit
+        team.diceTieValue = null;
+      } else {
+        team.diceTieValue = diceValue;    // eşitlik bozma: grup içi sıra
+      }
+
+      // UI’da "son atış" gibi kalsın
       team.diceValue = diceValue;
 
       const diceValueElement = document.getElementById(`diceValue-${team.id}`);
@@ -8023,31 +8117,56 @@ if (DOM.rollDiceBtn) {
   },
 
   handleDiceRoundEnd(participants) {
-    const groups = {};
-    participants.forEach(team => {
-      const v = team.diceValue;
-      if (!groups[v]) groups[v] = [];
-      groups[v].push(team);
+    const gameState = StorageManager.gameState;
+
+    // ✅ base (ilk atış) gruplarını oluştur: grup sırası ASLA değişmez
+    const baseGroups = {};
+    gameState.teams.forEach(team => {
+      const base = team.diceBaseValue ?? 0;
+      if (!baseGroups[base]) baseGroups[base] = [];
+      baseGroups[base].push(team);
     });
 
-    const tied = [];
-    Object.values(groups).forEach(g => { if (g.length > 1) tied.push(...g); });
+    // ✅ Aynı base grubunda "efektif" değer ile (tie varsa tie, yoksa base) eşitlik kontrol et
+    const stillTied = [];
 
-    if (tied.length > 0) {
-      let message = `<div class="tie-notice">Eşitlik var! Sadece eşit zar atan takımlar tekrar zar atacak.</div>`;
+    Object.values(baseGroups).forEach(group => {
+      if (group.length <= 1) return;
 
-      const byVal = {};
-      tied.forEach(t => { const v = t.diceValue; if (!byVal[v]) byVal[v] = []; byVal[v].push(t); });
+      const byEff = {};
+      group.forEach(t => {
+        const eff = (t.diceTieValue != null) ? t.diceTieValue : t.diceBaseValue;
+        if (!byEff[eff]) byEff[eff] = [];
+        byEff[eff].push(t);
+      });
 
-      Object.keys(byVal).forEach(v => {
-        const names = byVal[v].map(t => t.name).join(', ');
-        message += `<div class="tie-info">${names} takımları ${v} attı, tekrar zar atacak.</div>`;
+      Object.values(byEff).forEach(sameEffTeams => {
+        if (sameEffTeams.length > 1) stillTied.push(...sameEffTeams);
+      });
+    });
+
+    // ✅ hâlâ eşitlik varsa: SADECE hâlâ eşit olanlar tekrar atacak (grup dışına çıkamaz)
+    if (stillTied.length > 0) {
+      let message = `<div class="tie-notice">Eşitlik var! Sadece eşit takımlar kendi aralarında tekrar zar atacak.</div>`;
+
+      // Bilgi mesajı: hangi base içinde kimler hâlâ eşit
+      const infoMap = {};
+      stillTied.forEach(t => {
+        const base = t.diceBaseValue ?? 0;
+        const eff = (t.diceTieValue != null) ? t.diceTieValue : t.diceBaseValue;
+        const key = `${base}-${eff}`;
+        if (!infoMap[key]) infoMap[key] = [];
+        infoMap[key].push(t.name);
+      });
+
+      Object.keys(infoMap).forEach(key => {
+        const [base, eff] = key.split('-');
+        message += `<div class="tie-info">${infoMap[key].join(', ')} takımları (ilk: ${base}) içinde ${eff} ile eşit. Tekrar atacak.</div>`;
       });
 
       if (DOM.tieInfoContainer) DOM.tieInfoContainer.innerHTML = message;
 
-      const gameState = StorageManager.gameState;
-      gameState.diceParticipants = tied.map(t => t.id);
+      gameState.diceParticipants = stillTied.map(t => t.id);
 
       if (DOM.rollDiceBtn) {
         DOM.rollDiceBtn.disabled = false;
@@ -8056,7 +8175,7 @@ if (DOM.rollDiceBtn) {
       return;
     }
 
-    const gameState = StorageManager.gameState;
+    // ✅ eşitlik kalmadı: sıra belirle
     gameState.diceParticipants = [];
 
     if (DOM.tieInfoContainer) {
@@ -8070,15 +8189,33 @@ if (DOM.rollDiceBtn) {
     StorageManager.saveGameStateThrottled(true);
   },
 
+  // ✅ BURASI: SIRALAMA HESABI
   determineOrder() {
     const gameState = StorageManager.gameState;
+
+    // base = ilk atış (grup sırası, ASLA değişmez)
+    const base = (t) => (t.diceBaseValue ?? 0);
+
+    // eff = tie varsa tie değeri, yoksa base
+    const eff = (t) => (t.diceTieValue != null) ? t.diceTieValue : (t.diceBaseValue ?? 0);
+
+    // 1) base'e göre (gruplar)
+    // 2) aynı base grubunda eff'e göre (tie-break)
+    // 3) hâlâ eşitse stabil id
     gameState.teamOrder = [...gameState.teams]
-      .sort((a, b) => (b.diceValue || 0) - (a.diceValue || 0))
-      .map(t => ({ ...t }));
+      .sort((a, b) => {
+        if (base(b) !== base(a)) return base(b) - base(a);
+        if (eff(b) !== eff(a)) return eff(b) - eff(a);
+        return (a.id || 0) - (b.id || 0);
+      })
+      .map(t => ({ ...t })); // UI için kopya
 
     this.showOrderList();
+
+    if (DOM.orderList) DOM.orderList.style.display = 'block';
     if (DOM.startAfterDiceBtn) DOM.startAfterDiceBtn.style.display = 'block';
-    StorageManager.saveGameStateThrottled();
+
+    StorageManager.saveGameStateThrottled(true);
   },
 
   showOrderList() {
@@ -8102,7 +8239,11 @@ if (DOM.rollDiceBtn) {
           `<div class="order-team-flag"><div class="order-flag-placeholder">?</div></div>`
         }
         <div class="order-team">${team.name}</div>
-        <div class="order-dice">Zar: ${team.diceValue}</div>
+<div class="order-dice">
+  <span class="dice-pill dice-pill-base">İLK ${team.diceBaseValue ?? '-'}</span>
+  ${team.diceTieValue != null ? `<span class="dice-pill dice-pill-tie">TEKRAR ${team.diceTieValue}</span>` : ''}
+</div>
+
       `;
       DOM.orderList.appendChild(item);
     });
@@ -8110,6 +8251,7 @@ if (DOM.rollDiceBtn) {
     DOM.orderList.style.display = 'block';
   }
 };
+
 
 // ==========================================
 //  TUR YÖNETİCİSİ
@@ -10064,5 +10206,3 @@ window.addEventListener('DOMContentLoaded', () => {
     </script>
 </body>
 </html>
-
-
